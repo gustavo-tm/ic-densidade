@@ -1,0 +1,47 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.7 }
+
+\bibitem[Bauman 2003]{bauman2003city}
+\abntrefinfo{Bauman}{BAUMAN}{2003}
+{BAUMAN, Z. \textbf{City of fears, city of hopes}. [S.l.]: Goldsmiths,
+  University of London, 2003.}
+
+\bibitem[Brueckner 2011]{brueckner2011lectures}
+\abntrefinfo{Brueckner}{BRUECKNER}{2011}
+{BRUECKNER, J.~K. \textbf{Lectures on urban economics}. [S.l.]: MIT press,
+  2011.}
+
+\bibitem[Coase 1960]{coase2013problem}
+\abntrefinfo{Coase}{COASE}{1960}
+{COASE, R.~H. The problem of social cost.
+\textbf{The journal of Law and Economics}, 1960.}
+
+\bibitem[Glaeser 2011]{glaeser2011triumph}
+\abntrefinfo{Glaeser}{GLAESER}{2011}
+{GLAESER, E. \textbf{Triumph of the city: How urban spaces make us human}.
+  [S.l.]: Pan Macmillan, 2011.}
+
+\bibitem[Jacobs 1961]{jacobs1961death}
+\abntrefinfo{Jacobs}{JACOBS}{1961}
+{JACOBS, J. \textbf{The death and life of great American cities}. [S.l.]: New
+  York: Random House, 1961.}
+
+\bibitem[Lima 2021]{lima2021alem}
+\abntrefinfo{Lima}{LIMA}{2021}
+{LIMA, B. A. A.~d.
+\textbf{Para al{\'e}m da forma urbana. Conflitos e contradi{\c{c}}{\~o}es
+  socioambientais da cidade compacta proposta para os eixos de adensamento do
+  Plano Diretor Estrat{\'e}gico de S{\~a}o Paulo de 2014}.
+Tese (Doutorado) --- Universidade de S{\~a}o Paulo, 2021.}
+
+\bibitem[{SÃO PAULO} 2014]{PDE}
+\abntrefinfo{{SÃO PAULO}}{{SÃO PAULO}}{2014}
+{{SÃO PAULO}. \textbf{Lei nº 16.050, de 31 de julho de 2014}: Aprova a
+  política de desenvolvimento urbano e o plano diretor estratégico do
+  município de são paulo e revoga a lei nº 13.430/2002. 2014.}
+
+\end{thebibliography}
