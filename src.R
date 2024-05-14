@@ -5,13 +5,14 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
   as_tibble() %>% 
   select(sql = "NUMERO.DO.CONTRIBUINTE", 
          bairro = "BAIRRO.DO.IMOVEL",
+         condominio = "NUMERO.DO.CONDOMINIO",
          area_terreno = "AREA.DO.TERRENO",
          area_construida = "AREA.CONSTRUIDA",
          area_ocupada = "AREA.OCUPADA",
          tipo = "TIPO.DE.PADRAO.DA.CONSTRUCAO") %>% 
   mutate(lo_setor =  str_sub(sql, 1, 3),
          lo_quadra = str_sub(sql, 4, 6),
-         lo_lote =   str_sub(sql, 7, 10))
+         lo_lote =   str_sub(sql, 7, 10) %>% ifelse(condominio == "00-0", ., paste("CD", str_sub(condominio, 1, 2), sep = "")))
 
 for (file in list.files(path="dados/lotes/zip", full.names = FALSE) %>% 
      str_remove("\\.zip")){
@@ -25,20 +26,12 @@ for (file in list.files(path="dados/lotes/zip", full.names = FALSE) %>%
 lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>% 
   paste("dados/lotes/unzip/", ., "/", ., ".shp", sep = "") %>% 
   lapply(read_sf) %>% 
-  bind_rows 
-
-lotes <- lotes %>% 
-  st_set_crs("epsg:31983")
+  bind_rows %>% 
+  st_set_crs("epsg:31983") %>% 
+  mutate(lo_lote = ifelse(lo_lote == "0000", paste("CD", lo_condomi, sep = ""), lo_lote))
 
 IPTU.lotes <- IPTU %>% 
   left_join(lotes)
-
-IPTU.lotes %>% 
-  mutate(na = is.na(lo_setor)) %>% 
-  group_by(bairro) %>% 
-  count(na) %>% 
-  View()
-
 
 censo <- read_sf("dados/censo/SP_Malha_Preliminar_2022.shp")
 
