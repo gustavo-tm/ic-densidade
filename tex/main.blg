@@ -25,44 +25,44 @@ Reallocating 'global_strs' (item size: 1) to 4000000 items.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://www.abntex.net.br/                               |
 +---------------------------------------------------------+
-You've used 9 entries,
+You've used 11 entries,
             6714 wiz_defined-function locations,
-            1234 strings with 10271 characters,
-and the built_in function-call counts, 5198 in all, are:
-= -- 481
-> -- 105
-< -- 0
-+ -- 84
-- -- 35
-* -- 294
-:= -- 789
-add.period$ -- 21
-call.type$ -- 9
-change.case$ -- 50
-chr.to.int$ -- 8
-cite$ -- 7
-duplicate$ -- 238
-empty$ -- 474
-format.name$ -- 161
-if$ -- 1235
+            1245 strings with 10499 characters,
+and the built_in function-call counts, 6536 in all, are:
+= -- 573
+> -- 153
+< -- 2
++ -- 102
+- -- 50
+* -- 383
+:= -- 975
+add.period$ -- 28
+call.type$ -- 11
+change.case$ -- 67
+chr.to.int$ -- 13
+cite$ -- 9
+duplicate$ -- 311
+empty$ -- 584
+format.name$ -- 231
+if$ -- 1549
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 144
-newline$ -- 39
-num.names$ -- 35
-pop$ -- 185
+missing$ -- 180
+newline$ -- 48
+num.names$ -- 45
+pop$ -- 235
 preamble$ -- 1
-purify$ -- 27
+purify$ -- 34
 quote$ -- 0
-skip$ -- 362
+skip$ -- 433
 stack$ -- 1
-substring$ -- 175
-swap$ -- 85
-text.length$ -- 0
+substring$ -- 211
+swap$ -- 112
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 2
 warning$ -- 0
-while$ -- 44
+while$ -- 56
 width$ -- 0
-write$ -- 106
+write$ -- 135

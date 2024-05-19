@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+
+    \begin{axis}[standard,
+        xtick={0},
+        ytick={0},
+        xticklabels = {},
+        yticklabels = {},
+        samples=100,
+        xlabel={Distância ao centro ($x$)},
+        ylabel={\$},
+        xmin=0,xmax=2,
+        ymin=0,ymax=1,
+        y label style={anchor=east},
+        x label style={anchor=north},
+    ]
+    
+\addplot[domain={0:2}, dotted]{e^(-x)};
+\addplot[domain={0:2}, dotted]{e^(-x)+.1};
+\addplot[domain={0:2}, dashed]{.75};
+
+\addplot[domain={0:(-ln(.65))}, color = red]{.75};
+
+
+
+
+    
+\end{axis}
+\end{tikzpicture}

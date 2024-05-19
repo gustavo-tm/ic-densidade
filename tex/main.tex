@@ -50,6 +50,31 @@
 \usepackage[alf, abnt-emphasize=bf]{abntex2cite}    % Citações padrão ABNT
 \usepackage{quoting}                                % Pacote para citações
 
+% Pacotes de gráficos e imagens
+\usepackage{adjustbox} % Pacote para ajuste de tamanho de objetos
+\usepackage{pgfplots} % Pacote para criação de gráficos
+\usepackage{pdfpages} % Pacote para inclusão de arquivos PDF
+\usepackage{anyfontsize} % Pacote para especificação de tamanhos de fonte arbitrários
+
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{decorations.markings,decorations.pathmorphing}
+\usetikzlibrary{intersections}
+
+
+\pgfplotsset{
+    standard/.style={
+    axis line style = thick,
+    enlargelimits,
+    axis x line=middle,
+    axis y line=middle,
+    enlarge x limits=0.15,
+    enlarge y limits=0.15,
+    width = \linewidth
+    }
+}
+
 \newcolumntype{d}{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]} %Tabela R modelsummary
 
 % \usepackage[table,xcdraw]{xcolor}
@@ -205,12 +230,12 @@
 % Informações de dados para FOLHA DE ROSTO
 
 \autor{Gustavo Theil Machado}
-\titulo{Título}
+\titulo{Análise da eficiência dos instrumentos regulatórios de controle de adensamento do PDE de São Paulo}
 \orientador{Adriano Borges Costa}
 \local{São Paulo - SP}
-\data{2023}
+\data{2024}
 
-\preambulo{Iniciação Científica em Microeconometria e Urbanismo.}
+\preambulo{Trabalho de Conclusão de Curso}
 
 
 % ------------------------------------------------------------------------------ %

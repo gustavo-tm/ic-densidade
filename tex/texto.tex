@@ -74,6 +74,72 @@ Na Seção \ref{sec:emp}, será avaliado se estes instrumentos determinam a dens
 \chapter{Teórico}
 \label{sec:micro}
 
+Na literatura microeconômica há diversos modelos que tentam compreender as dinâmicas econômicas da cidade. Utilizando premissas formais e provas matemáticas, é possível resolver o modelo para algumas variáveis endógenas, como preço por metro quadrado na cidade, uso do solo, densidade populacional, entre outros \cite{papageorgiou2012essay, fujita1989urban}. A seguir será apresentado o modelo simplificado desenvolvido em \cite{brueckner2011lectures}, com o foco na variável densidade habitacional. O objetivo é compreender como o mercado se comportaria sem a intervenção da regulamentação e qual seria o seu impacto na variável resposta.
+
+O modelo microeconômico começa com premissas simplificadoras fortes, mas que podem ser flexibilizadas na medida que algum componente merece ser discutido. Em sua primeira versão, a cidade é um círculo no qual todos os empregos se encontram no centro, as pessoas se deslocam uma distância ($x$) para trabalhar, o custo de transporte por distância é ($t$) e todos os moradores apresentam a mesma renda ($y$). A renda disponível é definida pela renda subtraída dos custos de transportes ($T=tx$). Por simplificação também, em cada unidade habitacional habita apenas uma pessoa. Nesse sentido, a densidade ($D$) é definida pelo número de unidades habitacionais por área.
+
+Como o sistema está sempre em equilíbrio, todos os moradores apresentam a mesma utilidade em morar em cada ponto da cidade. Caso um lugar fosse melhor de morar, todos iriam querer se mudar para essa localização, aumentando seu preço ($p$). A função de utilidade dos cidadãos é composta por consumo de habitação ($q$) e outros bens, apelidados por pão, ($c$)\footnote{Por fins de simplificação, o preço do pão (outros bens) foi definido como unitário.}, de forma que toda sua renda disponível será gasta com estes bens, então $y-tx=c+pq$. Para o consumidor, sempre é melhor consumir unidades habitacionais maiores e mais pão, ou seja, quanto maior $p$ e $c$, maior sua utilidade. Dessa forma, quanto mais próximo do centro, e, portanto, um menor $x$, maior pode ser o gasto com $q$ e $c$.
+
+Analogamente, os produtores também apresentam lucro igual para produção imobiliária em todos os pontos da cidade. Se algum lugar na cidade lucrasse mais do que outro, as firmas buscariam produzir lá e, portanto, seu preço reduziria com a expansão de oferta, equilibrando o sistema. Os produtores apresentam uma função de produção que depende do preço ($r$) da terra ($l$) e do custo ($i$) da verticalização ($N$). Se construir um novo andar em um terreno existente for mais barato que comprar um novo terreno, a incorporadora decidirá por verticalizar, mas a cada novo andar construído, o próximo apresentará um custo maior.
+
+Com o modelo construído, agora é possível resolvê-lo de forma a descobrir o preço do metro quadrado na cidade. Na Figura \ref{fig:micro} é possível observar o que acontece com o preço por metro quadrado ($p$) na medida em que aumenta a distância ao centro ($x$). Como a renda é constante na cidade e os preços por metro quadrado são maiores no centro, os habitantes no centro conseguem comprar apartamentos menores. Dessa forma a densidade habitacional apresenta o mesmo comportamento do que o preço do metro quadrado: na medida em que aumenta $x$, $D$ reduz.
+
+\begin{figure}[h]
+    \centering
+    \caption{Curva de preço por metro quadrado}
+    \begin{subfigure}{.6\linewidth}
+        \input{imagens/micro.tex}
+    \end{subfigure}
+    \label{fig:micro}
+\end{figure}
+
+Portanto, com essas premissas e resultados, não é necessária a intervenção do governo para regulamentar a densidade, visto que as próprias forças de mercado adensam as regiões centrais. Dessa forma, regulamentações podem mais gerar peso morto, ineficiência e burocracia. Entretanto, algumas das premissas do modelo são tão fortes, que o tornam descolado da realidade. Inclusive, o efeito da distância pode ser ambíguo na densidade a depender de algumas premissas. 
+% Um exemplo disso é quando se incorpora no modelo níveis de renda diferentes.
+
+Suponha uma cidade na qual os habitantes possuem mais de uma opção de meio de transporte. Os ricos, por exemplo, se deslocam de carro e os pobres, de ônibus. Como o carro apresenta um custo mais alto, esse grupo vai valorizar mais morar em regiões centrais, visto que o efeito da distância ($x$) em sua renda disponível é maior. Com este novo cenário, o quanto cada grupo está disposto a pagar pelo metro quadrado muda do cenário da Figura \ref{fig:micro} para a Figura \ref{fig:micro-2}, na qual se observa um padrão de segregação espacial dos dois grupos. Os ricos, que habitam o centro, possuem um maior poder aquisitivo, então vão consumir apartamentos maiores. Como consequência, têm-se que com essas novas premissas, a densidade habitacional no centro já não é mais tão grande.
+
+\begin{figure}[h]
+    \centering
+    \caption{Curva de preço por metro quadrado com dois grupos}
+    \begin{subfigure}{.6\linewidth}
+        \input{imagens/micro-2.tex}
+    \end{subfigure}
+    \label{fig:micro-2}
+\end{figure}
+
+
+% Supondo agora uma cidade que possui dois grupos de renda, os ricos e os pobres. As outras premissas se mantém. Agora, se tanto os pobres quanto os ricos estiverem competindo pela mesma unidade habitacional, sempre vencerá quem consegue pagar o maior preço. Para determinar a localização que cada grupo se encontra na cidade, é importante comparar as curvas de preço, como da Figura \ref{fig:micro}, e analisar para cada parte da cidade, quem está disposto a pagar mais pela unidade habitacional.
+
+% Várias hipóteses de como essas curvas se comportam podem surgir, a depender de como o componente renda é incorporado no modelo. Uma que é razoável para o Brasil
+
 
 \chapter{Empírico}
 \label{sec:emp}
+
+\section{Dados}
+
+Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área.
+
+
+\begin{figure}[h]
+    \centering
+    \caption{Densidade populacional em São Paulo por setor censitário (Censo 2022)}
+    \includegraphics[width = \linewidth]{imagens/mapa.png}
+    \label{fig:populacao}
+\end{figure}
+
+Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no geosampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente.''.
+
+Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área útil e o número de pavimentos do empreendimento. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte. A cota parte especificamente também pode ser calculada através dos dados do censo apenas.
+
+Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de outros dados não é possível cruzá-los com censo. O que possibilita fazer essa junção é que o número único de contribuinte, também é o código do Setor, Quadra e Lote (SQL) que o empreendimento se encontra. Nesse sentido, é possível decompor o SQL e cruzar com a base de lotes do geosampa, que contém a geometria de cada  um dos 1.677.980 lotes da cidade. O que explica a diferença entre o número de lotes e número de números dos contribuintes são os lotes que contém um condomínio, que pode haver diversos números únicos de contribuintes em apenas um lote. 
+
+Uma dificuldade que surge ao juntar os dados do Censo com os do IPTU, é que setores censitários podem cortar os lotes de forma que um lote pertença a mais de um setor. Sendo assim, alguma premissa deve ser adotada para que se classifique em qual setor o lote será contabilizado para os cálculos dos indicadores utilizados pela regulamentação. Na Figura \ref{fig:lote-censo} é possível observar os lotes coloridos de vermelho e os setores censitários coloridos como na Figura \ref{fig:populacao} e delimitados por um contorno branco. Quando um lote é cortado em mais de um setor censitário, é calculada a porcentagem de sua área em cada um dos setores e ele é contabilizado em ambos, ponderado por essa porcentagem.
+
+
+\begin{figure}[h]
+    \centering
+    \caption{Lotes e setores censitários na Lapa}
+    \includegraphics[width = \linewidth]{imagens/mapa-lotes.png}
+    \label{fig:lote-censo}
+\end{figure}
