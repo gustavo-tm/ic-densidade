@@ -87,5 +87,21 @@ IPTU.censo <- censo %>%
   mutate(percent_intersec = as.numeric(st_area(geometria_intersec) / st_area(geometria_lote)))
 
 
+gg <- IPTU.censo %>%
+  st_as_sf() %>% 
+  st_crop(distrito %>% filter(ds_nome == "SE")) %>% 
+  mutate(densidade = v0001/area_setor,
+         decil = ntile(densidade, 10),
+         percent_intersec = round(percent_intersec * 100)) %>% 
+  ggplot() +
+  geom_sf(aes(geometry = geometria_setor_censitario, fill = factor(decil)), color = "white", lwd = 1.5) +
+  geom_sf(aes(geometry = geometria_intersec), fill = "red", color = "red", alpha = .25) +
+  geom_sf_label(aes(geometry = geometria_intersec, label = percent_intersec), label.size = .01) +
+  scale_fill_viridis_d() +
+  labs(fill = "Decil de densidade") +
+  theme(legend.position = "none") +
+  theme_void()
+
+ggsave("tex/imagens/mapa-lotes.png", gg, width = 70, height = 70, dpi = 150, limitsize = FALSE)
 
 
