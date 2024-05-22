@@ -227,56 +227,28 @@ df %>%
   scale_y_log10() +
   scale_x_log10()
 
-a <- 100
-limites <- list(xmin = 334654.5 - a, ymin = 7395000 - a, xmax = 334763.9 + a, ymax = 7395071 + a) 
 
-a <- 50
-limites_plot <- list(xmin = 334654.5 - a, ymin = 7395000 - a, xmax = 334763.9 + a, ymax = 7395071 + a) 
+lote_metro <- IPTU.censo %>% 
+  st_set_geometry("geometria_lote") %>% 
+  st_crop(distrito %>% filter(ds_nome == "SE")) %>% 
+  mutate(centroide_lote = st_centroid(geometria_lote),
+         metro = st_nearest_feature(centroide_lote, metro)) %>% 
+  left_join(metro %>% 
+              as_tibble() %>% 
+              mutate(rn = row_number()) %>% 
+              rename(geomeria_metro = geometry), by = join_by(metro== rn)) %>% 
+  mutate(distancia_metro = st_distance(centroide_lote, geomeria_metro,  by_element=TRUE)) %>% 
+  as_tibble() %>% 
+  pivot_longer(cols = c(centroide_lote, geomeria_metro)) %>% 
+  st_set_geometry("value") %>% 
+  group_by(setor, quadra, lote) %>% 
+  summarize(do_union = FALSE) %>% 
+  st_cast("LINESTRING")
 
-gg <- IPTU.censo %>%
-  st_as_sf() %>% 
-  # st_crop(distrito %>% filter(ds_nome == "SE")) %>% 
-  #IPTU.censo %>% filter(id_setor_censitario == "355030810000143P") %>% select(geometria_setor_censitario) %>% st_as_sf()
-  st_crop(limites %>% unlist()) %>% 
-  mutate(densidade = v0001/area_setor,
-         decil = ntile(densidade, 10),
-         percent_intersec = round(percent_intersec * 100)) %>% 
-  ggplot() +
-  geom_sf(aes(geometry = geometria_setor_censitario, fill = factor(decil)), color = "white", lwd = 1.5) +
-  geom_sf(aes(geometry = geometria_intersec), fill = "red", color = "red", alpha = .25) +
-  geom_sf_label(aes(geometry = geometria_intersec, label = percent_intersec), label.size = .01) +
-  scale_fill_viridis_d() +
-  labs(fill = "Decil de densidade") +
-  theme(legend.position = "none") +
-  coord_sf(xlim = c(limites_plot$xmin, limites_plot$xmax), ylim = c(limites_plot$ymin, limites_plot$ymax)) +
+ggplot() +
+  geom_sf(data = IPTU.censo %>% st_set_geometry("geometria_lote") %>% st_crop(distrito %>% filter(ds_nome == "SE")),
+          aes(geometry = geometria_lote)) +
+  geom_sf(data = lote_metro %>% st_crop(distrito %>% filter(ds_nome == "SE")), alpha = .1, color = "darkblue") +
+  geom_sf(data = metro %>% st_crop(distrito %>% filter(ds_nome == "SE")), color = "red") +
   theme_void()
-
-a <- 100
-limites <- list(xmin = 334654.5 - a, ymin = 7395000 - a, xmax = 334763.9 + a, ymax = 7395071 + a) 
-
-a <- 50
-limites_plot <- list(xmin = 334654.5 - a, ymin = 7395000 - a, xmax = 334763.9 + a, ymax = 7395071 + a) 
-gg <- IPTU.censo %>%
-  st_as_sf() %>% 
-  # st_crop(distrito %>% filter(ds_nome == "SE")) %>% 
-  #IPTU.censo %>% filter(id_setor_censitario == "355030810000143P") %>% select(geometria_setor_censitario) %>% st_as_sf()
-  st_crop(limites %>% unlist()) %>% 
-  mutate(densidade = v0001/area_setor,
-         decil = ntile(densidade, 10),
-         percent_intersec = round(percent_intersec * 100)) %>% 
-  ggplot() +
-  geom_sf(aes(geometry = geometria_setor_censitario, fill = factor(decil)), color = "white", lwd = 1.5) +
-  geom_sf(aes(geometry = geometria_intersec), fill = "red", color = "red", alpha = .25) +
-  geom_sf_label(aes(geometry = geometria_intersec, label = percent_intersec), label.size = .01) +
-  scale_fill_viridis_d() +
-  labs(fill = "Decil de densidade") +
-  theme(legend.position = "none") +
-  coord_sf(xlim = c(limites_plot$xmin, limites_plot$xmax), ylim = c(limites_plot$ymin, limites_plot$ymax)) +
-  theme_void()
-
-# ggsave("tex/imagens/mapa-lotes.png", gg, width = 70, height = 70, dpi = 150, limitsize = FALSE)
-ggsave("teste.png", gg, width = 20, height = 20, dpi = 150, limitsize = FALSE)
-
-
-
 
