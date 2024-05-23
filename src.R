@@ -230,7 +230,6 @@ df %>%
 
 lote_metro <- IPTU.censo %>% 
   st_set_geometry("geometria_lote") %>% 
-  st_crop(distrito %>% filter(ds_nome == "SE")) %>% 
   mutate(centroide_lote = st_centroid(geometria_lote),
          metro = st_nearest_feature(centroide_lote, metro)) %>% 
   left_join(metro %>% 
@@ -238,12 +237,14 @@ lote_metro <- IPTU.censo %>%
               mutate(rn = row_number()) %>% 
               rename(geomeria_metro = geometry), by = join_by(metro== rn)) %>% 
   mutate(distancia_metro = st_distance(centroide_lote, geomeria_metro,  by_element=TRUE)) %>% 
-  as_tibble() %>% 
-  pivot_longer(cols = c(centroide_lote, geomeria_metro)) %>% 
-  st_set_geometry("value") %>% 
-  group_by(setor, quadra, lote) %>% 
-  summarize(do_union = FALSE) %>% 
-  st_cast("LINESTRING")
+  as_tibble()
+
+IPTU.censo <- IPTU.censo %>% 
+  left_join(lote_metro %>% 
+              st_drop_geometry() %>% 
+              select(setor, quadra, lote, distancia_metro),
+            by = join_by(setor, quadra, lote))
+
 
 ggplot() +
   geom_sf(data = IPTU.censo %>% st_set_geometry("geometria_lote") %>% st_crop(distrito %>% filter(ds_nome == "SE")),
@@ -251,4 +252,5 @@ ggplot() +
   geom_sf(data = lote_metro %>% st_crop(distrito %>% filter(ds_nome == "SE")), alpha = .1, color = "darkblue") +
   geom_sf(data = metro %>% st_crop(distrito %>% filter(ds_nome == "SE")), color = "red") +
   theme_void()
+
 
