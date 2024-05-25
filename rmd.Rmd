@@ -11,6 +11,7 @@ library(tidyverse)
 library(sf)
 library(kableExtra)
 library(knitr)
+library(units)
 ```
 
 
@@ -56,11 +57,30 @@ lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>%
 
 ```{r, echo = FALSE}
 lotes %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
+
+```{r plot_lotsizes, cache = TRUE}
+lotes %>% 
+  mutate(condominio = case_when(lo_condomi == "00" ~ "Unidade",
+                                lo_condomi != "00" ~ "Condomínio"),
+         tipo = case_when(lo_tp_lote == "F" ~ "Fiscal",
+                          lo_tp_lote == "M" ~ "Espaço livre",
+                          lo_tp_lote == "V" ~ "Via de acesso",
+                          .default = NA),
+         area = st_area(geometry) %>% as.numeric()) %>% 
+  st_drop_geometry() %>% 
+  ggplot() +
+  geom_violin(aes(x = factor(condominio), y = area, fill = tipo)) +
+  scale_y_log10(labels = scales::comma_format(big.mark = ".")) +
+  labs(title = "Área dos lotes em SP" , x = "", y = "Área em metros quadrados", fill = "Tipo de lote") +
+  theme_classic()
+```
+
+
 
 # SQL dos Lotes (Setor, Quadra e Lote)
 Na base de dados de lotes, cada lote é identificado por três componentes principais:
@@ -79,7 +99,19 @@ lotes <- lotes %>%
 
 ```{r, echo = FALSE}
 lotes %>% 
-  head(10) %>% 
+  filter(!startsWith(lote, "CD")) %>% 
+  ungroup() %>% sample_n(5) %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+```
+
+
+```{r, echo = FALSE}
+lotes %>% 
+  ungroup() %>% 
+  filter(startsWith(lote, "CD")) %>% 
+  sample_n(5) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
@@ -120,20 +152,71 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
              ifelse(condominio == "00-0", ., paste("CD", str_sub(condominio, 1, 2), sep = "")),
            
            # Tipo de uso
-           residencial = str_detect(tipo, "Residencial") %>% as.numeric()) 
+           residencial = str_detect(tipo, "Residencial")) 
 ```
 
 ```{r, echo = FALSE}
 IPTU %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
 
+```{r}
+IPTU.tipos <- IPTU %>% 
+  group_by(tipo) %>% 
+  summarize(n = n()) %>% 
+  mutate(percentual = n/sum(n)) %>% 
+  rename("Tipo de contribuinte" = tipo)
+```
+
+```{r, echo = FALSE}
+IPTU.tipos %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+remove(IPTU.tipos)
+```
+
+```{r grafico_area_construida, cache = TRUE}
+IPTU %>% 
+  mutate(uso = case_when(str_detect(tipo, "Residencial") ~ "Residencial",
+                         str_detect(tipo, "Comercial") ~ "Comercial",
+                         str_detect(tipo, "Oficina") ~ "Industria",
+                         str_detect(tipo, "garagens") ~ "Garagem",
+                         str_detect(tipo, "TERRENO") ~ "Terreno",
+                         str_detect(tipo, "Clube") ~ "Entretenimento",
+                         .default = "Outros"),
+         padrao = case_when(str_detect(tipo, "A$") ~ "A",
+                            str_detect(tipo, "B$") ~ "B",
+                            str_detect(tipo, "C$") ~ "C",
+                            str_detect(tipo, "D$") ~ "D",
+                            str_detect(tipo, "E$") ~ "E",
+                            .default = "NA")) %>% 
+  
+  group_by(uso, padrao) %>% 
+  summarize(area = sum(area_construida)) %>% 
+  ggplot() +
+  treemapify::geom_treemap(aes(fill = uso, area = area), size = 2) +
+  treemapify::geom_treemap(aes(alpha = padrao, area = area), fill = "black") +
+  scale_fill_manual(values = c("Residencial" = "#FAE48B", 
+                               "Comercial" = "#A6EEE6",
+                               "Garagem" = "#1A5354",
+                               "Industria" = "#84BD00",
+                               "Entretenimento" = "#FB6467",
+                               "Outros" = "white")) +
+  scale_alpha_manual(values = c("A" = 0, "B" = .075, "C" = .15, "D" = .225, "E" = .3, "NA" = 0)) +
+  labs(title = "Área construída em SP por tipo de uso", fill = "Tipo de uso", alpha = "Parão de uso") +
+  theme(aspect.ratio=1)
+```
+
+
 ## Agrupamento dos condomínios
 
-Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agregado a nível lote, para que possa ser cruzado com a base de lotes, possibilitando que seja georreferenciada. 
+Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agregado a nível lote, para que possa ser cruzado com a base de lotes, possibilitando que seja georreferenciada. Todos os contribuintes dentro de um condomínio compartilham das mesmas características de área de terreno, área ocupada, ano de construção e pavimentos, então a mediana funciona para agregar estes dados, mas o máximo, mínimo, média ou pegar o primeiro valor também funcionaria.
+
+Como a análise é sobre a densidade residencial, foram considerados apenas os contribuintes que apresentam propriedades residenciais.
 
 ```{r IPTU_tratado, cache = TRUE}
 IPTU <- IPTU %>% 
@@ -142,24 +225,42 @@ IPTU <- IPTU %>%
   # No caso de condomínios, calcula quando aquele IPTU representa o lote, com base na área construída
   mutate(percent_area = (area_construida / sum(area_construida))) %>% 
   
+  # Remoção de IPTUs não residenciais
+  filter(residencial) %>% 
+  
   # Agregar por SQL
   group_by(setor, quadra, lote) %>% 
   summarize(unidades = n(),
-            area_terreno = mean(area_terreno), 
+            area_terreno = median(area_terreno), 
             area_construida = sum(area_construida), 
-            area_ocupada = mean(area_ocupada),
-            pavimentos = mean(pavimentos),
-            ano_construcao = mean(ano_construcao),
-            percent_residencial_unidades = mean(residencial),
-            percent_residencial_ponderado = sum(residencial * percent_area))
+            area_ocupada = median(area_ocupada),
+            pavimentos = median(pavimentos),
+            ano_construcao = median(ano_construcao))
 ```
 
 ```{r, echo = FALSE}
 IPTU %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
+```
+
+```{r plot_verticalizacao, cache = TRUE}
+IPTU %>% 
+  ungroup() %>% 
+  arrange(pavimentos) %>% 
+  mutate(grupo = cumsum((row_number() %% 100) == 0)) %>%
+  group_by(grupo) %>% 
+  summarize(pavimentos = median(pavimentos)) %>% 
+  mutate(grupo = grupo / max(grupo)) %>%
+  ggplot() +
+  geom_area(aes(x = grupo, y = pavimentos)) +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Percentual de lotes residenciais da cidade", y = "Pavimentos", 
+       title = "Perfil de verticalização residencial de SP") +
+  theme_classic()
+  
 ```
 
 # Join entre a Base de Lotes e a Base do IPTU
@@ -167,7 +268,8 @@ IPTU %>%
 ```{r join_IPTU-lotes, cache = TRUE}
 # Join dos lotes com IPTU com base no SQL
 IPTU.lotes <- IPTU %>% 
-  left_join(lotes, by = join_by(setor, quadra, lote))
+  left_join(lotes, by = join_by(setor, quadra, lote)) %>% 
+  ungroup()
 ```
 
 ```{r, echo = FALSE}
@@ -175,10 +277,63 @@ remove(IPTU)
 remove(lotes)
 
 IPTU.lotes %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
+```
+
+# Erros no join
+
+Há alguns casos em que o join não encontra match na base de dados dos lotes. Uma possível explicação para este descompasso pode ser a desatualização da base do IPTU, visto que no geosampa a base de lotes sempre é a mais atualizada, visto que toda vez em que um lote é modificado ou surgem novos lotes, esta base é atualizada. Possivelmente a base do IPTU perdeu essas eventuais atualizações.
+
+Uma possibilidade para contornar isso seria cruzar o setor e quadra do SQL, sem juntar com o lote com a base de quadras. Essa abordagem perderia um pouco da exatidão geográfica. Outra possibilidade seria de utilizar dados do logradouro para georreferenciar estes SQLs perdidos. Entretanto, como são dados residuais, isso tem impacto negligenciável na análise.
+
+```{r erro_join, cache = TRUE}
+erro_join <- IPTU.lotes %>% 
+  mutate(erro = geometry %>% st_is_empty()) %>% 
+  st_drop_geometry() %>% 
+  group_by(erro) %>% 
+  summarize(n = n(),
+            unidades = sum(unidades),
+            area_construida = sum(area_construida)) %>% 
+  mutate(prop = n/sum(n),
+         prop_unidades = unidades / sum(unidades),
+         prop_area_construida = area_construida / sum(area_construida))
+```
+
+```{r, echo = FALSE}
+erro_join %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+
+remove(erro_join)
+```
+
+```{r erros_geografica, cache = TRUE}
+setor <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
+  st_set_crs("epsg:31983") %>% 
+  select(st_codigo)
+
+IPTU.lotes %>% 
+  mutate(erro = geometry %>% st_is_empty()) %>% 
+  filter(erro) %>% 
+  group_by(setor) %>% 
+  summarize(erros = n())  %>%
+  mutate(erros = cut(erros, breaks = c(0, 50, 100, 200, 500, 1000, Inf))) %>% 
+  left_join(setor, join_by(setor == st_codigo)) %>% 
+  ggplot() +
+  geom_sf(data = setor, color = "white") +
+  geom_sf(aes(geometry = geometry, fill = factor(erros)), color = "white") +
+  scale_fill_viridis_d() +
+  labs(fill = "Número de erros", title = "Distribuição geográfica dos erros de join") +
+  theme_void()
+  
+```
+
+```{r, echo = FALSE}
+remove(setor, erro_join)
 ```
 
 # Uso dos Microdados do Censo de 2022 para Análise Geoespacial
@@ -203,7 +358,7 @@ censo <- read_sf("dados/censo/SP_Malha_Preliminar_2022.shp") %>%
 
 ```{r, echo = FALSE}
 censo %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
@@ -224,6 +379,22 @@ ggsave("tex/imagens/mapa.png", gg, width = 20, height = 20, dpi = 400)
 
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/mapa.png")
+```
+
+```{r}
+descritiva <- censo %>% 
+  st_drop_geometry() %>% 
+  summarize("Total de pessoas" = sum(v0001),
+            "Total de Domicílios" = sum(v0002),
+            "Total de Domicílios Particulares Ocupados" = sum(v0007)) %>% 
+  pivot_longer(everything())
+```
+
+```{r, echo = FALSE}
+descritiva %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
 ```
 
 # Cruzamento entre a Base do Censo e a Base do IPTU
@@ -254,7 +425,7 @@ IPTU.censo <- censo %>%
 remove(IPTU.lotes)
 
 IPTU.censo %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
@@ -346,7 +517,7 @@ caso.erro <- IPTU.censo %>%
 
 ```{r, echo = FALSE}
 caso.erro %>% 
-  head(10) %>% 
+  ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
@@ -399,7 +570,7 @@ lote_metro <- IPTU.censo %>%
 
 ```{r, echo = FALSE}
 lote_metro %>% 
-  head(10) %>% 
+  ungroup() %>% ungroup() %>% sample_n(10) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
@@ -436,3 +607,7 @@ ggsave("tex/imagens/mapa_metro.png", gg, width = 10, height = 10, dpi = 300)
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/mapa_metro.png")
 ```
+
+
+
+

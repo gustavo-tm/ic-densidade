@@ -189,17 +189,23 @@ view_geomtria(IPTU.censo %>%
 
 df <- IPTU.censo %>% 
   group_by(id_setor_censitario) %>% 
-  summarize(populacao = mean(v0007),
-            area_setor = mean(area_setor) %>% as.numeric(),
+  summarize(
+            
+            # Setor censitário
+            populacao = median(v0007),
+            area_setor = median(area_setor) %>% as.numeric(),
+            domicilios = median(v0002),
+            domicilios_ocupados = median(v0007),
+            
+            # Lote
             unidades_total = sum(unidades * percent_intersec),
             unidades_residenciais = sum(unidades * percent_intersec * percent_residencial_unidades),
-            domicilios = sum(v0002),
-            domicilios_ocupados = sum(v0007),
             area_terreno_total = sum(area_terreno * percent_intersec),
             area_construida_total = sum(area_construida * percent_intersec),
             area_ocupada_total = sum(area_ocupada * percent_intersec),
-            pavimentos = weighted.mean(pavimentos, area_terreno * percent_intersec),
+            pavimentos = weighted.mean(pavimentos, area_ocupada * percent_intersec),
             taxa_residencial = weighted.mean(percent_residencial_unidades)) %>% 
+  
   mutate(densidade = populacao / area_setor,
          cota_parte = area_construida_total / unidades_total,
          CA = area_construida_total / area_terreno_total)
