@@ -2,5 +2,6 @@ dados/*
 .Rhistory
 .Rdata
 rmd.html
+rmd.pdf
 rmd_cache/*
 rmd_files/*
