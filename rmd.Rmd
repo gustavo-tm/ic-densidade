@@ -15,6 +15,8 @@ library(kableExtra)
 library(knitr)
 library(units)
 library(gt)
+
+set.seed(123)
 ```
 
 
@@ -23,13 +25,15 @@ opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache.lazy = FALSE
 setwd("C:/git/densidade")
 ```
 
-# GeoSampa e bases utilizadas
+# Geosampa
 
-## Geosampa
 GeoSampa é o portal de mapas e dados geoespaciais da cidade de São Paulo, mantido pela prefeitura. Ele fornece uma vasta gama de informações geográficas, incluindo mapas, dados demográficos, infraestruturas e muito mais. Este portal é uma ferramenta valiosa para pesquisadores, urbanistas e qualquer pessoa interessada em informações espaciais detalhadas sobre a cidade.
 
-## Lotes
-Base de Lotes: No GeoSampa, a base de lotes representa a divisão da cidade em pequenos segmentos, geralmente correspondentes a terrenos individuais ou lotes. Esta base está organizada de forma que cada bairro tem seu próprio conjunto de dados e os dados de lotes para cada bairro podem ser baixados diretamente do site do GeoSampa em formato zip, contendo arquivos como .shp (shapefile), .dbf (database file), e .shx (index file).
+https://geosampa.prefeitura.sp.gov.br/
+
+# Lotes
+Base de Lotes: No GeoSampa, a base de lotes representa a divisão da cidade em pequenos segmentos, geralmente correspondentes a terrenos individuais ou condomínios. Esta base está organizada de forma que cada bairro tem seu próprio conjunto de dados e os dados de lotes para cada bairro podem ser baixados diretamente do site do GeoSampa em formato zip, contendo arquivos como .shp (shapefile), .dbf (database file), e .shx (index file).
+
 
 ```{r}
 # Extração do zip file com lotes de cada bairro
@@ -50,6 +54,7 @@ if (!"zip" %in% list.files(path = "dados/lotes")){
 ```
 
 ```{r lotes_bruto, cache = TRUE}
+# Junção dos shapes dos lotes de cada bairro em uma tabela
 lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>% 
     paste("dados/lotes/unzip/", ., "/", ., ".shp", sep = "") %>% 
     lapply(read_sf) %>% 
@@ -60,11 +65,22 @@ lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>%
 
 ```{r, echo = FALSE}
 lotes %>% 
-  ungroup() %>% sample_n(10) %>% 
+  ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
+
+## Tipos de lotes
+
+Os lotes podem ser classificados de três formas
+
+- Lotes fiscais: apresentam contribuintes do IPTU
+- Espaço livre: espaços públicos
+- Via de acesso: Ruas fechadas para acesso dentro de uma quadra
+
+Os lotes fiscais podem ser unidades ou condomínios. Um prédio, por exemplo, fica em um único lote, mas dentro pode haver diversas unidades, então se configura como um condomínio. Não é possível saber através dos dados de lotes quantas unidades estão no condomínio, nem alguma forma de discriminá-los.
+
 
 ```{r plot_lotsizes, cache = TRUE}
 lotes %>% 
@@ -85,7 +101,7 @@ lotes %>%
 
 
 
-# SQL dos Lotes (Setor, Quadra e Lote)
+## SQL dos Lotes (Setor, Quadra e Lote)
 Na base de dados de lotes, cada lote é identificado por três componentes principais:
 
 1. Setor (lo_setor): Uma divisão maior dentro do município que agrupa várias quadras.
@@ -102,29 +118,16 @@ lotes <- lotes %>%
 
 ```{r, echo = FALSE}
 lotes %>% 
-  filter(!startsWith(lote, "CD")) %>% 
-  ungroup() %>% sample_n(5) %>% 
+  ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
 
-
-```{r, echo = FALSE}
-lotes %>% 
-  ungroup() %>% 
-  filter(startsWith(lote, "CD")) %>% 
-  sample_n(5) %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-```
 
 # Base de Dados do IPTU
 
-A base de dados do IPTU (Imposto Predial e Territorial Urbano) é uma fonte abrangente de informações sobre imóveis urbanos dentro do município. Essa base é considerada completa, pois abrange todos os imóveis sujeitos à tributação do IPTU, representando uma fonte confiável e abrangente de informações sobre a propriedade urbana.
-
-Essa base é crucial para a gestão tributária municipal, fornecendo dados detalhados sobre os imóveis, incluindo sua localização, características físicas e valores venais. A inclusão de todos os imóveis tributáveis garante que a base do IPTU proporcione uma visão abrangente do mercado imobiliário urbano dentro do município.
+A base de dados do IPTU (Imposto Predial e Territorial Urbano) é uma fonte abrangente de informações sobre imóveis urbanos dentro do município. Essa base é considerada completa, pois abrange todos os imóveis sujeitos à tributação do IPTU, representando uma fonte confiável e abrangente de informações sobre a propriedade urbana. Propriedades que não foram construídas dentro da legalidade não constam nessa base.
 
 O número do contribuinte, utilizado para identificar exclusivamente cada imóvel na base de dados do IPTU, é representado diretamente pelo SQL, sendo essencial para consultas e manipulação dos dados relacionados ao imposto predial e territorial urbano. Esse formato permite a integração e cruzamento com outras bases de dados, como a base de lotes, que está georreferenciada, fornecendo informações espaciais adicionais que não estão disponíveis na base do IPTU.
 
@@ -137,7 +140,6 @@ Quando um lote é um condomínio, ou seja, quando não se classifica de acordo c
 IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>% 
     as_tibble() %>% 
     select(sql = "NUMERO.DO.CONTRIBUINTE", 
-           bairro = "BAIRRO.DO.IMOVEL",
            condominio = "NUMERO.DO.CONDOMINIO",
            area_terreno = "AREA.DO.TERRENO",
            area_construida = "AREA.CONSTRUIDA",
@@ -160,18 +162,23 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
 
 ```{r, echo = FALSE}
 IPTU %>% 
-  ungroup() %>% sample_n(10) %>% 
+  ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
+
+## Tipos de uso para IPTU
+
+Todos os empreendimentos não públicos regulares (de acordo com a lei) constam nesta base de dados. A seguir está uma análise de quais são estes tipos. O tipo de interesse para esta análise é apenas os residenciais.
+
 
 ```{r}
 IPTU.tipos <- IPTU %>% 
   group_by(tipo) %>% 
   summarize(n = n()) %>% 
   mutate(percentual = n/sum(n)) %>% 
-  rename("Tipo de contribuinte" = tipo)
+  rename("Tipo de contribuinte" = tipo) 
 ```
 
 ```{r, echo = FALSE}
@@ -183,11 +190,10 @@ remove(IPTU.tipos)
 ```
 
 ```{r grafico_area_construida, cache = TRUE}
-IPTU %>% 
+gg <- IPTU %>% 
   mutate(uso = case_when(str_detect(tipo, "Residencial") ~ "Residencial",
                          str_detect(tipo, "Comercial") ~ "Comercial",
                          str_detect(tipo, "Oficina") ~ "Industria",
-                         str_detect(tipo, "garagens") ~ "Garagem",
                          str_detect(tipo, "TERRENO") ~ "Terreno",
                          str_detect(tipo, "Clube") ~ "Entretenimento",
                          .default = "Outros"),
@@ -196,37 +202,48 @@ IPTU %>%
                             str_detect(tipo, "C$") ~ "C",
                             str_detect(tipo, "D$") ~ "D",
                             str_detect(tipo, "E$") ~ "E",
-                            .default = "NA")) %>% 
-  
-  group_by(uso, padrao) %>% 
+                            .default = "NA"),
+         nome = paste("(", padrao, ") ", uso, sep = "")) %>% 
+  group_by(uso, padrao, nome) %>% 
   summarize(area = sum(area_construida)) %>% 
+  ungroup() %>% 
+  mutate(percentual = paste(round(area * 100/ sum(area, na.rm = TRUE)), "%", sep = "")) %>% 
   ggplot() +
   treemapify::geom_treemap(aes(fill = uso, area = area), size = 2) +
   treemapify::geom_treemap(aes(alpha = padrao, area = area), fill = "black") +
+  treemapify::geom_treemap_text(aes(area = area, label = nome), alpha = .4, grow = FALSE, size = 8) +
+  treemapify::geom_treemap_text(aes(area = area, label = percentual), 
+                                alpha = .4, place = "middle", size = 10) +
   scale_fill_manual(values = c("Residencial" = "#FAE48B", 
                                "Comercial" = "#A6EEE6",
-                               "Garagem" = "#1A5354",
                                "Industria" = "#84BD00",
                                "Entretenimento" = "#FB6467",
-                               "Outros" = "white")) +
-  scale_alpha_manual(values = c("A" = 0, "B" = .075, "C" = .15, "D" = .225, "E" = .3, "NA" = 0)) +
-  labs(title = "Área construída em SP por tipo de uso", fill = "Tipo de uso", alpha = "Parão de uso") +
+                               "Outros" = "#1A5354")) +
+  scale_alpha_manual(values = c("A" = 0, "B" = .05, "C" = .1, "D" = .15, "E" = .2, "NA" = 0)) +
+  labs(title = "Área construída em SP por tipo de uso", 
+       fill = "Tipo de uso", alpha = "Parão de uso") +
   theme(aspect.ratio=1)
+
+
+
+ggsave("tex/imagens/tree_area_construida.png", gg, width = 8, height = 8, dpi = 250)
+
 ```
 
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/tree_area_construida.png")
+remove(gg)
+```
 
 ## Agrupamento dos condomínios
 
 Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agregado a nível lote, para que possa ser cruzado com a base de lotes, possibilitando que seja georreferenciada. Todos os contribuintes dentro de um condomínio compartilham das mesmas características de área de terreno, área ocupada, ano de construção e pavimentos, então a mediana funciona para agregar estes dados, mas o máximo, mínimo, média ou pegar o primeiro valor também funcionaria.
 
-Como a análise é sobre a densidade residencial, foram considerados apenas os contribuintes que apresentam propriedades residenciais.
+
 
 ```{r IPTU_tratado, cache = TRUE}
 IPTU <- IPTU %>% 
   group_by(setor, quadra, lote) %>% 
-  
-  # No caso de condomínios, calcula quando aquele IPTU representa o lote, com base na área construída
-  mutate(percent_area = (area_construida / sum(area_construida))) %>% 
   
   # Agregar por SQL
   group_by(setor, quadra, lote) %>% 
@@ -236,33 +253,16 @@ IPTU <- IPTU %>%
             area_ocupada = median(area_ocupada),
             pavimentos = median(pavimentos),
             ano_construcao = median(ano_construcao),
-            residencial = min(residencial))
+            residencial = median(residencial))
 ```
 
 ```{r, echo = FALSE}
 IPTU %>% 
-  ungroup() %>% sample_n(10) %>% 
+  ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
-
-```{r plot_verticalizacao, cache = TRUE}
-IPTU %>% 
-  ungroup() %>% 
-  arrange(pavimentos) %>% 
-  mutate(grupo = cumsum((row_number() %% 100) == 0)) %>%
-  group_by(grupo) %>% 
-  summarize(pavimentos = median(pavimentos)) %>% 
-  mutate(grupo = grupo / max(grupo)) %>%
-  ggplot() +
-  geom_area(aes(x = grupo, y = pavimentos)) +
-  scale_x_continuous(labels = scales::percent) +
-  labs(x = "Percentual de lotes residenciais da cidade", y = "Pavimentos", 
-       title = "Perfil de verticalização residencial de SP") +
-  theme_classic()
-```
-
 
 # Join entre a Base de Lotes e a Base do IPTU
 
@@ -278,14 +278,16 @@ remove(IPTU)
 remove(lotes)
 
 IPTU.lotes %>% 
-  ungroup() %>% sample_n(10) %>% 
+  ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
 
+## Algumas estatísticas descritivas
+
 ```{r plot_distancia_pavimentos, cache = TRUE}
-IPTU.lotes %>% 
+gg <- IPTU.lotes %>% 
   filter(residencial == 1) %>% 
   mutate(distancia_centro = st_distance(geometry, 
                                         read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
@@ -295,14 +297,84 @@ IPTU.lotes %>%
            cut(breaks = 10^3*(0:40), labels = FALSE)) %>% 
   st_drop_geometry() %>% 
   group_by(distancia_centro) %>% 
-  summarize(pavimentos = weighted.mean(pavimentos, area_construida)) %>% 
+  summarize(pavimentos = weighted.mean(pavimentos, area_ocupada)) %>% 
   ggplot(aes(x = distancia_centro, y = pavimentos)) +
   geom_col() +
-  scale_x_continuous(labels = scales::comma_format(big.mark = ".")) +
+  geom_hline(yintercept = 2, linetype = "dotted") +
   labs(x = "Distância ao centro em quilômetros", 
-       y = "Pavimentos") +
+       y = "Pavimentos") + 
+  scale_y_continuous(breaks = (1:5)*2) +
   theme_classic()
+
+ggsave("tex/imagens/pavimentos.png", gg, width = 6, height = 4, dpi = 250)
+
 ```
+
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/pavimentos.png")
+remove(gg)
+```
+
+```{r plot_indicadores, cache = TRUE}
+gg <- IPTU.lotes %>% 
+  filter(residencial == TRUE) %>% 
+  st_drop_geometry() %>% 
+  mutate(CA = area_construida / area_terreno,
+         cota_parte = area_construida / unidades) %>% 
+  filter(cota_parte < 500, CA < 5) %>% 
+  pivot_longer(CA:cota_parte) %>% 
+  ggplot() +
+  geom_histogram(aes(x = value)) +
+  facet_wrap(~ name, scales = "free_x") +
+  labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
+  theme_classic()
+
+ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 5, dpi = 250)
+
+```
+
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/indicadores.png")
+remove(gg)
+```
+
+## Outliers
+
+Alguns IPTUs apresentam inconsistências, como um terreno de 400.000 metros quadrados com apenas uma unidade residencial.
+
+```{r outliers, cache = TRUE}
+outliers <- IPTU.lotes %>% 
+  filter(residencial == TRUE) %>% 
+  st_drop_geometry() %>% 
+  mutate(cota_parte = area_construida / unidades) %>% 
+  arrange(desc(cota_parte)) %>% 
+  head(10)
+```
+
+```{r, echo = FALSE}
+outliers %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+
+```
+
+Exemplo do lote de 400.000 metros quadrados e apenas uma unidade habitacional.
+
+```{r plot_outlier, cache = TRUE}
+outlier <- outliers %>% first() %>% st_set_geometry("geometry")
+
+ggplot() +
+  geom_sf(data = lotes %>% st_crop(outlier %>% st_buffer(500))) +
+  geom_sf(data = outlier, aes(geometry = geometry), fill = "darkblue") +
+  theme_void()
+
+```
+
+```{r, echo = FALSE}
+remove(outliers, outlier)
+```
+
 # Erros no join
 
 Há alguns casos em que o join não encontra match na base de dados dos lotes. Uma possível explicação para este descompasso pode ser a desatualização da base do IPTU, visto que no geosampa a base de lotes sempre é a mais atualizada, visto que toda vez em que um lote é modificado ou surgem novos lotes, esta base é atualizada. Possivelmente a base do IPTU perdeu essas eventuais atualizações.
@@ -329,35 +401,7 @@ IPTU.lotes %>%
   tab_spanner(label = "Nao Residencial", columns = contains("_Nao Residencial")) %>% 
   cols_label_with(fn = ~ str_remove(., pattern = "_Residencial|_Nao residencial"))
 ```
-```{r}
-towny |>
-  dplyr::select(
-    name, ends_with("2001"), ends_with("2006"), matches("2001_2006")
-  ) |>
-  dplyr::filter(population_2001 > 100000) |>
-  dplyr::arrange(desc(pop_change_2001_2006_pct)) |>
-  dplyr::slice_head(n = 10) |>
-  gt() |>
-  fmt_integer() |>
-  fmt_percent(columns = matches("change"), decimals = 1) |>
-  tab_spanner(label = "Population", columns = starts_with("population")) |>
-  tab_spanner(label = "Density", columns = starts_with("density")) |>
-  cols_label(
-    ends_with("01") ~ "2001",
-    ends_with("06") ~ "2006",
-  ) |>
-  cols_width(everything() ~ px(120))
-```
 
-
-```{r, echo = FALSE}
-erro_join %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-
-remove(erro_join)
-```
 
 ```{r erros_geografica, cache = TRUE}
 setor <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
@@ -384,15 +428,11 @@ IPTU.lotes %>%
 remove(setor, erro_join)
 ```
 
-# Uso dos Microdados do Censo de 2022 para Análise Geoespacial
-
-Os microdados do Censo de 2022 são uma fonte crucial de informações para sua análise geoespacial, oferecendo insights detalhados sobre a população e suas características socioeconômicas. Esses dados fornecem uma visão abrangente da distribuição da população e de suas condições de vida em nível local, permitindo uma análise mais precisa e contextualizada para seu problema específico.
+## Microdados do Censo de 2022
 
 É importante destacar que os resultados disponíveis são parciais do censo, com dados atualizados até o momento da divulgação. No entanto, mesmo parciais, esses dados podem ser extremamente úteis para suas análises.
 
-Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas.
-
-Cada setor censitário abrange uma determinada área geográfica e possui um conjunto de informações demográficas e socioeconômicas associadas a ele, o que permite uma análise detalhada das características da população em cada região. Portanto, ao realizar sua análise geoespacial utilizando os microdados do censo, os setores censitários servirão como a unidade básica de observação, fornecendo a base para suas análises espaciais e a contextualização dos resultados.
+Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas. A delimitação geográfica do setor também considera questões logísticas para o entrevistador conseguir entrevistar a todos.
 
 
 ```{r read_censo, cache = TRUE}
@@ -465,6 +505,18 @@ censo %>%
        y = "Densidade populacional por quilômetro quadrado") +
   theme_classic()
 ```
+```{r}
+censo %>% 
+  mutate(distancia_centro = st_distance(geometry, 
+                                        read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
+                                          st_set_crs("epsg:31983") %>% 
+                                          filter(ds_nome == "SE")) %>% 
+           as.numeric() / 1000,
+         densidade = v0001 / as.numeric(area_setor)) %>% 
+  filter(distancia_centro != 0) %>% 
+  lm(densidade ~ exp(-distancia_centro), data = .) %>% 
+  summary()
+```
 
 
 # Cruzamento entre a Base do Censo e a Base do IPTU
@@ -505,7 +557,7 @@ IPTU.censo %>%
                 font_size = 10)
 ```
 
-# Erros no join
+## Erros no join
 
 Alguns setores censitários com população maior que zero não encontram pares na base de lotes. Isso acontece principalmente por conta de loteamentos irregulares e favelas, que não são contribuintes do IPTU, e, portanto, não constam na base. Isso não prejudica a análise, pois estes loteamentos não dependem da regulamentação urbana, então mudanças nos instrumentos e indicadores não impactariam essas regiões.
 
@@ -545,11 +597,11 @@ ggsave("tex/imagens/mapa_erros_setor.png", gg, width = 16, height = 16, dpi = 30
 
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/mapa_erros_setor.png")
-remove(favela, gg, lotes_irregulares, censo, IPTU.lotes)
+remove(favela, gg, lotes_irregulares, IPTU.lotes)
 ```
+## Função para plotar um setor censitário ou SQL específico
 
 ```{r}
-# Função para plotar um setor censitário ou SQL específico
 view_geomtria <- function(geometria, zoom_out, colorir = TRUE){
   
   bbox <- geometria %>% 
@@ -590,7 +642,7 @@ view_geomtria <- function(geometria, zoom_out, colorir = TRUE){
 }
 ```
 
-# Exemplo de lote que é cortado por setor censitário
+## Exemplo de lote que é cortado por setor censitário
 
 Demonstrativo do que acontece quando um lote está dividido em mais de um setor censitário. No fundo, há os setores censitários, coloridos de acordo com a densidade. Em vermelho, estão as geometrias dos lotes. Quando o lote não é cortado, sua área fica integralmente em um setor censitário. Quando um setor corta um lote, sua área é distribuída e o número representa o percentual da área que fica em cada setor censitário.
 
@@ -610,29 +662,24 @@ ggsave("tex/imagens/mapa_lote_corte.png", gg, width = 10, height = 10, dpi = 300
 knitr::include_graphics("tex/imagens/mapa_lote_corte.png")
 ```
 
-# Casos de erro do procedimento
+## Casos de erro do procedimento
 
-A seguir estão os casos em que a soma do percentual da intersecção não é 1. Teoricamente a soma sempre precisa ser 1. 
-
-```{r}
+```{r erro_tabela, cache = TRUE}
 caso.erro <- IPTU.censo %>%
   group_by(setor, quadra, lote) %>% 
   mutate(soma_percent_intersec = sum(percent_intersec) %>% round(2)) %>% 
   filter(soma_percent_intersec < 1)
 ```
 
-
 ```{r, echo = FALSE}
 caso.erro %>% 
-  ungroup() %>% sample_n(10) %>% 
+  ungroup() %>% sample_n(5) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 
 remove(caso.erro)
 ```
-
-# Mapa de um dos casos de erro
 
 É possível observar que nestes casos, a soma do percentual não é 1 porque estão na borda da cidade, então o resto do lote se encontra em outros municípios. Estes erros não vão causar problemas.
 
@@ -645,7 +692,6 @@ gg <- view_geomtria(IPTU.censo %>%
               colorir = FALSE)
 
 ggsave("tex/imagens/mapa_erro.png", gg, width = 10, height = 10, dpi = 300)
-
 ```
 
 
@@ -658,15 +704,17 @@ knitr::include_graphics("tex/imagens/mapa_erro.png")
 
 ```{r}
 df <- IPTU.censo %>% 
-  filter(residencial == 1) %>% 
+  filter(residencial == 1, v0001 > 0) %>% 
+
   group_by(id_setor_censitario) %>% 
   summarize(
             
             # Setor censitário
-            populacao = median(v0007),
+            populacao = median(v0001),
             area_setor = median(area_setor) %>% as.numeric(),
             domicilios = median(v0002),
             domicilios_ocupados = median(v0007),
+            geometry = first(geometria_setor_censitario),
             
             # Lote
             unidades = sum(unidades * percent_intersec),
@@ -675,17 +723,88 @@ df <- IPTU.censo %>%
             area_ocupada = sum(area_ocupada * percent_intersec),
             pavimentos = weighted.mean(pavimentos, area_ocupada * percent_intersec)) %>% 
   
-  mutate(densidade = populacao / area_setor,
+  mutate(densidade_terreno = populacao / area_terreno,
+         densidade_setor = populacao / area_setor,
          cota_parte = area_construida / unidades,
-         CA = area_construida / area_terreno)
+         CA = area_construida / area_terreno) %>% 
+  
+  mutate(distancia_centro = st_distance(geometry, 
+                                      read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
+                                        st_set_crs("epsg:31983") %>% 
+                                        filter(ds_nome == "SE")) %>% 
+         as.numeric() / 1000)
+  
+```
 
-lm(densidade ~ unidades, data = df) %>% summary()
+# Dados finais
+
+```{r}
+ggplot() +
+  geom_sf(data = censo, color = NA) +
+  geom_sf(data = df %>%
+            mutate(decil = ntile(densidade_setor, 10)),
+          aes(fill = factor(decil), geometry = geometry), color = NA) +
+  scale_fill_viridis_d() +
+  labs(fill = "Decil de densidade") +
+  theme_void()
+```
+```{r}
+df %>% 
+  arrange(desc(cota_parte)) %>% 
+  head(100) %>% 
+  select(id_setor_censitario) %>% 
+  left_join(IPTU.censo, join_by(id_setor_censitario))
+```
+
+
+```{r}
+view_geomtria(IPTU.censo %>% 
+                filter(setor == "141", quadra == "002", lote == "0002") %>% 
+                select(geometria_lote) %>% 
+                st_as_sf(),
+              zoom_out = 100,
+              colorir = FALSE)
+```
+
+```{r}
+IPTU.censo %>% 
+  filter(setor == "141", quadra == "002", lote == "0002")
+```
+
+
+```{r}
+view_geomtria(IPTU.censo %>% 
+                filter(setor == "135", quadra == "345", lote == "0051") %>% 
+                select(geometria_lote) %>% 
+                st_as_sf(),
+              zoom_out = 100,
+              colorir = FALSE)
+```
+
+
+```{r}
+lm(densidade_setor ~ CA + cota_parte + pavimentos, data = df %>% filter(cota_parte < 1000)) %>% summary()
+lm(densidade_terreno ~ CA + cota_parte + pavimentos, data = df) %>% summary()
+
+lm(densidade_setor ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
+lm(densidade_terreno ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
+
+lm(densidade_setor ~ exp(-distancia_centro) + CA + cota_parte + pavimentos, 
+   data = df %>% filter(distancia_centro > 0, cota_parte < 1000)) %>% summary()
+lm(densidade_terreno ~ exp(-distancia_centro) + CA, data = df %>% filter(distancia_centro > 0)) %>% summary()
 
 ```
 
 
 
 
+```{r}
+df %>% 
+  ggplot(aes(y = densidade_setor, x = distancia_centro)) +
+  geom_point(aes(size = area_construida), alpha = .1) +
+  geom_smooth(method = "lm")
+
+```
 
 
 
