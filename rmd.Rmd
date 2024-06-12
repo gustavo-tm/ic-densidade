@@ -15,6 +15,9 @@ library(kableExtra)
 library(knitr)
 library(units)
 library(gt)
+library(patchwork)
+library(purrr)
+library(ggtext)
 
 set.seed(123)
 ```
@@ -190,13 +193,13 @@ remove(IPTU.tipos)
 ```
 
 ```{r grafico_area_construida, cache = TRUE}
-gg <- IPTU %>% 
+gg.right <- IPTU %>% 
   mutate(uso = case_when(str_detect(tipo, "Residencial") ~ "Residencial",
                          str_detect(tipo, "Comercial") ~ "Comercial",
                          str_detect(tipo, "Oficina") ~ "Industria",
                          str_detect(tipo, "TERRENO") ~ "Terreno",
                          str_detect(tipo, "Clube") ~ "Entretenimento",
-                         .default = "Outros"),
+                         .default = "Outros") %>% as.factor(),
          padrao = case_when(str_detect(tipo, "A$") ~ "A",
                             str_detect(tipo, "B$") ~ "B",
                             str_detect(tipo, "C$") ~ "C",
@@ -207,12 +210,16 @@ gg <- IPTU %>%
   group_by(uso, padrao, nome) %>% 
   summarize(area = sum(area_construida)) %>% 
   ungroup() %>% 
-  mutate(percentual = paste(round(area * 100/ sum(area, na.rm = TRUE)), "%", sep = "")) %>% 
+  mutate(percentual = area * 100/ sum(area, na.rm = TRUE),
+         texto = case_when(percentual < 1 ~ "<1%",
+                           percentual < 5 ~ paste(round(percentual,1), "%", sep = ""),
+                           .default = paste(round(percentual, 2), "%", sep = "")),
+         color = ifelse(uso == "Outros", "white", "black")) %>% 
   ggplot() +
-  treemapify::geom_treemap(aes(fill = uso, area = area), size = 2) +
-  treemapify::geom_treemap(aes(alpha = padrao, area = area), fill = "black") +
-  treemapify::geom_treemap_text(aes(area = area, label = nome), alpha = .4, grow = FALSE, size = 8) +
-  treemapify::geom_treemap_text(aes(area = area, label = percentual), 
+  treemapify::geom_treemap(aes(fill = uso, area = area), size = 2, color = NA) +
+  treemapify::geom_treemap(aes(alpha = padrao, area = area), fill = "black", color = NA) +
+  treemapify::geom_treemap_text(aes(area = area, label = nome, color = color), alpha = .4, grow = FALSE, size = 8) +
+  treemapify::geom_treemap_text(aes(area = area, label = texto, color = color), 
                                 alpha = .4, place = "middle", size = 10) +
   scale_fill_manual(values = c("Residencial" = "#FAE48B", 
                                "Comercial" = "#A6EEE6",
@@ -220,19 +227,45 @@ gg <- IPTU %>%
                                "Entretenimento" = "#FB6467",
                                "Outros" = "#1A5354")) +
   scale_alpha_manual(values = c("A" = 0, "B" = .05, "C" = .1, "D" = .15, "E" = .2, "NA" = 0)) +
-  labs(title = "Área construída em SP por tipo de uso", 
-       fill = "Tipo de uso", alpha = "Parão de uso") +
+  scale_color_manual(values = c("black" = "black", "white" = "white")) +
+  labs(fill = "Tipo de uso", alpha = "Parão de uso") +
   theme(aspect.ratio=1)
 
+gg.left <- IPTU %>% 
+  mutate(uso = case_when(str_detect(tipo, "Residencial") ~ "Residencial",
+                         str_detect(tipo, "Comercial") ~ "Comercial",
+                         str_detect(tipo, "Oficina") ~ "Industria",
+                         str_detect(tipo, "TERRENO") ~ "Terreno",
+                         str_detect(tipo, "Clube") ~ "Entretenimento",
+                         .default = "Outros") %>% as.factor()) %>% 
+  group_by(uso) %>% 
+  summarize(area = sum(area_construida, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  arrange(desc(uso)) %>% 
+  mutate(percentual = area * 100 / sum(area, na.rm = TRUE),
+         texto = ifelse(percentual > 5, paste(round(percentual, 1), "%", sep = ""), ""),
+         ytext = (cumsum(area) + lag(cumsum(area)))/ 2) %>% 
+  ggplot() +
+  geom_col(aes(y = area, fill = uso, x = "")) +
+  geom_text(aes(y = ytext, fill = uso, x = "", label = texto), alpha = .5) +
+  scale_fill_manual(values = c("Residencial" = "#FAE48B", 
+                               "Comercial" = "#A6EEE6",
+                               "Industria" = "#84BD00",
+                               "Entretenimento" = "#FB6467",
+                               "Outros" = "#1A5354")) +
+  theme_void() +
+  theme(legend.position = "none")
 
-
-ggsave("tex/imagens/tree_area_construida.png", gg, width = 8, height = 8, dpi = 250)
+ggsave("tex/imagens/tree_area_construida.png", 
+       (gg.left | gg.right) + 
+         plot_layout(widths = c(1,6)), 
+       width = 10, height = 8, dpi = 250)
 
 ```
 
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/tree_area_construida.png")
-remove(gg)
+remove(gg.left, gg.right)
 ```
 
 ## Agrupamento dos condomínios
@@ -275,7 +308,6 @@ IPTU.lotes <- IPTU %>%
 
 ```{r, echo = FALSE}
 remove(IPTU)
-remove(lotes)
 
 IPTU.lotes %>% 
   ungroup() %>% sample_n(8) %>% 
@@ -320,12 +352,12 @@ gg <- IPTU.lotes %>%
   filter(residencial == TRUE) %>% 
   st_drop_geometry() %>% 
   mutate(CA = area_construida / area_terreno,
-         cota_parte = area_construida / unidades) %>% 
-  filter(cota_parte < 500, CA < 5) %>% 
-  pivot_longer(CA:cota_parte) %>% 
+         cota_parte = area_terreno / unidades) %>% 
+  filter(cota_parte < 500, CA < 5, pavimentos < 30) %>% 
+  pivot_longer(c(CA:cota_parte, pavimentos)) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
-  facet_wrap(~ name, scales = "free_x") +
+  facet_wrap(~ name, scales = "free") +
   labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
   theme_classic()
 
@@ -346,7 +378,7 @@ Alguns IPTUs apresentam inconsistências, como um terreno de 400.000 metros quad
 outliers <- IPTU.lotes %>% 
   filter(residencial == TRUE) %>% 
   st_drop_geometry() %>% 
-  mutate(cota_parte = area_construida / unidades) %>% 
+  mutate(cota_parte = area_terreno / unidades) %>% 
   arrange(desc(cota_parte)) %>% 
   head(10)
 ```
@@ -372,7 +404,7 @@ ggplot() +
 ```
 
 ```{r, echo = FALSE}
-remove(outliers, outlier)
+remove(outliers, outlier, lotes)
 ```
 
 # Erros no join
@@ -559,45 +591,50 @@ IPTU.censo %>%
 
 ## Erros no join
 
-Alguns setores censitários com população maior que zero não encontram pares na base de lotes. Isso acontece principalmente por conta de loteamentos irregulares e favelas, que não são contribuintes do IPTU, e, portanto, não constam na base. Isso não prejudica a análise, pois estes loteamentos não dependem da regulamentação urbana, então mudanças nos instrumentos e indicadores não impactariam essas regiões.
+Alguns setores censitários não encontram pares na base de lotes. Isso acontece principalmente por conta de loteamentos irregulares e favelas, que não são contribuintes do IPTU, e, portanto, não constam na base. Isso não prejudica a análise, pois estes loteamentos não dependem da regulamentação urbana, então mudanças nos instrumentos e indicadores não impactariam essas regiões.
 
 Outras falhas decorrem do erro do join da base do IPTU com lotes, como apontado anteriormente, mas estes casos são negligenciáveis.
 
-
 ```{r plot_erros_join_favelas, cache = TRUE}
-lotes_irregulares <- read_sf("dados/lotes_irregulares/SIRGAS_SHP_loteamento.shp") %>% st_set_crs("epsg:31983")
-favela <- read_sf("dados/favela/SIRGAS_SHP_favela.shp") %>% st_set_crs("epsg:31983")
-  
-gg <- censo %>% 
+distrito <- read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% st_set_crs("epsg:31983")
+lotes_irregulares <- read_sf("dados/lotes_irregulares/SIRGAS_SHP_loteamento.shp") %>%
+  st_set_crs("epsg:31983")
+favela <- read_sf("dados/favela/SIRGAS_SHP_favela.shp") %>% 
+  st_set_crs("epsg:31983")
+
+censo.pontos <- censo %>%
+  select(id_setor_censitario, geometry, n = v0001) %>%
+  mutate(pontos = round(n / 100)) %>% 
   as_tibble() %>% 
-  anti_join(IPTU.censo %>% 
-              select(id_setor_censitario)) %>% 
-  filter(v0001 > 0) %>% 
-  mutate(pessoas = cut(v0001, breaks = c(-Inf, 100, 500, 1000, Inf), 
-                     labels = c("Até 100", "500", "1000", "Mais de 1000"))) %>% 
+  left_join(censo %>% 
+              anti_join(IPTU.censo %>% select(id_setor_censitario))) %>% 
+  mutate(erro = is.na(v0001)) %>% 
+  mutate(samples = map2(geometry, pontos, ~st_sample(.x, size = .y))) %>%
+  unnest(cols = samples) %>%
+  as_tibble()
+
+gg <- censo.pontos %>% 
   ggplot() +
-  geom_sf(data = censo, color = NA) +
-  geom_sf(aes(geometry = geometry, fill = factor(pessoas)), color = NA) +
-  scale_fill_viridis_d("Número de pessoas") +
-  ggnewscale::new_scale_fill() +
-  geom_sf(data = lotes_irregulares, 
-          aes(fill = "Lotes Irregulares"), 
-          color = NA, alpha = .4) +
-  geom_sf(data = favela, 
-        aes(fill = "Favela"), 
-        color = NA, alpha = .4) +
-  scale_fill_manual("", values = c("Lotes Irregulares" = "red",
-                                   "Favela" = "darkred")) +
-  theme_void()
+  geom_sf(data = distrito, color = NA) +
+  geom_sf(data = st_union(favela %>% st_union() %>% st_buffer(10),
+                          lotes_irregulares %>% st_union() %>% st_buffer(10)),
+          aes(fill = "Favelas e lotes irregulares"), 
+        color = "black", size = .1, alpha = .7) +
+  geom_sf(aes(geometry = samples, color = erro), alpha = .25, size = .2) +
+  scale_color_manual(values = c("TRUE" = NA,#248232
+                               "FALSE" = "#006DAA"),
+                     labels = NULL) +
+  scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#E0CBA8")) +
+  labs(title = "População em <span style = 'color:#006DAA;'>áreas sem registro de IPTU</span> geralmente estão em <span style = 'color:#E0CBA8;'>favelas ou lotes irregulares</span>, cada ponto representa 100 pessoas") + 
+  theme_void() +
+  theme(plot.title = element_markdown(), legend.position = "none")
 
-ggsave("tex/imagens/mapa_erros_setor.png", gg, width = 16, height = 16, dpi = 300)
-
+ggsave("tex/imagens/mapa_pontos.png", gg, width = 20, height = 20, dpi = 300)
 ```
 
-
 ```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa_erros_setor.png")
-remove(favela, gg, lotes_irregulares, IPTU.lotes)
+knitr::include_graphics("tex/imagens/mapa_pontos.png")
+remove(favela, gg, lotes_irregulares, IPTU.lotes, censo.pontos)
 ```
 ## Função para plotar um setor censitário ou SQL específico
 
@@ -691,7 +728,7 @@ gg <- view_geomtria(IPTU.censo %>%
               zoom_out = 100,
               colorir = FALSE)
 
-ggsave("tex/imagens/mapa_erro.png", gg, width = 10, height = 10, dpi = 300)
+ggsave("tex/imagens/mapa_erro.png", gg, width = 10, height = 8, dpi = 300)
 ```
 
 
@@ -721,14 +758,15 @@ df <- IPTU.censo %>%
             area_terreno = sum(area_terreno * percent_intersec),
             area_construida = sum(area_construida * percent_intersec),
             area_ocupada = sum(area_ocupada * percent_intersec),
-            pavimentos = weighted.mean(pavimentos, area_ocupada * percent_intersec)) %>% 
+            verticalizacao = weighted.mean(pavimentos, area_ocupada * percent_intersec)) %>% 
   
   mutate(densidade_terreno = populacao / area_terreno,
          densidade_setor = populacao / area_setor,
-         cota_parte = area_construida / unidades,
+         cota_parte_IPTU = area_terreno / unidades,
+         cota_parte_censo = area_terreno / domicilios,
          CA = area_construida / area_terreno) %>% 
   
-  mutate(distancia_centro = st_distance(geometry, 
+  mutate(distancia_centro = st_distance(geometry %>% st_centroid(), 
                                       read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
                                         st_set_crs("epsg:31983") %>% 
                                         filter(ds_nome == "SE")) %>% 
@@ -749,60 +787,70 @@ ggplot() +
   theme_void()
 ```
 ```{r}
-df %>% 
-  arrange(desc(cota_parte)) %>% 
-  head(100) %>% 
-  select(id_setor_censitario) %>% 
-  left_join(IPTU.censo, join_by(id_setor_censitario))
+df %>% View()
+
+area_setor <- df$area_setor
+area_terreno <- df$area_terreno
+# library(lm.beta)
+
+# cor(area_setor, area_terreno)
+# lm(densidade_setor ~ CA + cota_parte_censo + verticalizacao + exp(-distancia_centro), 
+#                  data = df %>% filter(densidade_terreno<300000)) %>% 
+#   lm.beta() %>% 
+#   summary()
+
+
+# lm.beta()
+
+lm(populacao ~ area_construida, data = df) %>% summary()
+
+df %>%
+  pivot_longer(c(densidade_setor, densidade_terreno)) %>% 
+  filter(value < 300000) %>% 
+  ggplot(aes(x = distancia_centro, y = value)) +
+  geom_point() +
+  facet_wrap(~name, scale = "free") +
+  geom_smooth() 
 ```
 
-
 ```{r}
-view_geomtria(IPTU.censo %>% 
-                filter(setor == "141", quadra == "002", lote == "0002") %>% 
-                select(geometria_lote) %>% 
-                st_as_sf(),
-              zoom_out = 100,
-              colorir = FALSE)
-```
-
-```{r}
-IPTU.censo %>% 
-  filter(setor == "141", quadra == "002", lote == "0002")
-```
-
-
-```{r}
-view_geomtria(IPTU.censo %>% 
-                filter(setor == "135", quadra == "345", lote == "0051") %>% 
-                select(geometria_lote) %>% 
-                st_as_sf(),
-              zoom_out = 100,
-              colorir = FALSE)
-```
-
-
-```{r}
-lm(densidade_setor ~ CA + cota_parte + pavimentos, data = df %>% filter(cota_parte < 1000)) %>% summary()
-lm(densidade_terreno ~ CA + cota_parte + pavimentos, data = df) %>% summary()
-
-lm(densidade_setor ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
-lm(densidade_terreno ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
-
-lm(densidade_setor ~ exp(-distancia_centro) + CA + cota_parte + pavimentos, 
-   data = df %>% filter(distancia_centro > 0, cota_parte < 1000)) %>% summary()
-lm(densidade_terreno ~ exp(-distancia_centro) + CA, data = df %>% filter(distancia_centro > 0)) %>% summary()
-
+# modelos = list(
+#   "Simples" = lm(densidade_setor ~ CA + cota_parte + verticalizacao, 
+#                  data = df),
+#   "Com Distância" = lm(densidade_setor ~ CA + cota_parte + verticalizacao + exp(-distancia_centro), 
+#                        data = df),
+#   "Simples_rm" = lm(densidade_setor ~ CA + cota_parte + verticalizacao, 
+#                     data = df %>% filter(cota_parte < 1000)),
+#   "Com Distância_rm" = lm(densidade_setor ~ CA + cota_parte + verticalizacao + exp(-distancia_centro), 
+#                           data = df %>% filter(cota_parte < 1000))
+# )
+# 
+# modelsummary::modelsummary(modelos, statistic = NULL, estimate = "{estimate} {stars}")
 ```
 
 
 
+```{r}
+# lm(densidade_setor ~ CA + cota_parte + verticalizacao, data = df %>% filter(cota_parte < 1000)) %>% summary()
+# lm(densidade_terreno ~ CA + cota_parte + verticalizacao, data = df) %>% summary()
+# 
+# lm(densidade_setor ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
+# lm(densidade_terreno ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
+# 
+# lm(densidade_setor ~ exp(-distancia_centro) + CA + cota_parte + verticalizacao, 
+#    data = df %>% filter(distancia_centro > 0, cota_parte < 1000)) %>% summary()
+# lm(densidade_terreno ~ exp(-distancia_centro) + CA, data = df %>% filter(distancia_centro > 0)) %>% summary()
+
+```
+
+
+
 
 ```{r}
-df %>% 
-  ggplot(aes(y = densidade_setor, x = distancia_centro)) +
-  geom_point(aes(size = area_construida), alpha = .1) +
-  geom_smooth(method = "lm")
+# df %>% 
+#   ggplot(aes(y = densidade_setor, x = distancia_centro)) +
+#   geom_point(aes(size = area_construida), alpha = .1) +
+#   geom_smooth(method = "lm")
 
 ```
 
