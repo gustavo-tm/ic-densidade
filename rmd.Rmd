@@ -160,7 +160,7 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
              ifelse(condominio == "00-0", ., paste("CD", str_sub(condominio, 1, 2), sep = "")),
            
            # Tipo de uso
-           residencial = str_detect(tipo, "Residencial")) 
+           residencial = str_detect(tipo, "Residencial"))
 ```
 
 ```{r, echo = FALSE}
@@ -537,6 +537,7 @@ censo %>%
        y = "Densidade populacional por quilômetro quadrado") +
   theme_classic()
 ```
+
 ```{r}
 censo %>% 
   mutate(distancia_centro = st_distance(geometry, 
@@ -758,11 +759,10 @@ df <- IPTU.censo %>%
             area_terreno = sum(area_terreno * percent_intersec),
             area_construida = sum(area_construida * percent_intersec),
             area_ocupada = sum(area_ocupada * percent_intersec),
-            verticalizacao = weighted.mean(pavimentos, area_ocupada * percent_intersec)) %>% 
+            verticalizacao = weighted.mean(pavimentos, area_terreno * percent_intersec)) %>% 
   
-  mutate(densidade_terreno = populacao / area_terreno,
-         densidade_setor = populacao / area_setor,
-         cota_parte_IPTU = area_terreno / unidades,
+  mutate(densidade = populacao / area_setor,
+         cota_parte = area_terreno / unidades,
          cota_parte_censo = area_terreno / domicilios,
          CA = area_construida / area_terreno) %>% 
   
@@ -786,137 +786,60 @@ ggplot() +
   labs(fill = "Decil de densidade") +
   theme_void()
 ```
+
 ```{r}
-df %>% View()
 
-area_setor <- df$area_setor
-area_terreno <- df$area_terreno
-# library(lm.beta)
+lm(densidade ~ CA + cota_parte + verticalizacao, data = df) %>% summary()
+lm(log(densidade) ~ CA + log(cota_parte) + verticalizacao, data = df) %>% summary()
 
-# cor(area_setor, area_terreno)
-# lm(densidade_setor ~ CA + cota_parte_censo + verticalizacao + exp(-distancia_centro), 
-#                  data = df %>% filter(densidade_terreno<300000)) %>% 
-#   lm.beta() %>% 
-#   summary()
-
-
-# lm.beta()
-
-lm(populacao ~ area_construida, data = df) %>% summary()
-
-df %>%
-  pivot_longer(c(densidade_setor, densidade_terreno)) %>% 
-  filter(value < 300000) %>% 
-  ggplot(aes(x = distancia_centro, y = value)) +
-  geom_point() +
-  facet_wrap(~name, scale = "free") +
-  geom_smooth() 
 ```
 
 ```{r}
-# modelos = list(
-#   "Simples" = lm(densidade_setor ~ CA + cota_parte + verticalizacao, 
-#                  data = df),
-#   "Com Distância" = lm(densidade_setor ~ CA + cota_parte + verticalizacao + exp(-distancia_centro), 
-#                        data = df),
-#   "Simples_rm" = lm(densidade_setor ~ CA + cota_parte + verticalizacao, 
-#                     data = df %>% filter(cota_parte < 1000)),
-#   "Com Distância_rm" = lm(densidade_setor ~ CA + cota_parte + verticalizacao + exp(-distancia_centro), 
-#                           data = df %>% filter(cota_parte < 1000))
-# )
-# 
-# modelsummary::modelsummary(modelos, statistic = NULL, estimate = "{estimate} {stars}")
+split <- rsample::initial_split(df %>% select(-geometry), prop = 0.7)
+train <- rsample::training(split)
+test <- rsample::testing(split)
 ```
 
+```{r}
+lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train) 
+lm_preds <- predict(lm_model, newdata = test)
+```
+
+```{r}
+rtree <- rpart::rpart(densidade ~ CA + cota_parte + verticalizacao, data = train)
+visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
+```
+
+```{r}
+rf_model <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
+                     data = train, num.trees = 1000, importance = "impurity")
+rf_preds <- predict(rf_model, data = test)$predictions
+
+rf_model_all <- ranger::ranger(densidade ~ ., 
+                     data = train, num.trees = 1000, importance = "impurity")
+rf_preds_all <- predict(rf_model_all, data = test)$predictions
+
+ggplot(NULL, aes(x = rf_model_all$variable.importance,
+                 y = fct_reorder(names(rf_model_all$variable.importance),
+                                 rf_model_all$variable.importance))) +
+    geom_col(fill = "darkblue", alpha = 0.75) +
+    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
+    theme_bw()
+```
 
 
 ```{r}
-# lm(densidade_setor ~ CA + cota_parte + verticalizacao, data = df %>% filter(cota_parte < 1000)) %>% summary()
-# lm(densidade_terreno ~ CA + cota_parte + verticalizacao, data = df) %>% summary()
-# 
-# lm(densidade_setor ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
-# lm(densidade_terreno ~ exp(-distancia_centro), data = df %>% filter(distancia_centro > 0)) %>% summary()
-# 
-# lm(densidade_setor ~ exp(-distancia_centro) + CA + cota_parte + verticalizacao, 
-#    data = df %>% filter(distancia_centro > 0, cota_parte < 1000)) %>% summary()
-# lm(densidade_terreno ~ exp(-distancia_centro) + CA, data = df %>% filter(distancia_centro > 0)) %>% summary()
-
+sqrt(mean((rf_preds - test$densidade)^2))
+sqrt(mean((rf_preds_all - test$densidade)^2))
+sqrt(mean((lm_preds - test$densidade)^2))
 ```
-
-
-
 
 ```{r}
-# df %>% 
-#   ggplot(aes(y = densidade_setor, x = distancia_centro)) +
-#   geom_point(aes(size = area_construida), alpha = .1) +
-#   geom_smooth(method = "lm")
-
+ggplot(data = tibble(x = rf_preds, y = test$densidade)) +
+  geom_point(aes(x = x, y = y)) +
+  theme(aspect.ratio = 1) +
+  coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
+  geom_abline(slope = 1)
 ```
-
-
-
-```{r}
-# Import dados geosampa de distritos
-distrito <- read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% st_set_crs("epsg:31983")
-onibus <- read_sf("dados/onibus/SIRGAS_SHP_pontoonibus.shp") %>% st_set_crs("epsg:31983")
-metro <- read_sf("dados/metro/SIRGAS_SHP_estacaometro_point.shp") %>% st_set_crs("epsg:31983")
-```
-
-```{r lote_metro, cache = TRUE}
-lote_metro <- IPTU.censo %>% 
-  st_set_geometry("geometria_lote") %>% 
-  mutate(centroide_lote = st_centroid(geometria_lote),
-         metro = st_nearest_feature(centroide_lote, metro)) %>% 
-  left_join(metro %>% 
-              as_tibble() %>% 
-              mutate(rn = row_number()) %>% 
-              rename(geomeria_metro = geometry), by = join_by(metro== rn)) %>% 
-  mutate(distancia_metro = st_distance(centroide_lote, geomeria_metro,  by_element=TRUE)) %>% 
-  as_tibble()
-```
-
-
-```{r, echo = FALSE}
-lote_metro %>% 
-  ungroup() %>% ungroup() %>% sample_n(10) %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-```
-
-```{r lote_metro_mapa, cache = TRUE}
-lote_metro <- lote_metro %>% 
-  st_set_geometry("centroide_lote") %>% 
-  st_crop(distrito %>% 
-            filter(ds_nome == "SE")) %>% 
-  st_set_geometry("geomeria_metro") %>% 
-  st_crop(distrito %>% 
-            filter(ds_nome == "SE")) %>% 
-  as_tibble() %>% 
-  pivot_longer(cols = c(centroide_lote, geomeria_metro)) %>% 
-  st_set_geometry("value") %>% 
-  group_by(setor, quadra, lote) %>% 
-  summarize(do_union = FALSE) %>% 
-  st_cast("LINESTRING")
-
-gg <- ggplot() +
-  geom_sf(data = IPTU.censo %>% 
-            st_set_geometry("geometria_lote") %>% 
-            st_crop(distrito %>% 
-                      filter(ds_nome == "SE")),
-          aes(geometry = geometria_lote)) +
-  geom_sf(data = lote_metro, alpha = .1, color = "darkblue") +
-  geom_sf(data = metro %>% st_crop(distrito %>% filter(ds_nome == "SE")), color = "red") +
-  theme_void()
-
-ggsave("tex/imagens/mapa_metro.png", gg, width = 10, height = 10, dpi = 300)
-```
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa_metro.png")
-```
-
-
 
 
