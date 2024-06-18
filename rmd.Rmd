@@ -7,12 +7,16 @@ output:
   pdf_document: default
 ---
 
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache.lazy = FALSE)
+setwd("C:/git/densidade")
+```
 
 ```{r, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(sf)
 library(kableExtra)
-library(knitr)
 library(units)
 library(gt)
 library(patchwork)
@@ -20,12 +24,6 @@ library(purrr)
 library(ggtext)
 
 set.seed(123)
-```
-
-
-```{r setup, include=FALSE}
-opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache.lazy = FALSE)
-setwd("C:/git/densidade")
 ```
 
 # Geosampa
@@ -160,7 +158,10 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
              ifelse(condominio == "00-0", ., paste("CD", str_sub(condominio, 1, 2), sep = "")),
            
            # Tipo de uso
-           residencial = str_detect(tipo, "Residencial"))
+           residencial = str_detect(tipo, "Residencial"),
+           
+           # Medida de verticalização
+           verticalizacao = pavimentos * area_ocupada / area_terreno)
 ```
 
 ```{r, echo = FALSE}
@@ -286,7 +287,8 @@ IPTU <- IPTU %>%
             area_ocupada = median(area_ocupada),
             pavimentos = median(pavimentos),
             ano_construcao = median(ano_construcao),
-            residencial = median(residencial))
+            residencial = median(residencial),
+            verticalizacao = median(verticalizacao))
 ```
 
 ```{r, echo = FALSE}
@@ -296,6 +298,16 @@ IPTU %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
+
+```{r}
+IPTU %>% 
+  mutate(unitario = unidades == 1) %>% 
+  group_by(unitario) %>% 
+  summarize(n = n(),
+            soma = sum(unidades))
+```
+
+
 
 # Join entre a Base de Lotes e a Base do IPTU
 
@@ -353,11 +365,11 @@ gg <- IPTU.lotes %>%
   st_drop_geometry() %>% 
   mutate(CA = area_construida / area_terreno,
          cota_parte = area_terreno / unidades) %>% 
-  filter(cota_parte < 500, CA < 5, pavimentos < 30) %>% 
+  filter(cota_parte < 600, CA < 5, pavimentos < 15) %>% 
   pivot_longer(c(CA:cota_parte, pavimentos)) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
-  facet_wrap(~ name, scales = "free") +
+  facet_wrap(~ name, scales = "free_x") +
   labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
   theme_classic()
 
@@ -592,9 +604,43 @@ IPTU.censo %>%
 
 ## Erros no join
 
+
+
+```{r disparidade_unidades, cache = TRUE}
+gg <- IPTU.censo %>% 
+  group_by(id_setor_censitario) %>% 
+  summarize(domicilios = median(v0002),
+            unidades = sum(unidades)) %>% 
+  
+  # Caso seja 50%, domicilios = unidades, 
+  # caso < 50%, mais domicílios no censo que unidades no IPTU, 
+  # caso > 50%, há mais unidades no IPTU do que domicílios no censo
+  mutate(balanco = unidades / (unidades + domicilios)) %>% 
+  ggplot() +
+  geom_histogram(aes(x = balanco)) +
+  labs(caption = "Caso o balanço seja 50%, implica que o número de domicílios reportados no censo é igual ao número de 
+unidades reportadas no IPTU. Caso o balanço seja menor que 50%, implica que há mais domicílios no censo 
+do que unidades, e caso seja maior que 50%, há mais unidades que domicílios",
+title = "Disparidade entre censo e IPTU quanto ao número de unidades habitacionais",
+    
+       x = "Balanço: unidades / (unidades + domicilios)", y = "") +
+  theme_classic() +
+    theme(plot.caption = element_text(hjust = 0)) +
+  scale_x_continuous(labels = scales::percent)
+
+
+ggsave("tex/imagens/disparidade_censoIPTU.png", gg, width = 8, height = 5, dpi = 400)
+```
+
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/disparidade_censoIPTU.png")
+```
+
+
 Alguns setores censitários não encontram pares na base de lotes. Isso acontece principalmente por conta de loteamentos irregulares e favelas, que não são contribuintes do IPTU, e, portanto, não constam na base. Isso não prejudica a análise, pois estes loteamentos não dependem da regulamentação urbana, então mudanças nos instrumentos e indicadores não impactariam essas regiões.
 
 Outras falhas decorrem do erro do join da base do IPTU com lotes, como apontado anteriormente, mas estes casos são negligenciáveis.
+
 
 ```{r plot_erros_join_favelas, cache = TRUE}
 distrito <- read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% st_set_crs("epsg:31983")
@@ -604,12 +650,17 @@ favela <- read_sf("dados/favela/SIRGAS_SHP_favela.shp") %>%
   st_set_crs("epsg:31983")
 
 censo.pontos <- censo %>%
-  select(id_setor_censitario, geometry, n = v0001) %>%
-  mutate(pontos = round(n / 100)) %>% 
+  select(id_setor_censitario, geometry, pessoas = v0001, domicilios = v0002) %>%
+  mutate(pontos = round(pessoas / 100)) %>% 
   as_tibble() %>% 
-  left_join(censo %>% 
-              anti_join(IPTU.censo %>% select(id_setor_censitario))) %>% 
-  mutate(erro = is.na(v0001)) %>% 
+  left_join(
+            # Seleção dos setores censitários que não apresentam nenhum contribuinte do IPTU
+            censo %>% 
+              anti_join(IPTU.censo) %>% 
+              st_drop_geometry() %>% 
+              select(id_setor_censitario) %>% 
+              mutate(erro = TRUE)) %>% 
+  mutate(erro = replace_na(erro, FALSE)) %>% 
   mutate(samples = map2(geometry, pontos, ~st_sample(.x, size = .y))) %>%
   unnest(cols = samples) %>%
   as_tibble()
@@ -622,16 +673,67 @@ gg <- censo.pontos %>%
           aes(fill = "Favelas e lotes irregulares"), 
         color = "black", size = .1, alpha = .7) +
   geom_sf(aes(geometry = samples, color = erro), alpha = .25, size = .2) +
-  scale_color_manual(values = c("TRUE" = NA,#248232
-                               "FALSE" = "#006DAA"),
+  scale_color_manual(values = c("FALSE" = NA,#248232
+                               "TRUE" = "#D32934FF"),
                      labels = NULL) +
-  scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#E0CBA8")) +
-  labs(title = "População em <span style = 'color:#006DAA;'>áreas sem registro de IPTU</span> geralmente estão em <span style = 'color:#E0CBA8;'>favelas ou lotes irregulares</span>, cada ponto representa 100 pessoas") + 
+  scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#2BAA92FF")) +
+  labs(title = "<span style='font-size: 35pt;'>População em <span style = 'color:#D32934FF;'>áreas sem registro de IPTU</span> geralmente estão em <br><span style = 'color:#2BAA92FF;'>favelas ou lotes irregulares</span> (cada ponto representa 100 pessoas)</span>") + 
   theme_void() +
   theme(plot.title = element_markdown(), legend.position = "none")
 
-ggsave("tex/imagens/mapa_pontos.png", gg, width = 20, height = 20, dpi = 300)
+# scale_colour_paletteer_d("lisa::AndyWarhol_2")
+
+ggsave("tex/imagens/mapa_pontos.png", gg, width = 18, height = 20, dpi = 300)
 ```
+
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/mapa_pontos.png")
+```
+
+```{r}
+
+temp <- censo.pontos %>%
+  st_set_geometry("samples") %>% 
+  st_set_crs("epsg:31983") %>% 
+  mutate(intersects = st_intersects(
+    samples, 
+    st_union(favela %>% st_union() %>% st_buffer(1))) %>% 
+      as.character(),
+    intersects = intersects == "1")
+
+temp %>% 
+  group_by(intersects, erro) %>% 
+  summarize(n = n())
+
+(temp %>% 
+  ggplot() +
+  geom_sf(data = distrito, color = NA) +
+  geom_sf(data = st_union(favela %>% st_union() %>% st_buffer(1)),
+          aes(fill = "Favelas e lotes irregulares"), 
+          color = "black", size = .1, alpha = .7) +
+  geom_sf(aes(geometry = samples, color = intersects), alpha = .25, size = .2) +
+  scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#2BAA92FF")) +
+  scale_color_manual(values = c("TRUE" = "black", "FALSE" = "green")) +
+  theme_void()) %>% 
+  ggsave("test.png", ., height = 20, width = 20, dpi = 300)
+```
+
+```{r}
+temp.dist <- censo.pontos %>% 
+  st_set_geometry("samples") %>% 
+  st_set_crs("epsg:31983") %>% 
+  mutate(distancia_favela = st_distance(samples,st_union(favela %>% st_union() %>% st_buffer(1))) %>% 
+           as.numeric()) %>% 
+  st_drop_geometry()
+
+temp.dist %>% 
+  ggplot() +
+  geom_violin(aes(x = "", y = distancia_favela, fill = erro)) +
+  scale_y_sqrt()
+```
+
+
+
 
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/mapa_pontos.png")
@@ -759,7 +861,8 @@ df <- IPTU.censo %>%
             area_terreno = sum(area_terreno * percent_intersec),
             area_construida = sum(area_construida * percent_intersec),
             area_ocupada = sum(area_ocupada * percent_intersec),
-            verticalizacao = weighted.mean(pavimentos, area_terreno * percent_intersec)) %>% 
+            pavimentos = weighted.mean(pavimentos, area_terreno * percent_intersec),
+            verticalizacao = weighted.mean(verticalizacao, area_terreno * percent_intersec)) %>% 
   
   mutate(densidade = populacao / area_setor,
          cota_parte = area_terreno / unidades,
@@ -780,7 +883,7 @@ df <- IPTU.censo %>%
 ggplot() +
   geom_sf(data = censo, color = NA) +
   geom_sf(data = df %>%
-            mutate(decil = ntile(densidade_setor, 10)),
+            mutate(decil = ntile(densidade, 10)),
           aes(fill = factor(decil), geometry = geometry), color = NA) +
   scale_fill_viridis_d() +
   labs(fill = "Decil de densidade") +
@@ -835,11 +938,18 @@ sqrt(mean((lm_preds - test$densidade)^2))
 ```
 
 ```{r}
-ggplot(data = tibble(x = rf_preds, y = test$densidade)) +
-  geom_point(aes(x = x, y = y)) +
+n <- length(test$densidade)
+
+resultados <- tibble(pred = c(rf_preds, rf_preds_all, lm_preds),
+                     real = c(test$densidade, test$densidade, test$densidade),
+                     modelo = c(rep("A", n), rep("B", n), rep("C", n)))
+
+ggplot(data = resultados) +
+  geom_point(aes(x = pred, y = real)) +
   theme(aspect.ratio = 1) +
   coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
-  geom_abline(slope = 1)
+  geom_abline(slope = 1) +
+  facet_wrap(~modelo)
 ```
 
 

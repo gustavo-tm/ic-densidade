@@ -112,13 +112,15 @@ Suponha uma cidade na qual os habitantes possuem mais de uma opção de meio de 
 
 % Várias hipóteses de como essas curvas se comportam podem surgir, a depender de como o componente renda é incorporado no modelo. Uma que é razoável para o Brasil
 
+Com estas novas premissas, um tomador de decisão que tem como objetivo garantir maior densidade habitacional no centro deve intervir neste mercado, visto que a organização \textit{laisses-faire} leva a um equilíbrio menos denso do que o discutido no caso anterior. Nesse sentido, do ponto de vista microeconômico não é determinístico como o mercado se articula para definir a densidade habitacional.
+
 
 \chapter{Empírico}
 \label{sec:emp}
 
 \section{Dados}
 
-Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área.
+Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área. Os dados do censo foram utilizados em sua escala mais micro possível: nível setor censitário.
 
 
 \begin{figure}[h]
@@ -128,18 +130,35 @@ Para compreender o perfil geográfico da distribuição populacional de São Pau
     \label{fig:populacao}
 \end{figure}
 
-Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no geosampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente.''.
+Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no GeoSampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente''. 
 
-Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área útil e o número de pavimentos do empreendimento. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte. A cota parte especificamente também pode ser calculada através dos dados do censo apenas.
+Os únicos dados que não constam nessa base são relativos a lotes irregulares ou não registrados, como em áreas de favelas. Estes casos podem ser visualizados na Figura \ref{fig:pontos_erro}. Isso não é uma limitação, visto que os intrumentos de regulação urbana não se aplicam as estas áreas de qualquer forma.
 
-Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de outros dados não é possível cruzá-los com censo. O que possibilita fazer essa junção é que o número único de contribuinte, também é o código do Setor, Quadra e Lote (SQL) que o empreendimento se encontra. Nesse sentido, é possível decompor o SQL e cruzar com a base de lotes do geosampa, que contém a geometria de cada  um dos 1.677.980 lotes da cidade. O que explica a diferença entre o número de lotes e número de números dos contribuintes são os lotes que contém um condomínio, que pode haver diversos números únicos de contribuintes em apenas um lote. 
+\begin{figure}[h]
+    \centering
+    \caption{Casos em que o Censo registra população, mas não há lotes cadastrados no IPTU}
+    \bigskip
+    \includegraphics[width = \linewidth]{imagens/mapa_pontos.png}
+    \label{fig:pontos_erro}
+\end{figure}
+
+Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área ocupada e o número de pavimentos do empreendimento. O tipo de uso do imóvel também está disponível, mas como esta pesquisa foca em densidade habitacional, foram descartados os usos não residenciais. Na figura \ref{fig:area_construida}, é possível observar a área construída por tipo e padrão de uso em São Paulo. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte.
+
+\begin{figure}[h]
+    \centering
+    \caption{Área construída em São Paulo por tipo e padrão de uso}
+    \includegraphics[width = \linewidth]{imagens/tree_area_construida.png}
+    \label{fig:area_construida}
+\end{figure}
+
+Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de outros dados não é possível cruzá-los com os do censo. O que possibilita fazer essa junção é que o número único de contribuinte, também é o código do Setor, Quadra e Lote (SQL) que o empreendimento se encontra. Nesse sentido, é possível decompor o SQL e cruzar com a base de lotes do GeoSampa, que contém a geometria de cada  um dos 1.677.980 lotes da cidade. O que explica a diferença entre o número de lotes e número de números dos contribuintes são os lotes que contém um condomínio, que pode haver diversos números únicos de contribuintes em apenas um lote. Nos dados de IPTU, há 1.314.353 contribuintes em lotes com apenas uma unidade habitacional e 33.129 condomínios, que contêm 1.782.366 unidades.
 
 Uma dificuldade que surge ao juntar os dados do Censo com os do IPTU, é que setores censitários podem cortar os lotes de forma que um lote pertença a mais de um setor. Sendo assim, alguma premissa deve ser adotada para que se classifique em qual setor o lote será contabilizado para os cálculos dos indicadores utilizados pela regulamentação. Na Figura \ref{fig:lote-censo} é possível observar os lotes coloridos de vermelho e os setores censitários coloridos como na Figura \ref{fig:populacao} e delimitados por um contorno branco. Quando um lote é cortado em mais de um setor censitário, é calculada a porcentagem de sua área em cada um dos setores e ele é contabilizado em ambos, ponderado por essa porcentagem.
 
 
 \begin{figure}[h]
     \centering
-    \caption{Lotes e setores censitários na Lapa}
-    \includegraphics[width = \linewidth]{imagens/mapa-lotes.png}
+    \caption{Setor censitário cortando um lote em mais de uma parte}
+    \includegraphics[width = .6\linewidth]{imagens/mapa_lote_corte.png}
     \label{fig:lote-censo}
 \end{figure}
