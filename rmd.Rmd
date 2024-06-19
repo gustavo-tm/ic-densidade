@@ -54,7 +54,7 @@ if (!"zip" %in% list.files(path = "dados/lotes")){
 }
 ```
 
-```{r lotes_bruto, cache = TRUE}
+```{r data_lotes_import, cache = TRUE}
 # Junção dos shapes dos lotes de cada bairro em uma tabela
 lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>% 
     paste("dados/lotes/unzip/", ., "/", ., ".shp", sep = "") %>% 
@@ -83,7 +83,7 @@ Os lotes podem ser classificados de três formas
 Os lotes fiscais podem ser unidades ou condomínios. Um prédio, por exemplo, fica em um único lote, mas dentro pode haver diversas unidades, então se configura como um condomínio. Não é possível saber através dos dados de lotes quantas unidades estão no condomínio, nem alguma forma de discriminá-los.
 
 
-```{r plot_lotsizes, cache = TRUE}
+```{r plot_lotes, cache = TRUE}
 lotes %>% 
   mutate(condominio = case_when(lo_condomi == "00" ~ "Unidade",
                                 lo_condomi != "00" ~ "Condomínio"),
@@ -110,7 +110,7 @@ Na base de dados de lotes, cada lote é identificado por três componentes princ
 3. Lote (lo_lote): A menor unidade de divisão, que representa um terreno ou uma parcela específica dentro de uma quadra.
 Essa estrutura de Setor-Quadra-Lote é crucial para identificar de forma única cada lote dentro do município. No código, esses identificadores são utilizados para manipular e cruzar os dados de lotes com outras bases de dados, como a base de IPTU.
 
-```{r lotes_tratado, cache = TRUE}
+```{r data_lotes_tidy, cache = TRUE}
 lotes <- lotes %>% 
  filter(lo_tp_lote == "F") %>% # Seleção apenas de lotes fiscais
   mutate(lo_lote = ifelse(lo_lote == "0000", paste("CD", lo_condomi, sep = ""), lo_lote)) %>% 
@@ -125,6 +125,23 @@ lotes %>%
                 font_size = 10)
 ```
 
+## Base de quadras
+
+```{r data_quadras_import, cache = TRUE}
+quadras <- read_sf("dados/quadras/SIRGAS_SHP_quadraMDSF.shp") %>% 
+  st_set_crs("epsg:31983") %>% 
+  filter(qd_tipo == "F") %>% # Apenas quadras fiscais
+  select(setor = qd_setor, quadra = qd_fiscal)
+```
+
+
+## Base de setores
+
+```{r data_setores_import, cache = TRUE}
+setores <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
+  st_set_crs("epsg:31983") %>% 
+  select(setor = st_codigo)
+```
 
 # Base de Dados do IPTU
 
@@ -137,7 +154,7 @@ O número do contribuinte, utilizado para identificar exclusivamente cada imóve
 Quando um lote é um condomínio, ou seja, quando não se classifica de acordo com `condominio == "00-0"`, é necessário substituir os múltiplos números de SQL pelo número do condomínio. Isso ocorre porque cada unidade dentro do condomínio pode ser tratada como uma entidade separada para fins tributários, mas para a base de lotes, estão todos juntos.
 
 
-```{r IPTU_bruto, cache = TRUE}
+```{r data_IPTU_import, cache = TRUE}
 IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>% 
     as_tibble() %>% 
     select(sql = "NUMERO.DO.CONTRIBUINTE", 
@@ -177,23 +194,7 @@ IPTU %>%
 Todos os empreendimentos não públicos regulares (de acordo com a lei) constam nesta base de dados. A seguir está uma análise de quais são estes tipos. O tipo de interesse para esta análise é apenas os residenciais.
 
 
-```{r}
-IPTU.tipos <- IPTU %>% 
-  group_by(tipo) %>% 
-  summarize(n = n()) %>% 
-  mutate(percentual = n/sum(n)) %>% 
-  rename("Tipo de contribuinte" = tipo) 
-```
-
-```{r, echo = FALSE}
-IPTU.tipos %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-remove(IPTU.tipos)
-```
-
-```{r grafico_area_construida, cache = TRUE}
+```{r plot_area_construida, cache = TRUE}
 gg.right <- IPTU %>% 
   mutate(uso = case_when(str_detect(tipo, "Residencial") ~ "Residencial",
                          str_detect(tipo, "Comercial") ~ "Comercial",
@@ -275,7 +276,7 @@ Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agr
 
 
 
-```{r IPTU_tratado, cache = TRUE}
+```{r data_IPTU_tidy, cache = TRUE}
 IPTU <- IPTU %>% 
   group_by(setor, quadra, lote) %>% 
   
@@ -311,28 +312,51 @@ IPTU %>%
 
 # Join entre a Base de Lotes e a Base do IPTU
 
-```{r join_IPTU-lotes, cache = TRUE}
+```{r data_join_IPTU-lote, cache = TRUE}
 # Join dos lotes com IPTU com base no SQL
-IPTU.lotes <- IPTU %>% 
+IPTU.lote <- IPTU %>% 
+  filter(residencial == 1) %>% 
   left_join(lotes, by = join_by(setor, quadra, lote)) %>% 
   ungroup()
 ```
 
 ```{r, echo = FALSE}
-remove(IPTU)
-
-IPTU.lotes %>% 
+IPTU.lote %>% 
   ungroup() %>% sample_n(8) %>% 
   kbl() %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
 ```
 
+```{r data_join_IPTU-quadra, cache = TRUE}
+IPTU.quadra <- IPTU %>% 
+  filter(residencial == 1) %>% 
+  group_by(setor, quadra) %>% 
+  summarize(unidades = sum(unidades),
+            area_construida = sum(area_construida),
+            verticalizacao = weighted.mean(verticalizacao, area_terreno),
+            area_terreno = sum(area_terreno)) %>% 
+  left_join(quadras, by = join_by(setor, quadra)) %>% 
+  ungroup()
+```
+
+```{r data_join_IPTU-setor, cache = TRUE}
+IPTU.setor <- IPTU %>% 
+  filter(residencial == 1) %>% 
+  group_by(setor) %>% 
+  summarize(unidades = sum(unidades),
+            area_construida = sum(area_construida),
+            verticalizacao = weighted.mean(verticalizacao, area_terreno),
+            area_terreno = sum(area_terreno)) %>% 
+  left_join(setores, by = join_by(setor)) %>% 
+  ungroup()
+```
+
+
 ## Algumas estatísticas descritivas
 
-```{r plot_distancia_pavimentos, cache = TRUE}
-gg <- IPTU.lotes %>% 
-  filter(residencial == 1) %>% 
+```{r plot_verticalizacao, cache = TRUE}
+gg <- IPTU.lote %>% 
   mutate(distancia_centro = st_distance(geometry, 
                                         read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
                                           st_set_crs("epsg:31983") %>% 
@@ -341,39 +365,39 @@ gg <- IPTU.lotes %>%
            cut(breaks = 10^3*(0:40), labels = FALSE)) %>% 
   st_drop_geometry() %>% 
   group_by(distancia_centro) %>% 
-  summarize(pavimentos = weighted.mean(pavimentos, area_ocupada)) %>% 
-  ggplot(aes(x = distancia_centro, y = pavimentos)) +
+  summarize(verticalizacao = weighted.mean(verticalizacao, area_terreno)) %>% 
+  ggplot(aes(x = distancia_centro, y = verticalizacao)) +
   geom_col() +
-  geom_hline(yintercept = 2, linetype = "dotted") +
+  geom_hline(yintercept = 1, linetype = "dotted") +
   labs(x = "Distância ao centro em quilômetros", 
-       y = "Pavimentos") + 
-  scale_y_continuous(breaks = (1:5)*2) +
+       y = "Verticalização") + 
+  scale_y_continuous(breaks = (1:6)) +
   theme_classic()
 
-ggsave("tex/imagens/pavimentos.png", gg, width = 6, height = 4, dpi = 250)
+ggsave("tex/imagens/verticalizacao.png", gg, width = 6, height = 4, dpi = 250)
 
 ```
 
 ```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/pavimentos.png")
+knitr::include_graphics("tex/imagens/verticalizacao.png")
 remove(gg)
 ```
 
 ```{r plot_indicadores, cache = TRUE}
-gg <- IPTU.lotes %>% 
-  filter(residencial == TRUE) %>% 
+gg <- IPTU.lote %>% 
   st_drop_geometry() %>% 
   mutate(CA = area_construida / area_terreno,
          cota_parte = area_terreno / unidades) %>% 
-  filter(cota_parte < 600, CA < 5, pavimentos < 15) %>% 
-  pivot_longer(c(CA:cota_parte, pavimentos)) %>% 
+  filter(cota_parte < 600, CA < 5, verticalizacao < 5) %>% 
+  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
+  pivot_longer(everything()) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
   facet_wrap(~ name, scales = "free_x") +
   labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
   theme_classic()
 
-ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 5, dpi = 250)
+ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 4, dpi = 250)
 
 ```
 
@@ -386,8 +410,8 @@ remove(gg)
 
 Alguns IPTUs apresentam inconsistências, como um terreno de 400.000 metros quadrados com apenas uma unidade residencial.
 
-```{r outliers, cache = TRUE}
-outliers <- IPTU.lotes %>% 
+```{r data_temp_outliers, cache = TRUE}
+outliers <- IPTU.lote %>% 
   filter(residencial == TRUE) %>% 
   st_drop_geometry() %>% 
   mutate(cota_parte = area_terreno / unidades) %>% 
@@ -406,13 +430,12 @@ outliers %>%
 Exemplo do lote de 400.000 metros quadrados e apenas uma unidade habitacional.
 
 ```{r plot_outlier, cache = TRUE}
-outlier <- outliers %>% first() %>% st_set_geometry("geometry")
+outlier <- outliers %>% nth(2) %>% st_set_geometry("geometry")
 
 ggplot() +
   geom_sf(data = lotes %>% st_crop(outlier %>% st_buffer(500))) +
   geom_sf(data = outlier, aes(geometry = geometry), fill = "darkblue") +
   theme_void()
-
 ```
 
 ```{r, echo = FALSE}
@@ -425,8 +448,8 @@ Há alguns casos em que o join não encontra match na base de dados dos lotes. U
 
 Uma possibilidade para contornar isso seria cruzar o setor e quadra do SQL, sem juntar com o lote com a base de quadras. Essa abordagem perderia um pouco da exatidão geográfica. Outra possibilidade seria de utilizar dados do logradouro para georreferenciar estes SQLs perdidos. Entretanto, como são dados residuais, isso tem impacto negligenciável na análise.
 
-```{r erro_join, cache = TRUE}
-IPTU.lotes %>% 
+```{r table_erro_join, cache = TRUE}
+IPTU.lote %>% 
   mutate(erro = geometry %>% st_is_empty(),
          residencial = ifelse(residencial == 1, "Residencial", "Nao residencial")) %>% 
   st_drop_geometry() %>% 
@@ -447,12 +470,12 @@ IPTU.lotes %>%
 ```
 
 
-```{r erros_geografica, cache = TRUE}
+```{r plot_erro_join, cache = TRUE}
 setor <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
   st_set_crs("epsg:31983") %>% 
   select(st_codigo)
 
-IPTU.lotes %>% 
+IPTU.lote %>% 
   mutate(erro = geometry %>% st_is_empty()) %>% 
   filter(erro, residencial == 1) %>% 
   group_by(setor) %>% 
@@ -479,7 +502,7 @@ remove(setor, erro_join)
 Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas. A delimitação geográfica do setor também considera questões logísticas para o entrevistador conseguir entrevistar a todos.
 
 
-```{r read_censo, cache = TRUE}
+```{r data_censo_import, cache = TRUE}
 # Read dados do censo 2022
 censo <- read_sf("dados/censo/SP_Malha_Preliminar_2022.shp") %>% 
   filter(CD_MUN == "3550308") %>% 
@@ -530,7 +553,7 @@ descritiva %>%
 remove(descritiva)
 ```
 
-```{r plot_distcentro, cache = TRUE}
+```{r plot_densidade_distancia, cache = TRUE}
 censo %>% 
   mutate(distancia_centro = st_distance(geometry, 
                                         read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
@@ -550,19 +573,6 @@ censo %>%
   theme_classic()
 ```
 
-```{r}
-censo %>% 
-  mutate(distancia_centro = st_distance(geometry, 
-                                        read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
-                                          st_set_crs("epsg:31983") %>% 
-                                          filter(ds_nome == "SE")) %>% 
-           as.numeric() / 1000,
-         densidade = v0001 / as.numeric(area_setor)) %>% 
-  filter(distancia_centro != 0) %>% 
-  lm(densidade ~ exp(-distancia_centro), data = .) %>% 
-  summary()
-```
-
 
 # Cruzamento entre a Base do Censo e a Base do IPTU
 
@@ -571,10 +581,10 @@ O processo de cruzamento foi realizado com base na intersecção das geometrias 
 É importante destacar que, em casos onde um lote foi dividido entre dois ou mais setores censitários, ocorrerá uma intersecção em ambas as áreas. Para lidar com essa situação, foi calculado o percentual da área do lote que está contida em cada setor censitário.
 
 
-```{r join_IPTU-censo, cache = TRUE}
+```{r data_join_IPTU-censo, cache = TRUE}
 # Join dados do IPTU com do Censo através da intersecção das geometrias
 IPTU.censo <- censo %>% 
-  st_intersection(IPTU.lotes %>% st_as_sf()) %>% 
+  st_intersection(IPTU.lote %>% st_as_sf()) %>% 
   as_tibble() %>% 
   rename(geometria_intersec = geometry) %>% 
   
@@ -584,14 +594,14 @@ IPTU.censo <- censo %>%
               select(id_setor_censitario, 
                      geometria_setor_censitario = geometry),
             by = join_by(id_setor_censitario)) %>% 
-  left_join(IPTU.lotes %>% 
+  left_join(IPTU.lote %>% 
               as_tibble() %>% 
               select(setor, quadra, lote, 
                      geometria_lote = geometry),
             by = join_by(setor, quadra, lote)) %>% 
   
   # Cálculo de quanto % do lote está dentro do setor
-  mutate(percent_intersec = as.numeric(st_area(geometria_intersec) / st_area(geometria_lote)))
+  mutate(percent_intersec = as.numeric(st_area(geometria_intersec) / st_area(geometria_lote))) 
 ```
 
 ```{r, echo = FALSE}
@@ -602,19 +612,22 @@ IPTU.censo %>%
                 font_size = 10)
 ```
 
-## Erros no join
+# Erros no join
 
+## Disparidades de informações
 
+Teoricamente o número de domicílios deveria ser próximo do número de unidades habitacionais enunciadas pelo IPTU. Caso haja mais unidades habitacionais do que domicílios, houve algum equívoco na medição do censo, visto que entre domicílios não contam apenas os ocupados. Caso haja mais domicílios, há unidades que não são contribuintes do IPTU. O que é preocupante é que casos em que o número é diferente não são exceções.
 
-```{r disparidade_unidades, cache = TRUE}
-gg <- IPTU.censo %>% 
-  group_by(id_setor_censitario) %>% 
-  summarize(domicilios = median(v0002),
-            unidades = sum(unidades)) %>% 
-  
-  # Caso seja 50%, domicilios = unidades, 
-  # caso < 50%, mais domicílios no censo que unidades no IPTU, 
-  # caso > 50%, há mais unidades no IPTU do que domicílios no censo
+```{r plot_disparidade_IPTU-censo, cache = TRUE}
+gg <- censo %>% 
+  st_drop_geometry() %>% 
+  select(id_setor_censitario, domicilios = v0002) %>% 
+  left_join(IPTU.censo %>% 
+              st_drop_geometry() %>% 
+              filter(residencial == 1) %>% 
+              group_by(id_setor_censitario) %>% 
+              summarize(unidades = sum(unidades))) %>% 
+  mutate(unidades = replace_na(unidades, 0)) %>% 
   mutate(balanco = unidades / (unidades + domicilios)) %>% 
   ggplot() +
   geom_histogram(aes(x = balanco)) +
@@ -632,10 +645,12 @@ title = "Disparidade entre censo e IPTU quanto ao número de unidades habitacion
 ggsave("tex/imagens/disparidade_censoIPTU.png", gg, width = 8, height = 5, dpi = 400)
 ```
 
+
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/disparidade_censoIPTU.png")
 ```
 
+## Perfil geográfico dos erros
 
 Alguns setores censitários não encontram pares na base de lotes. Isso acontece principalmente por conta de loteamentos irregulares e favelas, que não são contribuintes do IPTU, e, portanto, não constam na base. Isso não prejudica a análise, pois estes loteamentos não dependem da regulamentação urbana, então mudanças nos instrumentos e indicadores não impactariam essas regiões.
 
@@ -688,268 +703,6 @@ ggsave("tex/imagens/mapa_pontos.png", gg, width = 18, height = 20, dpi = 300)
 
 ```{r, echo=FALSE, out.width = '100%'}
 knitr::include_graphics("tex/imagens/mapa_pontos.png")
+remove(favela, gg, lotes_irregulares, IPTU.lote, censo.pontos)
 ```
-
-```{r}
-
-temp <- censo.pontos %>%
-  st_set_geometry("samples") %>% 
-  st_set_crs("epsg:31983") %>% 
-  mutate(intersects = st_intersects(
-    samples, 
-    st_union(favela %>% st_union() %>% st_buffer(1))) %>% 
-      as.character(),
-    intersects = intersects == "1")
-
-temp %>% 
-  group_by(intersects, erro) %>% 
-  summarize(n = n())
-
-(temp %>% 
-  ggplot() +
-  geom_sf(data = distrito, color = NA) +
-  geom_sf(data = st_union(favela %>% st_union() %>% st_buffer(1)),
-          aes(fill = "Favelas e lotes irregulares"), 
-          color = "black", size = .1, alpha = .7) +
-  geom_sf(aes(geometry = samples, color = intersects), alpha = .25, size = .2) +
-  scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#2BAA92FF")) +
-  scale_color_manual(values = c("TRUE" = "black", "FALSE" = "green")) +
-  theme_void()) %>% 
-  ggsave("test.png", ., height = 20, width = 20, dpi = 300)
-```
-
-```{r}
-temp.dist <- censo.pontos %>% 
-  st_set_geometry("samples") %>% 
-  st_set_crs("epsg:31983") %>% 
-  mutate(distancia_favela = st_distance(samples,st_union(favela %>% st_union() %>% st_buffer(1))) %>% 
-           as.numeric()) %>% 
-  st_drop_geometry()
-
-temp.dist %>% 
-  ggplot() +
-  geom_violin(aes(x = "", y = distancia_favela, fill = erro)) +
-  scale_y_sqrt()
-```
-
-
-
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa_pontos.png")
-remove(favela, gg, lotes_irregulares, IPTU.lotes, censo.pontos)
-```
-## Função para plotar um setor censitário ou SQL específico
-
-```{r}
-view_geomtria <- function(geometria, zoom_out, colorir = TRUE){
-  
-  bbox <- geometria %>% 
-    st_transform("epsg:31983") %>% 
-    st_bbox()
-  
-  x_min <- (bbox$xmin - zoom_out) %>% as.numeric()
-  y_min <- (bbox$ymin - zoom_out) %>% as.numeric()
-  x_max <- (bbox$xmax + zoom_out) %>% as.numeric()
-  y_max <- (bbox$ymax + zoom_out) %>% as.numeric()
-  
-  corte <- list(xmin = x_min - zoom_out, ymin = y_min - zoom_out, 
-                xmax = x_max + zoom_out, ymax = y_max + zoom_out)
-  
-  df <- IPTU.censo %>%
-    st_as_sf() %>%
-    st_transform("epsg:31983") %>% 
-    st_crop(corte %>% unlist()) %>% 
-    mutate(densidade = v0001/area_setor,
-           decil = ntile(densidade, 10),
-           percent_intersec = round(percent_intersec * 100))
-  
-  if (colorir){gg <- df %>% 
-      ggplot() +
-      geom_sf(aes(geometry = geometria_setor_censitario, fill = factor(decil)), color = "white", lwd = 1.5)}
-  else{gg <- df %>% 
-      ggplot() +
-      geom_sf(aes(geometry = geometria_setor_censitario), color = "white", lwd = 1.5)}
-  
-  gg +
-    geom_sf(aes(geometry = geometria_intersec), fill = "red", color = "red", alpha = .25) +
-    geom_sf_label(aes(geometry = geometria_intersec, label = percent_intersec), label.size = .01) +
-    scale_fill_viridis_d() +
-    labs(fill = "Decil de densidade") +
-    theme(legend.position = "none") +
-    coord_sf(xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
-    theme_void()
-}
-```
-
-## Exemplo de lote que é cortado por setor censitário
-
-Demonstrativo do que acontece quando um lote está dividido em mais de um setor censitário. No fundo, há os setores censitários, coloridos de acordo com a densidade. Em vermelho, estão as geometrias dos lotes. Quando o lote não é cortado, sua área fica integralmente em um setor censitário. Quando um setor corta um lote, sua área é distribuída e o número representa o percentual da área que fica em cada setor censitário.
-
-
-```{r mapa_lote_cortado, cache=TRUE}
-gg <- view_geomtria(IPTU.censo %>% 
-                filter(id_setor_censitario == "355030810000143P") %>% 
-                select(geometria_setor_censitario) %>% 
-                st_as_sf(),
-              zoom_out = 50)
-
-ggsave("tex/imagens/mapa_lote_corte.png", gg, width = 10, height = 10, dpi = 300)
-```
-
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa_lote_corte.png")
-```
-
-## Casos de erro do procedimento
-
-```{r erro_tabela, cache = TRUE}
-caso.erro <- IPTU.censo %>%
-  group_by(setor, quadra, lote) %>% 
-  mutate(soma_percent_intersec = sum(percent_intersec) %>% round(2)) %>% 
-  filter(soma_percent_intersec < 1)
-```
-
-```{r, echo = FALSE}
-caso.erro %>% 
-  ungroup() %>% sample_n(5) %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-
-remove(caso.erro)
-```
-
-É possível observar que nestes casos, a soma do percentual não é 1 porque estão na borda da cidade, então o resto do lote se encontra em outros municípios. Estes erros não vão causar problemas.
-
-```{r mapa_erro, cache = TRUE}
-gg <- view_geomtria(IPTU.censo %>% 
-                filter(setor == "160", quadra == "128", lote == "0008") %>% 
-                select(geometria_lote) %>% 
-                st_as_sf(),
-              zoom_out = 100,
-              colorir = FALSE)
-
-ggsave("tex/imagens/mapa_erro.png", gg, width = 10, height = 8, dpi = 300)
-```
-
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa_erro.png")
-```
-
-# Regressão
-
-
-```{r}
-df <- IPTU.censo %>% 
-  filter(residencial == 1, v0001 > 0) %>% 
-
-  group_by(id_setor_censitario) %>% 
-  summarize(
-            
-            # Setor censitário
-            populacao = median(v0001),
-            area_setor = median(area_setor) %>% as.numeric(),
-            domicilios = median(v0002),
-            domicilios_ocupados = median(v0007),
-            geometry = first(geometria_setor_censitario),
-            
-            # Lote
-            unidades = sum(unidades * percent_intersec),
-            area_terreno = sum(area_terreno * percent_intersec),
-            area_construida = sum(area_construida * percent_intersec),
-            area_ocupada = sum(area_ocupada * percent_intersec),
-            pavimentos = weighted.mean(pavimentos, area_terreno * percent_intersec),
-            verticalizacao = weighted.mean(verticalizacao, area_terreno * percent_intersec)) %>% 
-  
-  mutate(densidade = populacao / area_setor,
-         cota_parte = area_terreno / unidades,
-         cota_parte_censo = area_terreno / domicilios,
-         CA = area_construida / area_terreno) %>% 
-  
-  mutate(distancia_centro = st_distance(geometry %>% st_centroid(), 
-                                      read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
-                                        st_set_crs("epsg:31983") %>% 
-                                        filter(ds_nome == "SE")) %>% 
-         as.numeric() / 1000)
-  
-```
-
-# Dados finais
-
-```{r}
-ggplot() +
-  geom_sf(data = censo, color = NA) +
-  geom_sf(data = df %>%
-            mutate(decil = ntile(densidade, 10)),
-          aes(fill = factor(decil), geometry = geometry), color = NA) +
-  scale_fill_viridis_d() +
-  labs(fill = "Decil de densidade") +
-  theme_void()
-```
-
-```{r}
-
-lm(densidade ~ CA + cota_parte + verticalizacao, data = df) %>% summary()
-lm(log(densidade) ~ CA + log(cota_parte) + verticalizacao, data = df) %>% summary()
-
-```
-
-```{r}
-split <- rsample::initial_split(df %>% select(-geometry), prop = 0.7)
-train <- rsample::training(split)
-test <- rsample::testing(split)
-```
-
-```{r}
-lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train) 
-lm_preds <- predict(lm_model, newdata = test)
-```
-
-```{r}
-rtree <- rpart::rpart(densidade ~ CA + cota_parte + verticalizacao, data = train)
-visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
-```
-
-```{r}
-rf_model <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 1000, importance = "impurity")
-rf_preds <- predict(rf_model, data = test)$predictions
-
-rf_model_all <- ranger::ranger(densidade ~ ., 
-                     data = train, num.trees = 1000, importance = "impurity")
-rf_preds_all <- predict(rf_model_all, data = test)$predictions
-
-ggplot(NULL, aes(x = rf_model_all$variable.importance,
-                 y = fct_reorder(names(rf_model_all$variable.importance),
-                                 rf_model_all$variable.importance))) +
-    geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
-    theme_bw()
-```
-
-
-```{r}
-sqrt(mean((rf_preds - test$densidade)^2))
-sqrt(mean((rf_preds_all - test$densidade)^2))
-sqrt(mean((lm_preds - test$densidade)^2))
-```
-
-```{r}
-n <- length(test$densidade)
-
-resultados <- tibble(pred = c(rf_preds, rf_preds_all, lm_preds),
-                     real = c(test$densidade, test$densidade, test$densidade),
-                     modelo = c(rep("A", n), rep("B", n), rep("C", n)))
-
-ggplot(data = resultados) +
-  geom_point(aes(x = pred, y = real)) +
-  theme(aspect.ratio = 1) +
-  coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
-  geom_abline(slope = 1) +
-  facet_wrap(~modelo)
-```
-
 
