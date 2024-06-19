@@ -24,123 +24,86 @@ library(purrr)
 library(ggtext)
 
 set.seed(123)
+
+distrito <- read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% st_set_crs("epsg:31983")
 ```
 
-# Geosampa
+## Microdados do Censo de 2022
 
-GeoSampa é o portal de mapas e dados geoespaciais da cidade de São Paulo, mantido pela prefeitura. Ele fornece uma vasta gama de informações geográficas, incluindo mapas, dados demográficos, infraestruturas e muito mais. Este portal é uma ferramenta valiosa para pesquisadores, urbanistas e qualquer pessoa interessada em informações espaciais detalhadas sobre a cidade.
+É importante destacar que os resultados disponíveis são parciais do censo, com dados atualizados até o momento da divulgação. No entanto, mesmo parciais, esses dados podem ser extremamente úteis para suas análises.
 
-https://geosampa.prefeitura.sp.gov.br/
+Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas. A delimitação geográfica do setor também considera questões logísticas para o entrevistador conseguir entrevistar a todos.
 
-# Lotes
-Base de Lotes: No GeoSampa, a base de lotes representa a divisão da cidade em pequenos segmentos, geralmente correspondentes a terrenos individuais ou condomínios. Esta base está organizada de forma que cada bairro tem seu próprio conjunto de dados e os dados de lotes para cada bairro podem ser baixados diretamente do site do GeoSampa em formato zip, contendo arquivos como .shp (shapefile), .dbf (database file), e .shx (index file).
 
+```{r data_censo_import, cache = TRUE}
+# Read dados do censo 2022
+censo <- read_sf("dados/censo/SP_Malha_Preliminar_2022.shp") %>% 
+  filter(CD_MUN == "3550308") %>% 
+  st_transform("epsg:31983") %>% # Sistema de coordenadas do geosampa
+  select(id_setor_censitario = CD_SETOR, v0001:v0007) %>% 
+  mutate(area_setor = st_area(geometry))
+```
+
+```{r, echo = FALSE}
+censo %>% 
+  ungroup() %>% sample_n(10) %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+```
+
+```{r plot_censo, cache = TRUE}
+gg <- ggplot() +
+  geom_sf(data = censo %>%
+            mutate(densidade = v0001/area_setor,
+                   decil = ntile(densidade, 10)),
+          aes(fill = factor(decil)), color = NA) +
+  scale_fill_viridis_d() +
+  labs(fill = "Decil de densidade") +
+  theme_void()
+
+ggsave("tex/imagens/mapa.png", gg, width = 20, height = 20, dpi = 400)
+```
+
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("tex/imagens/mapa.png")
+```
 
 ```{r}
-# Extração do zip file com lotes de cada bairro
-if (!"zip" %in% list.files(path = "dados/lotes")){
-  for (file in list.files(path="dados/lotes/zip", full.names = FALSE) %>% 
-       str_remove("\\.zip")){
-    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
-          paste(file, "/", file, ".shp", sep = ""), 
-          exdir = "dados/lotes/unzip")
-    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
-          paste(file, "/", file, ".dbf", sep = ""), 
-          exdir = "dados/lotes/unzip")
-    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
-          paste(file, "/", file, ".shx", sep = ""), 
-          exdir = "dados/lotes/unzip")
-  }
-}
-```
-
-```{r data_lotes_import, cache = TRUE}
-# Junção dos shapes dos lotes de cada bairro em uma tabela
-lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>% 
-    paste("dados/lotes/unzip/", ., "/", ., ".shp", sep = "") %>% 
-    lapply(read_sf) %>% 
-    bind_rows %>% 
-    st_set_crs("epsg:31983") 
-
-```
-
-```{r, echo = FALSE}
-lotes %>% 
-  ungroup() %>% sample_n(8) %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-```
-
-## Tipos de lotes
-
-Os lotes podem ser classificados de três formas
-
-- Lotes fiscais: apresentam contribuintes do IPTU
-- Espaço livre: espaços públicos
-- Via de acesso: Ruas fechadas para acesso dentro de uma quadra
-
-Os lotes fiscais podem ser unidades ou condomínios. Um prédio, por exemplo, fica em um único lote, mas dentro pode haver diversas unidades, então se configura como um condomínio. Não é possível saber através dos dados de lotes quantas unidades estão no condomínio, nem alguma forma de discriminá-los.
-
-
-```{r plot_lotes, cache = TRUE}
-lotes %>% 
-  mutate(condominio = case_when(lo_condomi == "00" ~ "Unidade",
-                                lo_condomi != "00" ~ "Condomínio"),
-         tipo = case_when(lo_tp_lote == "F" ~ "Fiscal",
-                          lo_tp_lote == "M" ~ "Espaço livre",
-                          lo_tp_lote == "V" ~ "Via de acesso",
-                          .default = NA),
-         area = st_area(geometry) %>% as.numeric()) %>% 
+descritiva <- censo %>% 
   st_drop_geometry() %>% 
-  ggplot() +
-  geom_violin(aes(x = factor(condominio), y = area, fill = tipo)) +
-  scale_y_log10(labels = scales::comma_format(big.mark = ".")) +
-  labs(title = "Área dos lotes em SP" , x = "", y = "Área em metros quadrados", fill = "Tipo de lote") +
-  theme_classic()
-```
-
-
-
-## SQL dos Lotes (Setor, Quadra e Lote)
-Na base de dados de lotes, cada lote é identificado por três componentes principais:
-
-1. Setor (lo_setor): Uma divisão maior dentro do município que agrupa várias quadras.
-2. Quadra (lo_quadra): Uma subdivisão dentro de um setor que agrupa vários lotes.
-3. Lote (lo_lote): A menor unidade de divisão, que representa um terreno ou uma parcela específica dentro de uma quadra.
-Essa estrutura de Setor-Quadra-Lote é crucial para identificar de forma única cada lote dentro do município. No código, esses identificadores são utilizados para manipular e cruzar os dados de lotes com outras bases de dados, como a base de IPTU.
-
-```{r data_lotes_tidy, cache = TRUE}
-lotes <- lotes %>% 
- filter(lo_tp_lote == "F") %>% # Seleção apenas de lotes fiscais
-  mutate(lo_lote = ifelse(lo_lote == "0000", paste("CD", lo_condomi, sep = ""), lo_lote)) %>% 
-  select(setor = lo_setor, quadra = lo_quadra, lote = lo_lote)
+  summarize("Total de pessoas" = sum(v0001),
+            "Total de Domicílios" = sum(v0002),
+            "Total de Domicílios Particulares Ocupados" = sum(v0007)) %>% 
+  pivot_longer(everything())
 ```
 
 ```{r, echo = FALSE}
-lotes %>% 
-  ungroup() %>% sample_n(8) %>% 
-  kbl() %>% 
+descritiva %>% 
+  kbl(format.args = list(big.mark = ".")) %>% 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 10)
+remove(descritiva)
 ```
 
-## Base de quadras
-
-```{r data_quadras_import, cache = TRUE}
-quadras <- read_sf("dados/quadras/SIRGAS_SHP_quadraMDSF.shp") %>% 
-  st_set_crs("epsg:31983") %>% 
-  filter(qd_tipo == "F") %>% # Apenas quadras fiscais
-  select(setor = qd_setor, quadra = qd_fiscal)
-```
-
-
-## Base de setores
-
-```{r data_setores_import, cache = TRUE}
-setores <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
-  st_set_crs("epsg:31983") %>% 
-  select(setor = st_codigo)
+```{r plot_densidade_distancia, cache = TRUE}
+censo %>% 
+  mutate(distancia_centro = st_distance(geometry, 
+                                        read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
+                                          st_set_crs("epsg:31983") %>% 
+                                          filter(ds_nome == "SE")) %>% 
+           as.numeric() %>% 
+           cut(breaks = 10^3*(0:40), labels = FALSE)) %>% 
+  st_drop_geometry() %>%
+  group_by(distancia_centro) %>% 
+  summarize(densidade = sum(v0001) / sum(as.numeric(area_setor) / 10^6)) %>% 
+  ggplot(aes(x = distancia_centro, y = densidade)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".")) +
+  scale_x_continuous(labels = scales::comma_format(big.mark = ".")) +
+  labs(x = "Distância ao centro em quilômetros", 
+       y = "Densidade populacional por quilômetro quadrado") +
+  theme_classic()
 ```
 
 # Base de Dados do IPTU
@@ -289,7 +252,8 @@ IPTU <- IPTU %>%
             pavimentos = median(pavimentos),
             ano_construcao = median(ano_construcao),
             residencial = median(residencial),
-            verticalizacao = median(verticalizacao))
+            verticalizacao = median(verticalizacao)) %>% 
+  ungroup()
 ```
 
 ```{r, echo = FALSE}
@@ -306,6 +270,153 @@ IPTU %>%
   group_by(unitario) %>% 
   summarize(n = n(),
             soma = sum(unidades))
+```
+
+
+```{r plot_indicadores, cache = TRUE}
+gg <- IPTU %>% 
+  ungroup() %>% 
+  mutate(CA = area_construida / area_terreno,
+         cota_parte = area_terreno / unidades) %>% 
+  filter(cota_parte < 600, CA < 5, verticalizacao < 5) %>% 
+  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot() +
+  geom_histogram(aes(x = value)) +
+  facet_wrap(~ name, scales = "free_x") +
+  labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
+  theme_classic()
+
+ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 4, dpi = 250)
+
+```
+
+```{r, echo=FALSE, out.width = '90%'}
+knitr::include_graphics("tex/imagens/indicadores.png")
+remove(gg)
+```
+
+# Geosampa
+
+GeoSampa é o portal de mapas e dados geoespaciais da cidade de São Paulo, mantido pela prefeitura. Ele fornece uma vasta gama de informações geográficas, incluindo mapas, dados demográficos, infraestruturas e muito mais. Este portal é uma ferramenta valiosa para pesquisadores, urbanistas e qualquer pessoa interessada em informações espaciais detalhadas sobre a cidade.
+
+https://geosampa.prefeitura.sp.gov.br/
+
+# Lotes
+Base de Lotes: No GeoSampa, a base de lotes representa a divisão da cidade em pequenos segmentos, geralmente correspondentes a terrenos individuais ou condomínios. Esta base está organizada de forma que cada bairro tem seu próprio conjunto de dados e os dados de lotes para cada bairro podem ser baixados diretamente do site do GeoSampa em formato zip, contendo arquivos como .shp (shapefile), .dbf (database file), e .shx (index file).
+
+
+```{r}
+# Extração do zip file com lotes de cada bairro
+if (!"zip" %in% list.files(path = "dados/lotes")){
+  for (file in list.files(path="dados/lotes/zip", full.names = FALSE) %>% 
+       str_remove("\\.zip")){
+    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
+          paste(file, "/", file, ".shp", sep = ""), 
+          exdir = "dados/lotes/unzip")
+    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
+          paste(file, "/", file, ".dbf", sep = ""), 
+          exdir = "dados/lotes/unzip")
+    unzip(paste("dados/lotes/zip/", file, ".zip", sep = ""), 
+          paste(file, "/", file, ".shx", sep = ""), 
+          exdir = "dados/lotes/unzip")
+  }
+}
+```
+
+```{r data_lotes_import, cache = TRUE}
+# Junção dos shapes dos lotes de cada bairro em uma tabela
+lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>% 
+    paste("dados/lotes/unzip/", ., "/", ., ".shp", sep = "") %>% 
+    lapply(read_sf) %>% 
+    bind_rows %>% 
+    st_set_crs("epsg:31983") 
+
+```
+
+```{r, echo = FALSE}
+lotes %>% 
+  ungroup() %>% sample_n(8) %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+```
+
+## Tipos de lotes
+
+Os lotes podem ser classificados de três formas
+
+- Lotes fiscais: apresentam contribuintes do IPTU
+- Espaço livre: espaços públicos
+- Via de acesso: Ruas fechadas para acesso dentro de uma quadra
+
+Os lotes fiscais podem ser unidades ou condomínios. Um prédio, por exemplo, fica em um único lote, mas dentro pode haver diversas unidades, então se configura como um condomínio. Não é possível saber através dos dados de lotes quantas unidades estão no condomínio, nem alguma forma de discriminá-los.
+
+
+```{r plot_lotes, cache = TRUE}
+lotes %>% 
+  mutate(condominio = case_when(lo_condomi == "00" ~ "Unidade",
+                                lo_condomi != "00" ~ "Condomínio"),
+         tipo = case_when(lo_tp_lote == "F" ~ "Fiscal",
+                          lo_tp_lote == "M" ~ "Espaço livre",
+                          lo_tp_lote == "V" ~ "Via de acesso",
+                          .default = NA),
+         area = st_area(geometry) %>% as.numeric()) %>% 
+  st_drop_geometry() %>% 
+  ggplot() +
+  geom_violin(aes(x = factor(condominio), y = area, fill = tipo)) +
+  scale_y_log10(labels = scales::comma_format(big.mark = ".")) +
+  labs(title = "Área dos lotes em SP" , x = "", y = "Área em metros quadrados", fill = "Tipo de lote") +
+  theme_classic()
+```
+
+
+
+## SQL dos Lotes (Setor, Quadra e Lote)
+Na base de dados de lotes, cada lote é identificado por três componentes principais:
+
+1. Setor (lo_setor): Uma divisão maior dentro do município que agrupa várias quadras.
+2. Quadra (lo_quadra): Uma subdivisão dentro de um setor que agrupa vários lotes.
+3. Lote (lo_lote): A menor unidade de divisão, que representa um terreno ou uma parcela específica dentro de uma quadra.
+Essa estrutura de Setor-Quadra-Lote é crucial para identificar de forma única cada lote dentro do município. No código, esses identificadores são utilizados para manipular e cruzar os dados de lotes com outras bases de dados, como a base de IPTU.
+
+```{r data_lotes_tidy, cache = TRUE}
+lotes <- lotes %>% 
+ filter(lo_tp_lote == "F") %>% # Seleção apenas de lotes fiscais
+  mutate(lo_lote = ifelse(lo_lote == "0000", paste("CD", lo_condomi, sep = ""), lo_lote)) %>% 
+  select(setor = lo_setor, quadra = lo_quadra, lote = lo_lote)
+```
+
+```{r, echo = FALSE}
+lotes %>% 
+  ungroup() %>% sample_n(8) %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                font_size = 10)
+```
+
+## Base de quadras
+
+```{r data_quadras_import, cache = TRUE}
+quadras <- read_sf("dados/quadras/SIRGAS_SHP_quadraMDSF.shp") %>% 
+  st_set_crs("epsg:31983") %>% 
+  filter(qd_tipo == "F") %>% # Apenas quadras fiscais
+  select(setor = qd_setor, quadra = qd_fiscal) %>% 
+  group_by(setor, quadra) %>% 
+  summarize(geometry = st_union(geometry)) %>% 
+  ungroup()
+```
+
+
+## Base de setores
+
+```{r data_setores_import, cache = TRUE}
+setores <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
+  st_set_crs("epsg:31983") %>% 
+  select(setor = st_codigo) %>% 
+  group_by(setor) %>% 
+  summarize(geometry = st_union(geometry)) %>% 
+  ungroup()
 ```
 
 
@@ -352,6 +463,27 @@ IPTU.setor <- IPTU %>%
   ungroup()
 ```
 
+```{r}
+list(IPTU %>% filter(residencial == 1) %>% mutate(base = "bruta"), 
+     IPTU.setor  %>% mutate(base = "Setor")  %>% filter(!geometry %>% st_is_empty()), 
+     IPTU.quadra %>% mutate(base = "Quadra") %>% filter(!geometry %>% st_is_empty()), 
+     IPTU.lote   %>% mutate(base = "Lote")   %>% filter(!geometry %>% st_is_empty())) %>% 
+  lapply(function(x) x %>% 
+           group_by(base) %>% 
+           summarize(unidades = sum(unidades))) %>% 
+  bind_rows %>% 
+  pivot_wider(names_from = base, values_from = unidades) %>% 
+  pivot_longer(2:4) %>% 
+  mutate(missing = bruta - value,
+         missing_percent = (100 *missing / bruta) %>% round(2) %>% paste("%")) %>% 
+  select("Critério de join" = name,
+         "Erros (unidades)" = missing,
+         "Percentual de erro" = missing_percent)
+```
+
+
+
+
 
 ## Algumas estatísticas descritivas
 
@@ -378,201 +510,36 @@ ggsave("tex/imagens/verticalizacao.png", gg, width = 6, height = 4, dpi = 250)
 
 ```
 
-```{r, echo=FALSE, out.width = '100%'}
+```{r, echo=FALSE, out.width = '75%'}
 knitr::include_graphics("tex/imagens/verticalizacao.png")
 remove(gg)
 ```
 
-```{r plot_indicadores, cache = TRUE}
-gg <- IPTU.lote %>% 
-  st_drop_geometry() %>% 
-  mutate(CA = area_construida / area_terreno,
-         cota_parte = area_terreno / unidades) %>% 
-  filter(cota_parte < 600, CA < 5, verticalizacao < 5) %>% 
-  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
-  pivot_longer(everything()) %>% 
+```{r}
+gg.lotes <- IPTU.quadra %>% 
   ggplot() +
-  geom_histogram(aes(x = value)) +
-  facet_wrap(~ name, scales = "free_x") +
-  labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
-  theme_classic()
+  geom_sf(data = distrito, fill = "black") +
+  geom_sf(aes(fill = verticalizacao, geometry = geometry), color = NA) +
+  theme_void() +
+  scale_fill_gradient(low = "#004D40FF", high = "#E0F2F1FF")
 
-ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 4, dpi = 250)
+gg.setor <- IPTU.setor %>% 
+  ggplot() +
+  geom_sf(data = distrito, fill = "black") +
+  geom_sf(aes(fill = verticalizacao, geometry = geometry), color = NA) +
+  theme_void() +
+  scale_fill_gradient(low = "#004D40FF", high = "#E0F2F1FF")
+
+ggsave("tex/imagens/mapa_verticalizacao.png", 
+       (gg.lotes | gg.setor), width = 20, height = 20, dpi = 300)
 
 ```
 
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/indicadores.png")
+
+```{r, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("tex/imagens/mapa_verticalizacao.png")
 remove(gg)
 ```
-
-## Outliers
-
-Alguns IPTUs apresentam inconsistências, como um terreno de 400.000 metros quadrados com apenas uma unidade residencial.
-
-```{r data_temp_outliers, cache = TRUE}
-outliers <- IPTU.lote %>% 
-  filter(residencial == TRUE) %>% 
-  st_drop_geometry() %>% 
-  mutate(cota_parte = area_terreno / unidades) %>% 
-  arrange(desc(cota_parte)) %>% 
-  head(10)
-```
-
-```{r, echo = FALSE}
-outliers %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-
-```
-
-Exemplo do lote de 400.000 metros quadrados e apenas uma unidade habitacional.
-
-```{r plot_outlier, cache = TRUE}
-outlier <- outliers %>% nth(2) %>% st_set_geometry("geometry")
-
-ggplot() +
-  geom_sf(data = lotes %>% st_crop(outlier %>% st_buffer(500))) +
-  geom_sf(data = outlier, aes(geometry = geometry), fill = "darkblue") +
-  theme_void()
-```
-
-```{r, echo = FALSE}
-remove(outliers, outlier, lotes)
-```
-
-# Erros no join
-
-Há alguns casos em que o join não encontra match na base de dados dos lotes. Uma possível explicação para este descompasso pode ser a desatualização da base do IPTU, visto que no geosampa a base de lotes sempre é a mais atualizada, visto que toda vez em que um lote é modificado ou surgem novos lotes, esta base é atualizada. Possivelmente a base do IPTU perdeu essas eventuais atualizações.
-
-Uma possibilidade para contornar isso seria cruzar o setor e quadra do SQL, sem juntar com o lote com a base de quadras. Essa abordagem perderia um pouco da exatidão geográfica. Outra possibilidade seria de utilizar dados do logradouro para georreferenciar estes SQLs perdidos. Entretanto, como são dados residuais, isso tem impacto negligenciável na análise.
-
-```{r table_erro_join, cache = TRUE}
-IPTU.lote %>% 
-  mutate(erro = geometry %>% st_is_empty(),
-         residencial = ifelse(residencial == 1, "Residencial", "Nao residencial")) %>% 
-  st_drop_geometry() %>% 
-  group_by(erro, residencial) %>% 
-  summarize(n = n(),
-            unidades = sum(unidades),
-            area_construida = sum(area_construida)) %>% 
-  group_by(residencial) %>% 
-  mutate(prop = n/sum(n),
-         prop_unidades = unidades / sum(unidades),
-         prop_area_construida = area_construida / sum(area_construida)) %>% 
-  pivot_wider(id_cols = c(erro), names_from = c(residencial), 
-              values_from = n:prop) %>% 
-  gt() %>% 
-  tab_spanner(label = "Residencial", columns = contains("_Residencial")) %>% 
-  tab_spanner(label = "Nao Residencial", columns = contains("_Nao Residencial")) %>% 
-  cols_label_with(fn = ~ str_remove(., pattern = "_Residencial|_Nao residencial"))
-```
-
-
-```{r plot_erro_join, cache = TRUE}
-setor <- read_sf("dados/setor/SIRGAS_SHP_setorfiscal.shp") %>% 
-  st_set_crs("epsg:31983") %>% 
-  select(st_codigo)
-
-IPTU.lote %>% 
-  mutate(erro = geometry %>% st_is_empty()) %>% 
-  filter(erro, residencial == 1) %>% 
-  group_by(setor) %>% 
-  summarize(erros = n())  %>%
-  mutate(erros = cut(erros, breaks = c(0, 50, 100, 200, 500, 1000, Inf))) %>% 
-  left_join(setor, join_by(setor == st_codigo)) %>% 
-  ggplot() +
-  geom_sf(data = setor, color = "white") +
-  geom_sf(aes(geometry = geometry, fill = factor(erros)), color = "white") +
-  scale_fill_viridis_d() +
-  labs(fill = "Número de erros", title = "Distribuição geográfica dos erros de join") +
-  theme_void()
-  
-```
-
-```{r, echo = FALSE}
-remove(setor, erro_join)
-```
-
-## Microdados do Censo de 2022
-
-É importante destacar que os resultados disponíveis são parciais do censo, com dados atualizados até o momento da divulgação. No entanto, mesmo parciais, esses dados podem ser extremamente úteis para suas análises.
-
-Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas. A delimitação geográfica do setor também considera questões logísticas para o entrevistador conseguir entrevistar a todos.
-
-
-```{r data_censo_import, cache = TRUE}
-# Read dados do censo 2022
-censo <- read_sf("dados/censo/SP_Malha_Preliminar_2022.shp") %>% 
-  filter(CD_MUN == "3550308") %>% 
-  st_transform("epsg:31983") %>% # Sistema de coordenadas do geosampa
-  select(id_setor_censitario = CD_SETOR, v0001:v0007) %>% 
-  mutate(area_setor = st_area(geometry))
-```
-
-```{r, echo = FALSE}
-censo %>% 
-  ungroup() %>% sample_n(10) %>% 
-  kbl() %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-```
-
-```{r plot_censo, cache = TRUE}
-gg <- ggplot() +
-  geom_sf(data = censo %>%
-            mutate(densidade = v0001/area_setor,
-                   decil = ntile(densidade, 10)),
-          aes(fill = factor(decil)), color = NA) +
-  scale_fill_viridis_d() +
-  labs(fill = "Decil de densidade") +
-  theme_void()
-
-ggsave("tex/imagens/mapa.png", gg, width = 20, height = 20, dpi = 400)
-```
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("tex/imagens/mapa.png")
-```
-
-```{r}
-descritiva <- censo %>% 
-  st_drop_geometry() %>% 
-  summarize("Total de pessoas" = sum(v0001),
-            "Total de Domicílios" = sum(v0002),
-            "Total de Domicílios Particulares Ocupados" = sum(v0007)) %>% 
-  pivot_longer(everything())
-```
-
-```{r, echo = FALSE}
-descritiva %>% 
-  kbl(format.args = list(big.mark = ".")) %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 10)
-remove(descritiva)
-```
-
-```{r plot_densidade_distancia, cache = TRUE}
-censo %>% 
-  mutate(distancia_centro = st_distance(geometry, 
-                                        read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
-                                          st_set_crs("epsg:31983") %>% 
-                                          filter(ds_nome == "SE")) %>% 
-           as.numeric() %>% 
-           cut(breaks = 10^3*(0:40), labels = FALSE)) %>% 
-  st_drop_geometry() %>%
-  group_by(distancia_centro) %>% 
-  summarize(densidade = sum(v0001) / sum(as.numeric(area_setor) / 10^6)) %>% 
-  ggplot(aes(x = distancia_centro, y = densidade)) +
-  geom_col() +
-  scale_y_continuous(labels = scales::comma_format(big.mark = ".")) +
-  scale_x_continuous(labels = scales::comma_format(big.mark = ".")) +
-  labs(x = "Distância ao centro em quilômetros", 
-       y = "Densidade populacional por quilômetro quadrado") +
-  theme_classic()
-```
-
 
 # Cruzamento entre a Base do Censo e a Base do IPTU
 
