@@ -9,19 +9,24 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
+library(kableExtra)
+
 opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache.lazy = FALSE)
 setwd("C:/git/densidade")
 ```
 
 ```{r, warning = FALSE, message = FALSE}
 library(tidyverse)
+
 library(sf)
-library(kableExtra)
-library(units)
-library(gt)
+library(exactextractr)
+
 library(patchwork)
-library(purrr)
 library(ggtext)
+library(units)
+
+library(gt)
+
 
 set.seed(123)
 
@@ -241,8 +246,6 @@ Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agr
 
 ```{r data_IPTU_tidy, cache = TRUE}
 IPTU <- IPTU %>% 
-  group_by(setor, quadra, lote) %>% 
-  
   # Agregar por SQL
   group_by(setor, quadra, lote) %>% 
   summarize(unidades = n(),
@@ -541,6 +544,43 @@ knitr::include_graphics("tex/imagens/mapa_verticalizacao.png")
 remove(gg)
 ```
 
+
+
+```{r}
+
+geoms <- IPTU.setor %>% 
+  filter(! st_is_empty(geometry)) %>% 
+  st_as_sf() %>% 
+  mutate(area = st_area(geometry) %>% as.numeric()) %>% 
+  select(id = setor, unidades, area)
+
+bbox <- st_bbox(geoms)
+
+ras <- raster::raster(xmn = bbox["xmin"], xmx = bbox["xmax"], ymn = bbox["ymin"], ymx = bbox["ymax"], 
+            res = 2000, crs = "epsg:31983")
+
+IPTU.setor %>% summarize(sumaa = sum(unidades))
+IPTU %>% filter(residencial == 1) %>% summarize(somaa = sum(unidades))
+
+result <- exact_extract(ras, geoms, include_xy = T, 
+                        include_cols = c("id", "unidades", "area"), 
+                        force_df = T, coverage_area = T) %>% 
+  bind_rows %>% 
+  mutate(percent_intersect = coverage_area / area,
+         unidades_ponderadas = unidades * percent_intersect) %>% 
+  group_by(x, y) %>% 
+  summarize(unidades = sum(unidades_ponderadas)) %>% 
+  ungroup()
+
+r <- raster::rasterize(x = result %>% select(x, y), y = ras, field = result %>% pull(unidades))
+r
+
+raster::plot(r)
+```
+
+
+
+
 # Cruzamento entre a Base do Censo e a Base do IPTU
 
 O processo de cruzamento foi realizado com base na intersecção das geometrias dos setores censitários e dos lotes do IPTU. Cada setor censitário e cada lote do IPTU possui uma geometria associada, representando sua área geográfica no mapa. Ao cruzar essas geometrias, é possível identificar quais lotes estão contidos em cada setor censitário e vice-versa.
@@ -643,7 +683,7 @@ censo.pontos <- censo %>%
               select(id_setor_censitario) %>% 
               mutate(erro = TRUE)) %>% 
   mutate(erro = replace_na(erro, FALSE)) %>% 
-  mutate(samples = map2(geometry, pontos, ~st_sample(.x, size = .y))) %>%
+  mutate(samples = purrr::map2(geometry, pontos, ~st_sample(.x, size = .y))) %>%
   unnest(cols = samples) %>%
   as_tibble()
 
