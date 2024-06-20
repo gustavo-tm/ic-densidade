@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  19 JUN 2024 09:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  20 JUN 2024 14:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1241,55 +1241,16 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) [1
 
 
-{C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}] (texto.tex
-
-LaTeX Warning: Citation `bauman2003city' on page 2 undefined on input line 5.
+{C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}] (texto.tex [2
 
 
-LaTeX Warning: Citation `jacobs1961death' on page 2 undefined on input line 7.
-
-
-LaTeX Warning: Citation `brueckner2011lectures' on page 2 undefined on input line 11.
-
-[2
-
-
-]
-
-LaTeX Warning: Citation `brueckner2011lectures' on page 3 undefined on input line 13.
-
-
-LaTeX Warning: Reference `sec:micro' on page 3 undefined on input line 13.
-
-
-LaTeX Warning: Citation `coase2013problem' on page 3 undefined on input line 17.
-
-
-LaTeX Warning: Citation `glaeser2011triumph' on page 3 undefined on input line 20.
-
-
-LaTeX Warning: Citation `PDE' on page 3 undefined on input line 26.
-
-
-LaTeX Warning: Citation `lima2021alem' on page 3 undefined on input line 26.
-
-[3]
-
-LaTeX Warning: Citation `PDE' on page 4 undefined on input line 33.
-
-
-LaTeX Warning: Reference `eq:cotaparte' on page 4 undefined on input line 36.
-
-
-LaTeX Warning: Reference `fig:CA' on page 4 undefined on input line 43.
-
-[4]
-<imagens/CA_macroareas.png, id=39, 963.6pt x 297.11pt>
+] [3] [4]
+<imagens/CA_macroareas.png, id=68, 963.6pt x 297.11pt>
 File: imagens/CA_macroareas.png Graphic file (type png)
 <use imagens/CA_macroareas.png>
 Package pdftex.def Info: imagens/CA_macroareas.png  used on input line 52.
 (pdftex.def)             Requested size: 409.49722pt x 126.25874pt.
-<imagens/CA_eixos.png, id=40, 963.6pt x 294.09875pt>
+<imagens/CA_eixos.png, id=69, 963.6pt x 294.09875pt>
 File: imagens/CA_eixos.png Graphic file (type png)
 <use imagens/CA_eixos.png>
 Package pdftex.def Info: imagens/CA_eixos.png  used on input line 57.
@@ -1299,30 +1260,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 59--59
 [][]|\T1/ptm/m/n/12 (+20) Fonte: [][]$<[]https : / / gestaourbana . prefeitura . sp . gov . br / marco-[]regulatorio / plano-[]diretor /
  []
 
-
-LaTeX Warning: Reference `eq:cotaparte' on page 5 undefined on input line 62.
-
-[5 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>]
-
-LaTeX Warning: Reference `sec:micro' on page 6 undefined on input line 70.
-
-
-LaTeX Warning: Reference `sec:emp' on page 6 undefined on input line 72.
-
-[6]
-
-LaTeX Warning: Citation `papageorgiou2012essay' on page 7 undefined on input line 77.
-
-
-LaTeX Warning: Citation `fujita1989urban' on page 7 undefined on input line 77.
-
-
-LaTeX Warning: Citation `brueckner2011lectures' on page 7 undefined on input line 77.
-
-
-LaTeX Warning: Reference `fig:micro' on page 7 undefined on input line 85.
-
-[7
+[5 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>] [6] [7
 
 ] (imagens/micro.tex)
 Overfull \hbox (14.55237pt too wide) in paragraph at lines 24--92
@@ -1333,12 +1271,6 @@ Overfull \hbox (14.55237pt too wide) in paragraph at lines 24--92
 Underfull \hbox (badness 10000) in paragraph at lines 24--92
 
  []
-
-
-LaTeX Warning: Reference `fig:micro' on page 8 undefined on input line 99.
-
-
-LaTeX Warning: Reference `fig:micro-2' on page 8 undefined on input line 99.
 
 (imagens/micro-2.tex)
 Overfull \hbox (14.55237pt too wide) in paragraph at lines 28--106
@@ -1354,80 +1286,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--106
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8] [9]
-
-LaTeX Warning: Reference `fig:populacao' on page 10 undefined on input line 123.
-
-<imagens/mapa.png, id=72, 1445.4pt x 1445.4pt>
+<imagens/mapa.png, id=116, 1445.4pt x 1445.4pt>
 File: imagens/mapa.png Graphic file (type png)
 <use imagens/mapa.png>
 Package pdftex.def Info: imagens/mapa.png  used on input line 129.
 (pdftex.def)             Requested size: 455.0pt x 454.99464pt.
 
+
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-LaTeX Warning: Reference `fig:pontos_erro' on page 10 undefined on input line 135.
-
-<imagens/mapa_pontos.png, id=74, 1300.86pt x 1445.4pt>
+<imagens/mapa_pontos.png, id=119, 1300.86pt x 1445.4pt>
 File: imagens/mapa_pontos.png Graphic file (type png)
 <use imagens/mapa_pontos.png>
-Package pdftex.def Info: imagens/mapa_pontos.png  used on input line 141.
+Package pdftex.def Info: imagens/mapa_pontos.png  used on input line 139.
 (pdftex.def)             Requested size: 455.0pt x 505.54471pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-LaTeX Warning: Reference `fig:area_construida' on page 10 undefined on input line 145.
-
-<imagens/tree_area_construida.png, id=75, 722.7pt x 578.16pt>
+<imagens/tree_area_construida.png, id=122, 722.7pt x 578.16pt>
 File: imagens/tree_area_construida.png Graphic file (type png)
 <use imagens/tree_area_construida.png>
-Package pdftex.def Info: imagens/tree_area_construida.png  used on input line 150.
+Package pdftex.def Info: imagens/tree_area_construida.png  used on input line 148.
 (pdftex.def)             Requested size: 455.0pt x 364.00453pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imagens/indicadores.png, id=123, 650.43pt x 289.08pt>
+File: imagens/indicadores.png Graphic file (type png)
+<use imagens/indicadores.png>
+Package pdftex.def Info: imagens/indicadores.png  used on input line 155.
+(pdftex.def)             Requested size: 455.0pt x 202.22668pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10
 
-]
-
-LaTeX Warning: Reference `fig:lote-censo' on page 11 undefined on input line 156.
-
-
-LaTeX Warning: Reference `fig:populacao' on page 11 undefined on input line 156.
-
-
-LaTeX Warning: File `imagens/mapa_lote_corte.png' not found on input line 162.
-
-
-texto.tex:162: Package pdftex.def Error: File `imagens/mapa_lote_corte.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.162 ...6\linewidth]{imagens/mapa_lote_corte.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 162.
-(C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `pcr' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (main.bbl (main.brf)
+]) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [11 <./imagens/mapa.png>] [12 <./imagens/mapa_pontos.png>] [13 <./imagens/tree_area_construida.png>]
+ [11 <./imagens/mapa.png>] [12 <./imagens/mapa_pontos.png>] [13 <./imagens/tree_area_construida.png> <./imagens/indicadores.png>]
 bibitemlist
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 56.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
@@ -1441,31 +1339,21 @@ enddocument/afterlastpage: lastpage setting LastPage.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `main.brf' has not changed.
 (rerunfilecheck)             Checksum: 70535282954ED70CC1BB6E525D95289B;613.
-
-Package lastpage Warning: Rerun to get the references right on input line 404.
-
  ) 
 Here is how much of TeX's memory you used:
- 48649 strings out of 474370
- 1114362 string characters out of 5740535
+ 48582 strings out of 474370
+ 1112831 string characters out of 5740535
  1941754 words of memory out of 5000000
- 69962 multiletter control sequences out of 15000+600000
- 614272 words of font info for 245 fonts, out of 8000000 for 9000
+ 69906 multiletter control sequences out of 15000+600000
+ 613400 words of font info for 239 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1579b,2499s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (14 pages, 14844339 bytes).
+<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (14 pages, 14940246 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
+ 229 PDF objects out of 1000 (max. 8388607)
  45 named destinations out of 1000 (max. 500000)
- 63062 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 62555 words of extra memory for PDF output out of 74296 (max. 10000000)
 
