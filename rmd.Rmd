@@ -428,10 +428,6 @@ list(IPTU %>% filter(residencial == 1) %>% mutate(base = "bruta"),
   gt()
 ```
 
-```{r removes}
-remove(lotes, quadras, setores, IPTU)
-```
-
 
 ```{r plot_verticalizacao_lote, cache = TRUE}
 gg <- IPTU.lote %>% 
@@ -476,6 +472,10 @@ ggsave("tex/imagens/mapa_verticalizacao.png",
        (gg.lotes | gg.setor), width = 20, height = 20, dpi = 300)
 
 (gg.lotes | gg.setor)
+```
+
+```{r removesPre_joinIPTUCenso, echo = FALSE}
+remove(gg.lotes, gg.setor, gg, lotes, quadras, setores, IPTU)
 ```
 
 # Join IPTU - Censo
@@ -592,8 +592,8 @@ ggsave("tex/imagens/mapa_pontos.png", gg, width = 18, height = 20, dpi = 300)
 gg
 ```
 
-```{r removes2}
-remove(censo.pontos, lotes_irregulares, favela, IPTU.censo)
+```{r removesPre_raster, echo = FALSE}
+remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg)
 ```
 
 
@@ -668,7 +668,7 @@ gg <- result %>%
   theme_void() +
   scale_fill_viridis_d()
 
-ggsave("test.png", gg, width = 20, height = 20, dpi = 300)
+ggsave("tex/imagens/rasters.png", gg, width = 20, height = 20, dpi = 400)
 
 gg
 ```
