@@ -522,7 +522,7 @@ gg <- censo %>%
               st_drop_geometry() %>% 
               filter(residencial == 1) %>% 
               group_by(id_setor_censitario) %>% 
-              summarize(unidades = sum(unidades))) %>% 
+              summarize(unidades = sum(unidades * percent_intersec))) %>% 
   mutate(unidades = replace_na(unidades, 0)) %>% 
   mutate(balanco = unidades / (unidades + domicilios)) %>% 
   ggplot() +
@@ -592,8 +592,63 @@ ggsave("tex/imagens/mapa_pontos.png", gg, width = 18, height = 20, dpi = 300)
 gg
 ```
 
+```{r data_regression_IPTU-censo, cache = TRUE}
+df <- IPTU.censo %>% 
+  filter(residencial == 1) %>% 
+
+  group_by(id_setor_censitario) %>% 
+  summarize(# Setor censitário
+            populacao = median(v0001),
+            area_setor = median(area_setor) %>% as.numeric(),
+            domicilios = median(v0002),
+            domicilios_ocupados = median(v0007),
+            
+            # Lote
+            unidades = sum(unidades * percent_intersec),
+            area_terreno = sum(area_terreno * percent_intersec),
+            area_construida = sum(area_construida * percent_intersec),
+            area_ocupada = sum(area_ocupada * percent_intersec),
+            pavimentos = weighted.mean(pavimentos, area_terreno * percent_intersec),
+            verticalizacao = weighted.mean(verticalizacao, area_terreno * percent_intersec)) %>% 
+  
+  mutate(densidade = populacao * 10 ^ 6 / area_setor,
+         cota_parte = area_terreno / unidades,
+         CA = area_construida / area_terreno,
+         balanco = unidades / (unidades + domicilios))
+
+modelsummary::datasummary_skim(df)
+```
+
+
+
+
+# Análise de resultados via join
+
+
+```{r analise_regressao}
+modelo1 <- df %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelo2 <- df %>% 
+  filter(abs(balanco - .5) < .25) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelo3 <- df %>% 
+  filter(abs(balanco - .5) < .1) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelsummary::modelsummary(
+  list("Todos setores" = modelo1, "Balanço entre 25% e 75%" = modelo2, "Balanço entre 40% e 60%" = modelo3), 
+  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
+  statistic = NULL)
+
+```
+
 ```{r removesPre_raster, echo = FALSE}
-remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg)
+remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg, df, modelo1, modelo2, modelo3)
 ```
 
 
@@ -673,7 +728,7 @@ ggsave("tex/imagens/rasters.png", gg, width = 20, height = 20, dpi = 400)
 gg
 ```
 
-# Análise
+# Análise resultados via Raster
 
 ```{r plot_scatter_indicadores}
 result %>% 
