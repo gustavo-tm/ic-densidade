@@ -65,9 +65,10 @@ gg <- ggplot() +
           aes(fill = factor(decil)), color = NA) +
   scale_fill_viridis_d() +
   labs(fill = "Decil de densidade") +
-  theme_void()
+  theme_void() +
+  theme(legend.position = c(.8, .3))
 
-ggsave("tex/imagens/mapa.png", gg, width = 20, height = 20, dpi = 400)
+ggsave("tex/imagens/mapa.png", gg, width = 7, height = 12, dpi = 500)
 gg
 ```
 
@@ -84,7 +85,7 @@ censo %>%
 
 
 ```{r plot_densidade_distancia, cache = TRUE}
-censo %>% 
+gg <- censo %>% 
   mutate(distancia_centro = st_distance(geometry, 
                                         read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% 
                                           st_set_crs("epsg:31983") %>% 
@@ -94,13 +95,18 @@ censo %>%
   st_drop_geometry() %>%
   group_by(distancia_centro) %>% 
   summarize(densidade = sum(v0001) / sum(as.numeric(area_setor) / 10^6)) %>% 
-  ggplot(aes(x = distancia_centro, y = densidade)) +
-  geom_col() +
+  mutate(teorico = 2*10^4*exp(-distancia_centro/10)) %>% 
+  ggplot(aes(x = distancia_centro)) +
+  geom_col(aes(y = densidade), fill = "#2BAA92FF") +
+  geom_line(aes(y = teorico), lwd = .8, linetype = "dashed", color = "#D32934FF") +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".")) +
   scale_x_continuous(labels = scales::comma_format(big.mark = ".")) +
-  labs(x = "Distância ao centro em quilômetros", 
-       y = "Densidade populacional por quilômetro quadrado") +
+  labs(x = "Distância ao centro em km", 
+       y = expression("Densidade populacional por" ~ km^2)) +
   theme_classic()
+
+ggsave("tex/imagens/densidade_distcentro.png", gg, width = 5, height = 3, dpi = 200)
+gg
 ```
 
 # Base de Dados do IPTU
@@ -182,7 +188,7 @@ gg.right <- IPTU %>%
                                "Outros" = "#1A5354")) +
   scale_alpha_manual(values = c("A" = 0, "B" = .05, "C" = .1, "D" = .15, "E" = .2, "NA" = 0)) +
   scale_color_manual(values = c("black" = "black", "white" = "white")) +
-  labs(fill = "Tipo de uso", alpha = "Parão de uso") +
+  labs(fill = "Tipo de uso", alpha = "Padrão de uso") +
   theme(aspect.ratio=1)
 
 gg.left <- IPTU %>% 
@@ -213,7 +219,7 @@ gg.left <- IPTU %>%
 ggsave("tex/imagens/tree_area_construida.png", 
        (gg.left | gg.right) + 
          plot_layout(widths = c(1,6)), 
-       width = 10, height = 8, dpi = 250)
+       width = 6.75, height = 5, dpi = 250)
 
 (gg.left | gg.right)
 ```
@@ -235,9 +241,12 @@ IPTU <- IPTU %>%
             ano_construcao = median(ano_construcao),
             residencial = median(residencial),
             verticalizacao = median(verticalizacao)) %>% 
-  ungroup()
+  ungroup() %>% 
+  mutate(CA = area_construida / area_terreno,
+         cota_parte = area_terreno / unidades)
 
 IPTU %>% 
+  filter(residencial == 1) %>% 
   modelsummary::datasummary_skim()
 ```
 
@@ -253,21 +262,33 @@ IPTU %>%
 
 ```{r plot_indicadores, cache = TRUE}
 gg <- IPTU %>% 
-  ungroup() %>% 
-  mutate(CA = area_construida / area_terreno,
-         cota_parte = area_terreno / unidades) %>% 
-  filter(cota_parte < 600, CA < 5, verticalizacao < 5) %>% 
-  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
+  filter(residencial == 1) %>% 
+  filter(cota_parte < 600, CA < 5, pavimentos < 10) %>% 
+  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Pavimentos" = pavimentos) %>% 
   pivot_longer(everything()) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
-  facet_wrap(~ name, scales = "free_x") +
-  labs(title = "Distribuição dos indicadores em SP", x = "", y = "Frequência") + 
-  theme_classic()
+  facet_wrap(~ name, scales = "free") +
+  labs(x = "", y = "Frequência") + 
+  theme_classic() +
+  scale_x_continuous(breaks = scales::breaks_pretty())
 
-ggsave("tex/imagens/indicadores.png", gg, width = 9, height = 4, dpi = 250)
+ggsave("tex/imagens/indicadores.png", gg, width = 8, height = 2.75, dpi = 250)
 gg
 ```
+
+```{r plot_verticalizacao_CA}
+IPTU %>% 
+  filter(residencial == 1) %>% 
+  ggplot(aes(x = verticalizacao, y = CA)) +
+  geom_point(alpha = .75) +
+  geom_abline(intercept = 0, slope = 1, color = "blue") +
+  geom_smooth() +
+  theme_classic() +
+  coord_cartesian(xlim = c(0,30), ylim = c(0,30)) +
+  theme(aspect.ratio = 1)
+```
+
 
 # Geosampa
 
@@ -527,18 +548,13 @@ gg <- censo %>%
   mutate(balanco = unidades / (unidades + domicilios)) %>% 
   ggplot() +
   geom_histogram(aes(x = balanco)) +
-  labs(caption = "Caso o balanço seja 50%, implica que o número de domicílios reportados no censo é igual ao número de 
-unidades reportadas no IPTU. Caso o balanço seja menor que 50%, implica que há mais domicílios no censo 
-do que unidades, e caso seja maior que 50%, há mais unidades que domicílios",
-title = "Disparidade entre censo e IPTU quanto ao número de unidades habitacionais",
-    
-       x = "Balanço: unidades / (unidades + domicilios)", y = "") +
+  labs(x = "Balanço: unidades / (unidades + domicilios)", y = "Frequência") +
   theme_classic() +
     theme(plot.caption = element_text(hjust = 0)) +
   scale_x_continuous(labels = scales::percent)
 
 
-ggsave("tex/imagens/disparidade_censoIPTU.png", gg, width = 8, height = 5, dpi = 400)
+ggsave("tex/imagens/disparidade_censoIPTU.png", gg, width = 7, height = 3, dpi = 300)
 gg
 ```
 
@@ -588,7 +604,7 @@ gg <- censo.pontos %>%
 
 # scale_colour_paletteer_d("lisa::AndyWarhol_2")
 
-ggsave("tex/imagens/mapa_pontos.png", gg, width = 18, height = 20, dpi = 300)
+ggsave("tex/imagens/mapa_pontos.png", gg, width = 16, height = 20, dpi = 300)
 gg
 ```
 
@@ -663,11 +679,11 @@ geoms.IPTU <- IPTU.lote %>%
 
 geoms.censo <- censo %>% 
   mutate(area = st_area(geometry) %>% as.numeric()) %>% 
-  select(id = id_setor_censitario, area, populacao = v0001)
+  select(id = id_setor_censitario, area, populacao = v0001, domicilios = v0002)
 
 bbox <- st_bbox(geoms.censo)
 
-raster <- raster::raster(xmn = bbox["xmin"], xmx = bbox["xmax"], ymn = bbox["ymin"], ymx = bbox["ymax"], 
+raster <- raster::raster(xmn = bbox["xmin"], xmx = bbox["xmax"], ymn = bbox["ymin"], ymx = bbox["ymax"],
             res = 1000, crs = st_crs(geoms.censo)$proj4string, vals = NA)
 ```
 
@@ -689,17 +705,19 @@ result.IPTU <- exact_extract(raster, geoms.IPTU, include_xy = T,
          CA = area_construida / area_terreno)
 
 result.censo <- exact_extract(raster, geoms.censo, include_xy = T, 
-                        include_cols = c("id", "area", "populacao"), 
+                        include_cols = c("id", "area", "populacao", "domicilios"), 
                         force_df = T, coverage_area = T, progress = F) %>% 
   bind_rows %>% 
   mutate(percent_intersect = coverage_area / area,
-         across(c(area, populacao), ~ .x * percent_intersect)) %>% 
+         across(c(area, populacao, domicilios), ~ .x * percent_intersect)) %>% 
   group_by(x, y) %>% 
   summarize(populacao = sum(populacao),
-            area = sum(area)) %>% 
+            area = sum(area),
+            domicilios = sum(domicilios)) %>% 
   mutate(densidade = populacao * 10^6 / area)
 
-result <- full_join(result.IPTU, result.censo) 
+result <- full_join(result.IPTU, result.censo) %>% 
+  mutate(balanco = unidades / (unidades + domicilios))
 
 result %>% 
   modelsummary::datasummary_skim()
@@ -715,15 +733,55 @@ result %>%
 gg <- result %>% 
   pivot_longer(c(CA, cota_parte, verticalizacao, densidade)) %>% 
   group_by(name) %>% 
-  mutate(value = ntile(value, 10) %>% as.factor()) %>% 
+  mutate(value = ntile(value, 10) %>% as.factor(),
+         name = case_when(name == "CA" ~ "Coeficiente de Aproveitamento (CA)",
+                          name == "cota_parte" ~ "Cota-parte",
+                          name == "densidade" ~ "Densidade populacional",
+                          name == "verticalizacao" ~ "Verticalização",
+                          .default = NA)) %>% 
   ggplot() +
   geom_sf(data = distrito) +
   geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = "grey") +
   facet_wrap(~name) +
   theme_void() +
+  theme(strip.text = element_text(size = 12)) +
+  labs(fill = "Decil") +
   scale_fill_viridis_d()
 
-ggsave("tex/imagens/rasters.png", gg, width = 20, height = 20, dpi = 400)
+ggsave("tex/imagens/rasters.png", gg, width = 8, height = 12, dpi = 300)
+
+gg
+```
+
+```{r plot_raster_topDens}
+(result %>% 
+  filter(area > 9*10^5) %>% 
+  arrange(desc(densidade)) %>% 
+  mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
+  ggplot() +
+  geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
+  geom_tile(aes(x = x, y = y, fill = top)) +
+  scale_fill_viridis_d() +
+  theme_void()) %>% 
+  plotly::ggplotly()
+```
+
+
+```{r plot_raster_balanco, cache = T}
+gg <- result %>% 
+  drop_na() %>% 
+  ggplot() +
+  geom_sf(data = distrito, color = NA) +
+  geom_tile(aes(x = x, y = y, fill = balanco), alpha = .75, color = "grey") +
+  theme_void() +
+  scale_fill_gradient2(high = "#2F191B", low = "#D32934", mid = "white", na.value = NA,
+                       midpoint = .5, limits = c(0,1)) +
+  theme(legend.position = c(.8, .35), legend.title = element_markdown(size = 25), 
+        plot.title = element_markdown(), legend.text = element_text(size = 25),
+        legend.key.size = unit(1.75, 'cm')) +
+  labs(fill = "Balanço", title = "<span style='font-size: 35pt;'>Áreas com <span style = 'color:#D32934;'>menos domicílios registrados no IPTU, comparados <br>ao censo</span> geralmente estão em regiões afastadas do centro</span>")
+
+ggsave("tex/imagens/balanco_raster.png", gg, width = 16, height = 20, dpi = 300)
 
 gg
 ```

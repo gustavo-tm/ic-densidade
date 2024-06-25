@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  20 JUN 2024 14:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  24 JUN 2024 16:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1124,7 +1124,7 @@ Package: anyfontsize 2007/11/22 anyfontsize.sty by pts
 \c@defi1=\count421
 \c@ex1=\count422
 \c@prop1=\count423
-Package hyperref Info: Option `colorlinks' set `true' on input line 195.
+Package hyperref Info: Option `colorlinks' set `true' on input line 202.
 \main@idxfile=\write5
 \openout5 = `main.idx'.
 
@@ -1133,25 +1133,25 @@ Writing index file main.idx
 (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 244.
-LaTeX Font Info:    ... okay on input line 244.
-Package hyperref Info: Link coloring ON on input line 244.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 251.
+LaTeX Font Info:    ... okay on input line 251.
+Package hyperref Info: Link coloring ON on input line 251.
 \myptabbox=\box88
 \myptabboxwidth=\skip270
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
@@ -1170,40 +1170,40 @@ Package hyperref Info: Link coloring ON on input line 244.
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 244.
-Package microtype Info: Applying patch `item' on input line 244.
-Package microtype Info: Applying patch `toc' on input line 244.
-Package microtype Info: Applying patch `eqnum' on input line 244.
-Package microtype Info: Applying patch `footnote' on input line 244.
-Package microtype Info: Applying patch `verbatim' on input line 244.
+LaTeX Info: Redefining \microtypecontext on input line 251.
+Package microtype Info: Applying patch `item' on input line 251.
+Package microtype Info: Applying patch `toc' on input line 251.
+Package microtype Info: Applying patch `eqnum' on input line 251.
+Package microtype Info: Applying patch `footnote' on input line 251.
+Package microtype Info: Applying patch `verbatim' on input line 251.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 244.
+LaTeX Info: Redefining \showhyphens on input line 251.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-LaTeX Info: Redefining \celsius on input line 244.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 244.
+LaTeX Info: Redefining \celsius on input line 251.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 251.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 244.
-Package gensymb Info: Using \Omega for \ohm on input line 244.
+LaTeX Info: Redefining \ohm on input line 251.
+Package gensymb Info: Using \Omega for \ohm on input line 251.
 
 Package gensymb Warning: Not defining \micro.
 
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\translations-basic-dictionary-brazil.trsl
 File: translations-basic-dictionary-brazil.trsl (brazil translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 244.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 251.
 
 Package pgfplots notification 'compat/show suggested version=true': document has been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
@@ -1216,7 +1216,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 258.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 265.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
@@ -1227,13 +1227,13 @@ Package microtype Info: Loading generic protrusion settings for font family
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 258.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 265.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 258.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 265.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
@@ -1286,51 +1286,85 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--106
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8] [9]
-<imagens/mapa.png, id=116, 1445.4pt x 1445.4pt>
+<imagens/mapa.png, id=116, 505.89pt x 867.24pt>
 File: imagens/mapa.png Graphic file (type png)
 <use imagens/mapa.png>
-Package pdftex.def Info: imagens/mapa.png  used on input line 129.
-(pdftex.def)             Requested size: 455.0pt x 454.99464pt.
+Package pdftex.def Info: imagens/mapa.png  used on input line 128.
+(pdftex.def)             Requested size: 364.00139pt x 624.01535pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<imagens/mapa_pontos.png, id=119, 1300.86pt x 1445.4pt>
-File: imagens/mapa_pontos.png Graphic file (type png)
-<use imagens/mapa_pontos.png>
-Package pdftex.def Info: imagens/mapa_pontos.png  used on input line 139.
-(pdftex.def)             Requested size: 455.0pt x 505.54471pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<imagens/tree_area_construida.png, id=122, 722.7pt x 578.16pt>
-File: imagens/tree_area_construida.png Graphic file (type png)
-<use imagens/tree_area_construida.png>
-Package pdftex.def Info: imagens/tree_area_construida.png  used on input line 148.
-(pdftex.def)             Requested size: 455.0pt x 364.00453pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<imagens/indicadores.png, id=123, 650.43pt x 289.08pt>
-File: imagens/indicadores.png Graphic file (type png)
-<use imagens/indicadores.png>
-Package pdftex.def Info: imagens/indicadores.png  used on input line 155.
-(pdftex.def)             Requested size: 455.0pt x 202.22668pt.
+<imagens/densidade_distcentro.png, id=122, 361.35pt x 216.81pt>
+File: imagens/densidade_distcentro.png Graphic file (type png)
+<use imagens/densidade_distcentro.png>
+Package pdftex.def Info: imagens/densidade_distcentro.png  used on input line 144.
+(pdftex.def)             Requested size: 341.25pt x 204.75089pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10
 
-]) (main.bbl (main.brf)
+]
+<imagens/tree_area_construida.png, id=136, 487.67796pt x 361.35pt>
+File: imagens/tree_area_construida.png Graphic file (type png)
+<use imagens/tree_area_construida.png>
+Package pdftex.def Info: imagens/tree_area_construida.png  used on input line 157.
+(pdftex.def)             Requested size: 364.00139pt x 269.72162pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imagens/indicadores.png, id=139, 578.16pt x 198.59796pt>
+File: imagens/indicadores.png Graphic file (type png)
+<use imagens/indicadores.png>
+Package pdftex.def Info: imagens/indicadores.png  used on input line 166.
+(pdftex.def)             Requested size: 455.0pt x 156.29063pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11] [12]
+<imagens/mapa_pontos.png, id=156, 1156.32pt x 1445.4pt>
+File: imagens/mapa_pontos.png Graphic file (type png)
+<use imagens/mapa_pontos.png>
+Package pdftex.def Info: imagens/mapa_pontos.png  used on input line 193.
+(pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
+<imagens/balanco_raster.png, id=157, 1156.32pt x 1445.4pt>
+File: imagens/balanco_raster.png Graphic file (type png)
+<use imagens/balanco_raster.png>
+Package pdftex.def Info: imagens/balanco_raster.png  used on input line 199.
+(pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
+ [13]
+<imagens/disparidade_censoIPTU.png, id=168, 505.89pt x 216.81pt>
+File: imagens/disparidade_censoIPTU.png Graphic file (type png)
+<use imagens/disparidade_censoIPTU.png>
+Package pdftex.def Info: imagens/disparidade_censoIPTU.png  used on input line 217.
+(pdftex.def)             Requested size: 455.0pt x 195.00478pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imagens/rasters.png, id=171, 578.16pt x 867.24pt>
+File: imagens/rasters.png Graphic file (type png)
+<use imagens/rasters.png>
+Package pdftex.def Info: imagens/rasters.png  used on input line 229.
+(pdftex.def)             Requested size: 455.0pt x 682.49197pt.
+
+LaTeX Warning: Float too large for page by 10.74196pt on input line 231.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [11 <./imagens/mapa.png>] [12 <./imagens/mapa_pontos.png>] [13 <./imagens/tree_area_construida.png> <./imagens/indicadores.png>]
+ [14] [15 <./imagens/mapa.png>] [16 <./imagens/densidade_distcentro.png> <./imagens/tree_area_construida.png>] [17 <./imagens/indicadores.png> <./imagens/mapa_pontos.png> <./imagens/balanco_raster.png>] [18 <./imagens/disparidade_censoIPTU.png>] [19 <./imagens/rasters.png>]
 bibitemlist
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 56.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 68.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) [14
+)) [20
 
 ] 
 enddocument/afterlastpage: lastpage setting LastPage.
@@ -1340,20 +1374,20 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: 70535282954ED70CC1BB6E525D95289B;613.
+(rerunfilecheck)             Checksum: 0C48A78CFAE8F63D73CA16D070D1DB95;764.
  ) 
 Here is how much of TeX's memory you used:
- 48582 strings out of 474370
- 1112831 string characters out of 5740535
+ 48695 strings out of 474370
+ 1115011 string characters out of 5740535
  1941754 words of memory out of 5000000
- 69906 multiletter control sequences out of 15000+600000
- 613400 words of font info for 239 fonts, out of 8000000 for 9000
+ 69988 multiletter control sequences out of 15000+600000
+ 616853 words of font info for 250 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1579b,2499s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (14 pages, 14940246 bytes).
+<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (20 pages, 13791884 bytes).
 PDF statistics:
- 229 PDF objects out of 1000 (max. 8388607)
- 45 named destinations out of 1000 (max. 500000)
- 62555 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 290 PDF objects out of 1000 (max. 8388607)
+ 60 named destinations out of 1000 (max. 500000)
+ 66663 words of extra memory for PDF output out of 74296 (max. 10000000)
 

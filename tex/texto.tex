@@ -115,39 +115,50 @@ Suponha uma cidade na qual os habitantes possuem mais de uma opção de meio de 
 Com estas novas premissas, um tomador de decisão que tem como objetivo garantir maior densidade habitacional no centro deve intervir neste mercado, visto que a organização \textit{laisses-faire} leva a um equilíbrio menos denso do que o discutido no caso anterior. Nesse sentido, do ponto de vista microeconômico não é determinístico como o mercado se articula para definir a densidade habitacional.
 
 
-\chapter{Empírico}
+\chapter{Dados}
 \label{sec:emp}
 
-\section{Dados}
+\section*{Dados do Censo}
 
-Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área. Os dados do censo foram utilizados em sua escala mais micro possível: nível setor censitário.
-
+Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área. Os dados do censo foram utilizados em sua escala mais micro possível: nível setor censitário. 
 
 \begin{figure}[h]
     \centering
     \caption{Densidade populacional em São Paulo por setor censitário (Censo 2022)}
-    \includegraphics[width = \linewidth]{imagens/mapa.png}
+    \includegraphics[width = .8\linewidth]{imagens/mapa.png}
     \label{fig:populacao}
 \end{figure}
 
-Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no GeoSampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente''. Os únicos dados que não constam nessa base são relativos a lotes irregulares ou não registrados, como em áreas de favelas. Estes casos podem ser visualizados na Figura \ref{fig:pontos_erro}. Isso não é uma limitação, visto que os intrumentos de regulação urbana não se aplicam as estas áreas de qualquer forma.
+A metodologia para a delimitação dos setores censitários leva em consideração diversos fatores, como elementos na paisagem que se constituam em barreiras naturais ou artificiais e dificultam o trabalho do agente, pontos de referência estáveis e de fácil identificação no terreno, limites das estruturas territoriais, entre outros \cite{IBGE2024}. De maneira geral, estes limites são construídos de forma que o agente de coleta consiga cobrir o setor inteiro, minimizando os erros de medição. Estes setores censitários também são georreferenciados através da malha preliminar divulgada pelo IBGE e apresentam um número de identificação que pode ser decomposto segundo o exemplo apresentado a seguir.
+
+\begin{equation*}
+    \underbrace{21}_\text{UF} \underbrace{00873}_\text{Município} \underbrace{05}_\text{Distrito} \underbrace{00}_\text{Subdistrito} \underbrace{0026}_\text{Setor} \underbrace{P}_\text{Preliminar}
+    \label{eq:setor}
+\end{equation*}
+
+É interessante notar na Figura \ref{fig:populacao}, que o clássico modelo, no qual população se concentra principalmente no centro apresenta mérito, dado que perto da região da Sé, centro histórico de São Paulo, há uma enorme concentração habitacional. Entretanto, é surpreendente a densidade habitacional nas favelas de Paraisópolis e Heliópolis, que acabam por ser as áreas mais densas da cidade. Na Figura \ref{fig:dens-distcentro} é possível ver como ainda que haja uma relação entre a densidade habitacional e a distância, ela não é tão perfeita quanto no modelo microeconômico. Paraisópolis, por exemplo, está a 15km do centro e ainda é a região mais densa de São Paulo -- mais detalhes serão discutidos adiante.
 
 \begin{figure}[h]
     \centering
-    \caption{Casos em que o Censo registra população, mas não há lotes cadastrados no IPTU}
-    \bigskip
-    \includegraphics[width = \linewidth]{imagens/mapa_pontos.png}
-    \label{fig:pontos_erro}
+    \caption{Densidade habitacional na medida em que se distancia da Sé}
+    \includegraphics[width = .75\linewidth]{imagens/densidade_distcentro.png}
+    \label{fig:dens-distcentro}
 \end{figure}
+
+\section*{Dados do IPTU}
+
+Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário de tudo que já foi construído legalmente na cidade. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no GeoSampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente''. Os únicos dados que não constam nessa base são relativos a lotes irregulares ou não registrados, como em áreas de favelas. Estes casos podem ser visualizados na Figura \ref{fig:erros-join}, mas serão discutidos a seguir. Isso não é uma limitação, visto que os intrumentos de regulação urbana não se aplicam as estas áreas de qualquer forma.
 
 Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área ocupada e o número de pavimentos do empreendimento. O tipo de uso do imóvel também está disponível, mas como esta pesquisa foca em densidade habitacional, foram descartados os usos não residenciais. Na figura \ref{fig:area_construida}, é possível observar a área construída por tipo e padrão de uso em São Paulo. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte. A distribuição destes indicadores pode ser vista na Figura \ref{fig:histogramas}.
 
 \begin{figure}[h]
     \centering
     \caption{Área construída em São Paulo por tipo e padrão de uso}
-    \includegraphics[width = \linewidth]{imagens/tree_area_construida.png}
+    \includegraphics[width = .8\linewidth]{imagens/tree_area_construida.png}
     \label{fig:area_construida}
 \end{figure}
+
+Em São Paulo, 70\% da área construída é residencial, sendo que o padrão residencial mais comum é o "C". O padrão é uma divisão feita no cálculo do IPTU \cite{lei10235_1986}, para criar descontos do imposto para imóveis com características desejáveis do ponto de vista do planejamento urbano, como maior adensamento. Medidas como metragem, pé direito, vaga de garagem, número de pavimentos, elementos arquitetônicos, materiais de construção, etc., são fatores levados em consideração para determinar o padrão. No caso do "C", ele está no meio da escala de densidade, sendo "A" o mais denso, e "E" o menos. O segundo uso mais comum é o comercial, seguido do industrial e entretenimento. Na categoria de entretenimento encontram templos religiosos, clubes, estádios esportivos, cinemas, aeroporto, museu, zoológico, entre outros.
 
 \begin{figure}[h]
     \centering
@@ -156,18 +167,65 @@ Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área con
     \label{fig:histogramas}
 \end{figure}
 
-Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de outros dados não é possível cruzá-los com os do censo. O que possibilita fazer essa junção é que o número único de contribuinte, também é o código do Setor, Quadra e Lote (SQL) que o empreendimento se encontra. Nesse sentido, é possível decompor o SQL e cruzar com as bases de lotes, quadras e setores do GeoSampa, que contêm a geometria de cada  um dos 1.677.980 lotes, X quadras e Y setores da cidade. O que explica a diferença entre o número de lotes e número de números dos contribuintes são os lotes que contém um condomínio, que pode haver diversos números únicos de contribuintes em apenas um lote. Nos dados de IPTU, há 1.314.353 contribuintes em lotes com apenas uma unidade habitacional e 33.129 condomínios, que contêm 1.782.366 unidades. Ao cruzar o SQL do IPTU com a base de lotes, 44.319 contribuintes não encontram um par na outra base, o que representa uma perda de 1,67\% das unidades. Caso o join seja feito com a base de quadras, a perda passa a ser de 820 contribuintes, um erro de 0,03\%. Já quando são cruzados com base no setor, o erro chega a 0.
-
-Agora, com os dados do censo georreferenciados e os dados do IPTU também georreferenciados, é necessário juntar estas bases. Entretanto, como o recorte dos setores censitários não respeita os recortes dos lotes, algum tipo de critério deve ser adotado para conectar essas geometrias.
+De fato, ao observar os indicadores na Figura \ref{fig:histogramas}, é possível notar que o perfil habitacional de São Paulo é bastante horizontal. É surpreendente que 95\% dos lotes residenciais em São Paulo apresentam 2 ou menos pavimentos. Ainda, a mediana do CA é 0,8, o que indica que em mais da metade dos lotes da cidade foi construído menos do que a área do terreno. Ainda, a cota parte média dos lotes da cidade é de 322 $m^2$, o que representa um uso do terreno para poucas unidades habitacionais em média. 
 
 
+\section*{Cruzamento dos dados}
 
-% Uma dificuldade que surge ao juntar os dados do Censo com os do IPTU, é que setores censitários podem cortar os lotes de forma que um lote pertença a mais de um setor. Sendo assim, alguma premissa deve ser adotada para que se classifique em qual setor o lote será contabilizado para os cálculos dos indicadores utilizados pela regulamentação. Na Figura \ref{fig:lote-censo} é possível observar os lotes coloridos de vermelho e os setores censitários coloridos como na Figura \ref{fig:populacao} e delimitados por um contorno branco. Quando um lote é cortado em mais de um setor censitário, é calculada a porcentagem de sua área em cada um dos setores e ele é contabilizado em ambos, ponderado por essa porcentagem.
+Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de outros dados não é possível cruzá-los com os do censo. O que possibilita fazer essa junção é que o número único de contribuinte, também é o código do Setor, Quadra e Lote (SQL) que o empreendimento se encontra. Nesse sentido, é possível decompor o SQL e cruzar com as bases de lotes, quadras e setores do GeoSampa, que contêm a geometria de cada  um dos 1.677.980 lotes, 45.987 quadras e 309 setores da cidade. O que explica a diferença entre o número de lotes e número de números dos contribuintes são os lotes que contém um condomínio, que pode haver diversos números únicos de contribuintes em apenas um lote. Nos dados de IPTU, há 1.314.353 contribuintes em lotes com apenas uma unidade habitacional e 33.129 condomínios, que contêm 1.782.366 unidades. Ao cruzar o SQL do IPTU com a base de lotes, 44.319 contribuintes não encontram um par na outra base, o que representa uma perda de 1,67\% das unidades. Caso o join seja feito com a base de quadras, a perda passa a ser de 820 contribuintes, um erro de 0,03\%. Já quando são cruzados com base no setor, o erro chega a 0.
+
+Agora, com os dados do censo georreferenciados e os dados do IPTU também georreferenciados, é necessário juntar estas bases. Entretanto, como o recorte dos setores censitários não respeita os recortes dos lotes, algum tipo de critério deve ser adotado para conectar essas geometrias. Duas abordagens foram feitas, a primeira com um join geográfico e a segunda, a partir da rasterização de ambos os dados. Na primeira, para cada um dos 27.592 setores censitários foram identificados todos os lotes que se interseccionam com os setores. A partir disso, foram cortados os lotes que não estão contidos apenas em um setor, de forma a atribuir seus dados a todos os setores que pertence, ponderado pelo percentual de sua área que intersecciona com cada setor. A segunda abordagem envolve dividir a cidade em um quadriculado (\textit{raster}) e converter tanto os dados do IPTU quanto do censo para esta escala. A metodologia é parecida, visto que formado o quadriculado, os lotes são dividos entre cada quadrado, ponderando-se pelo percentual de sua área que intersecciona com cada um.
+
+Dessa forma, para cada setor censitário ou para cada célula do raster, há varios lotes, que devem ser agregados segundo algum critério. Para a área construída, área ocupada, área do terreno e unidades, os valores de cada lotes podem ser simplesmente somados. Entretanto, no caso da verticalização fica mais complicado. A primeira possibilidade, de fazer uma média dos pavimentos, é bastante problemática, visto que se um lote fosse cortado no meio, tornando-se dois lotes e mantiver a construção com o mesmo número de pavimentos, a medida de verticalização vai se alterar, o que é um problema. A mediana também não funciona bem, visto que um local, por exemplo, com três lotes com diferentes pavimentos: 1, 3 e 10; e outro com 1, 3 e 30, vão apresentar a mesma verticalização. Caso a medida de verticalização seja uma média ponderada pela área ocupada, é possível que ao construir novos pavimentos em um terreno antes desocupado, haja uma redução na verticalização, caso esse número de pavimentos seja menor do que a média ponderada antes deste choque. 
+
+O critério adotado nessa pesquisa foi de multiplicar o número de pavimentos pela taxa de ocupação do terreno (área ocupada / área do terreno) somado a (1 - taxa de ocupação) por zero pavimentos, Equação \ref{eq:verticaliz}. Depois, basta fazer uma média ponderada pelo tamanho do terreno desse índice de verticalização. Com este indicador, sempre que for construído algum pavimento, a verticalização vai aumentar e se um lote for cortado no meio, o índice não vai mudar. O único problema desse método é que o resultado acaba sendo muito parecido com o CA, visto que a área ocupada vezes o número de pavimentos é bastante parecida com a área construída, que ao ser dividida pela área do terreno é igual ao CA. Entretanto essa relação não é perfeita e a correlação entre o CA e a verticalização seguindo este método é de 83\% no caso da metodologia de join e 92\% na metodologia de \textit{raster}. A partir deste critério, CA e verticalização são variáveis um pouco redundantes, mas outras formas de calcular essa verticalização se mostraram mais problemáticas.
+
+\begin{equation}
+    \text{Verticalização} = \text{Pavimentos} * \frac{\text{Área Ocupada}}{\text{Área do Terreno}} + 0 * \frac{\text{Área não Ocupada}}{\text{Área do Terreno}}
+    \label{eq:verticaliz}
+\end{equation}
 
 
-% \begin{figure}[h]
-%     \centering
-%     \caption{Setor censitário cortando um lote em mais de uma parte}
-%     \includegraphics[width = .6\linewidth]{imagens/mapa_lote_corte.png}
-%     \label{fig:lote-censo}
-% \end{figure}
+\begin{figure}
+    \caption{Inconsistências entre dados do IPTU e do censo}
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width = \linewidth]{imagens/mapa_pontos.png}
+        \caption{Abordagem join}
+        \label{fig:pontos_erro}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\linewidth}
+        \includegraphics[width = \linewidth]{imagens/balanco_raster.png}
+        \caption{Abordagem Raster}
+        \label{fig:balanco-raster}
+    \end{subfigure}
+    \label{fig:erros-join}
+\end{figure}
+
+Com as bases relacionadas, é importante fazer um balanço para analisar se as informações batem. A única informação em comum entre as bases é o número de unidades habitacionais, que nos dados do IPTU são classificadas como unidades, e na do Censo como domicílios. A definição deles não é exatamente a mesma, porém é a única informação possível de ser validada. Caso o número de domicílios no Censo seja maior do que o de unidades no IPTU, é um forte indicativo de que há moradias irregulares. Para medir essa diferença, foi criado um indicador chamado balanço, que é construído a partir do número de unidades dividido pelo número de unidades mais domicílios. Caso o balanço seja próximo de 50\%, as informações são consistentes. Na medida em que o balanço se aproxima de 0\%, significa que há mais unidades no censo do que no IPTU, enquanto mais próximo de 100\% indica o contrário.
+
+\begin{quote}
+    ``Domicílio é o local estruturalmente separado e independente que se destina a servir de habitação a uma ou mais pessoas, ou que esteja sendo utilizado como tal. A separação fica caracterizada quando o local de habitação for limitado por paredes, muros ou cercas e coberto por um teto, permitindo a uma ou mais pessoas, que nele habitam, isolar-se das demais, com a finalidade de dormir, preparar e/ ou consumir seus alimentos e proteger-se do meio ambiente, arcando, total ou parcialmente, com suas despesas de alimentação ou moradia. A independência fica caracterizada quando o local de habitação tem acesso direto, permitindo a seus moradores entrar e sair sem necessidade de passar por locais de moradia de outras pessoas''\cite{IBGE2013}.
+\end{quote}
+
+No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas. Para analisar em termos numéricos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. Apesar de isso ser um problema do ponto de vista do planejamento da cidade, não é uma limitação para esta pesquisa, visto que os instrumentos de regulação não vão impactar estas áreas.
+
+\begin{figure}[h]
+    \centering
+    \caption{Diferença entre unidades e domicílios por setor censitário}
+    \includegraphics[width = \linewidth]{imagens/disparidade_censoIPTU.png}
+    \label{fig:balanco}
+\end{figure}
+
+Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de balanço para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
+Dentre as 5 células com maior densidade, uma está no centro da cidade (Sé) e as outras quatro estão em favelas: duas em Paraisópolis, uma em Heliópolis e outra no distrito Pedreira da subprefeitura Cidade Ademar, onde há diversas pequenas favelas.
+
+Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte.
+
+\begin{figure}[h]
+    \centering
+    \caption{Rasters com os indicadores utilizados na regulação}
+    \includegraphics[width = \linewidth]{imagens/rasters.png}
+    \label{fig:rasters}
+\end{figure}
