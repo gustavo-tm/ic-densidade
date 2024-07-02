@@ -446,7 +446,6 @@ INPUT .\main.aux
 INPUT .\main.aux
 INPUT main.aux
 OUTPUT main.aux
-OUTPUT main.pdf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -502,6 +501,7 @@ INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msb.cf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
+OUTPUT main.pdf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\helvetic\phvr8t.vf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\helvetic\phvr8r.tfm
 INPUT C:\Users\gusth\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
@@ -541,6 +541,10 @@ INPUT .\imagens\CA_macroareas.png
 INPUT .\imagens\CA_macroareas.png
 INPUT .\imagens\CA_macroareas.png
 INPUT .\imagens\CA_macroareas.png
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
 INPUT .\imagens\CA_eixos.png
 INPUT .\imagens\CA_eixos.png
 INPUT .\imagens\CA_eixos.png
@@ -550,6 +554,8 @@ INPUT .\imagens\CA_eixos.png
 INPUT .\imagens\CA_eixos.png
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
@@ -598,6 +604,13 @@ INPUT .\imagens\indicadores.png
 INPUT .\imagens\indicadores.png
 INPUT .\imagens\indicadores.png
 INPUT .\imagens\indicadores.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
+INPUT .\imagens\indicadores_tempo.png
 INPUT .\imagens\mapa_pontos.png
 INPUT .\imagens\mapa_pontos.png
 INPUT .\imagens\mapa_pontos.png
@@ -613,6 +626,8 @@ INPUT .\imagens\balanco_raster.png
 INPUT .\imagens\balanco_raster.png
 INPUT .\imagens\balanco_raster.png
 INPUT .\imagens\balanco_raster.png
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT .\imagens\disparidade_censoIPTU.png
 INPUT .\imagens\disparidade_censoIPTU.png
 INPUT .\imagens\disparidade_censoIPTU.png
@@ -636,8 +651,6 @@ INPUT main.brf
 INPUT .\main.brf
 INPUT .\main.brf
 OUTPUT main.brf
-INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
-INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\ts1ptm.fd
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\ts1ptm.fd
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\ts1ptm.fd
@@ -656,10 +669,16 @@ INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\c
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi8.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr6.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr6.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr8.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr8.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy8.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy8.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\urw\courier\ucrr8a.pfb
+INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\urw\courier\ucrr8a.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\urw\helvetic\uhvb8a.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\urw\helvetic\uhvb8a.pfb
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\type1\urw\helvetic\uhvr8a.pfb

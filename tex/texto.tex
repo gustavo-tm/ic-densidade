@@ -122,10 +122,10 @@ Com estas novas premissas, um tomador de decisão que tem como objetivo garantir
 
 Para compreender o perfil geográfico da distribuição populacional de São Paulo foram utilizados os dados preliminares do Censo de 2022, feito pelo IBGE. Segundo o levantamento, a atual população do município de SP se encontra em 11.451.999 de habitantes, dividios em 4.996.529 de domicílios, dos quais apenas 4.316.336 estão ocupados. Na Figura \ref{fig:populacao} é possível observar quais são as áreas mais densas da cidade. A densidade foi calculada através da população no setor censitário dividida pela sua área. Os dados do censo foram utilizados em sua escala mais micro possível: nível setor censitário. 
 
-\begin{figure}[h]
+\begin{figure}[!h]
     \centering
     \caption{Densidade populacional em São Paulo por setor censitário (Censo 2022)}
-    \includegraphics[width = .8\linewidth]{imagens/mapa.png}
+    \includegraphics[width = .85\linewidth]{imagens/mapa.png}
     \label{fig:populacao}
 \end{figure}
 
@@ -167,8 +167,16 @@ Em São Paulo, 70\% da área construída é residencial, sendo que o padrão res
     \label{fig:histogramas}
 \end{figure}
 
-De fato, ao observar os indicadores na Figura \ref{fig:histogramas}, é possível notar que o perfil habitacional de São Paulo é bastante horizontal. É surpreendente que 95\% dos lotes residenciais em São Paulo apresentam 2 ou menos pavimentos. Ainda, a mediana do CA é 0,8, o que indica que em mais da metade dos lotes da cidade foi construído menos do que a área do terreno. Ainda, a cota parte média dos lotes da cidade é de 322 $m^2$, o que representa um uso do terreno para poucas unidades habitacionais em média. 
+De fato, ao observar os indicadores na Figura \ref{fig:histogramas}, é possível notar que o perfil habitacional de São Paulo é bastante horizontal. É surpreendente que 95\% dos lotes residenciais em São Paulo apresentam 2 ou menos pavimentos. Ainda, a mediana do CA é 0,8, o que indica que em mais da metade dos lotes da cidade foi construído menos do que a área do terreno. Ainda, a cota parte mediana dos lotes da cidade é de 155$m^2$, o que representa um uso do terreno para poucas unidades habitacionais em média. 
 
+\begin{figure}[h]
+    \centering
+    \caption{Variação no tempo dos indicadores residenciais em São Paulo}
+    \includegraphics[width = \linewidth]{imagens/indicadores_tempo.png}
+    \label{fig:indicadores-tempo}
+\end{figure}
+
+Todavia, ao analisar estes indicadores ao longo do tempo na Figura \ref{fig:indicadores-tempo}, fica evidente a trajetória de adensamento. Na figura, cada linha representa um quantil dos lotes do IPTU. Ao ordenar as construções no ano 2020 de maneira crescente de CA, observa-se que o empreendimento na posição 80\% dessa fila apresenta um CA de 3,8. Este mesmo procedimento nos anos 2000 retornaria um empreendimento com CA igual a 1,46. Analogamente, a cota parte que em 2020 apresenta o quantil 20\% de meros 21,7 metros quadrados, em 2000 apresentaria 100 metros quadrados. Isso evidencia que nos últimos anos São Paulo passou por um forte processo de adensamento.
 
 \section*{Cruzamento dos dados}
 
@@ -209,7 +217,7 @@ Com as bases relacionadas, é importante fazer um balanço para analisar se as i
     ``Domicílio é o local estruturalmente separado e independente que se destina a servir de habitação a uma ou mais pessoas, ou que esteja sendo utilizado como tal. A separação fica caracterizada quando o local de habitação for limitado por paredes, muros ou cercas e coberto por um teto, permitindo a uma ou mais pessoas, que nele habitam, isolar-se das demais, com a finalidade de dormir, preparar e/ ou consumir seus alimentos e proteger-se do meio ambiente, arcando, total ou parcialmente, com suas despesas de alimentação ou moradia. A independência fica caracterizada quando o local de habitação tem acesso direto, permitindo a seus moradores entrar e sair sem necessidade de passar por locais de moradia de outras pessoas''\cite{IBGE2013}.
 \end{quote}
 
-No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas. Para analisar em termos numéricos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. Apesar de isso ser um problema do ponto de vista do planejamento da cidade, não é uma limitação para esta pesquisa, visto que os instrumentos de regulação não vão impactar estas áreas.
+No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas. Para analisar em termos numéricos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. Apesar de isso ser um problema do ponto de vista do planejamento da cidade, não é uma limitação para esta pesquisa, visto que os instrumentos de regulação não vão impactar estas áreas. Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de balanço para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
 
 \begin{figure}[h]
     \centering
@@ -218,10 +226,7 @@ No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simul
     \label{fig:balanco}
 \end{figure}
 
-Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de balanço para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
-Dentre as 5 células com maior densidade, uma está no centro da cidade (Sé) e as outras quatro estão em favelas: duas em Paraisópolis, uma em Heliópolis e outra no distrito Pedreira da subprefeitura Cidade Ademar, onde há diversas pequenas favelas.
-
-Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte.
+Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte. Dentre as 5 células com maior densidade, uma está no centro da cidade (Sé) e as outras quatro estão em favelas: duas em Paraisópolis, uma em Heliópolis e outra no distrito Pedreira da subprefeitura Cidade Ademar, onde há diversas pequenas favelas. 
 
 \begin{figure}[h]
     \centering
@@ -229,3 +234,23 @@ Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instr
     \includegraphics[width = \linewidth]{imagens/rasters.png}
     \label{fig:rasters}
 \end{figure}
+
+\section*{Alguns resultados preliminares}
+
+Apenas através da análise descritiva já é possível concluir que em boa parte da cidade os instrumentos regulatórios não funcionam, visto que as moradias não estão nem registradas nos sistemas públicos. Dessa forma, não importa qual regra for adotada pelo governo, estas áreas não serão impactadas por isso. Em termos numéricos, dos 4.996.529 domicílios registrados pelo Censo, há apenas 3.096.719 unidades registradas no IPTU, o que representa um índice de moradia regular (em termos legais) de aproximadamente 61,98\%. Além disso, entre as regiões mais densas da cidade, muitas estão nestes 38\% que não estão registradas no IPTU, portanto há outras forças além da regulação que levam a esse adensamento.
+
+
+\chapter{Análise}
+
+Considerando o modelo microeconômico apresentado na Seção \ref{sec:micro}, a forma como a densidade é definida segue a Equação \ref{eq:emp-densidade}, na qual $D$ representa a densidade habitacional e $x$, a distância em relação ao centro. Os parâmetros $\alpha_0$ e $\alpha_1$ são importantes para capturar a magnitude do efeito da distância.
+
+\begin{equation}
+    D = \alpha_0\cdot e^{-\alpha_1\cdot x}
+    \label{eq:emp-densidade}
+\end{equation}
+
+Para que o modelo seja estimável econometricamente, ele deve ser linear nos parâmetros, necessitando uma transformação logarítimica
+
+\begin{equation}
+    \ln{D} = \ln{(\alpha_0)} - \alpha_1\cdot x
+\end{equation}

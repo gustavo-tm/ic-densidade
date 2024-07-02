@@ -139,10 +139,7 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
              ifelse(condominio == "00-0", ., paste("CD", str_sub(condominio, 1, 2), sep = "")),
            
            # Tipo de uso
-           residencial = str_detect(tipo, "Residencial"),
-           
-           # Medida de verticalização
-           verticalizacao = pavimentos * area_ocupada / area_terreno)
+           residencial = str_detect(tipo, "Residencial"))
 
 IPTU %>% 
   modelsummary::datasummary_skim()
@@ -239,16 +236,20 @@ IPTU <- IPTU %>%
             area_ocupada = median(area_ocupada),
             pavimentos = median(pavimentos),
             ano_construcao = median(ano_construcao),
-            residencial = median(residencial),
-            verticalizacao = median(verticalizacao)) %>% 
+            residencial = median(residencial)) %>% 
   ungroup() %>% 
   mutate(CA = area_construida / area_terreno,
-         cota_parte = area_terreno / unidades)
+         cota_parte = area_terreno / unidades,
+         verticalizacao = area_construida / area_ocupada) %>% 
+  
+  filter(area_ocupada > 0)
 
 IPTU %>% 
   filter(residencial == 1) %>% 
   modelsummary::datasummary_skim()
 ```
+
+
 
 ```{r table_IPTU_unidades}
 IPTU %>% 
@@ -263,21 +264,20 @@ IPTU %>%
 ```{r plot_indicadores, cache = TRUE}
 gg <- IPTU %>% 
   filter(residencial == 1) %>% 
-  filter(cota_parte < 600, CA < 5, pavimentos < 10) %>% 
-  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Pavimentos" = pavimentos) %>% 
+  filter(cota_parte < 600, CA < 5, verticalizacao < 6) %>% 
+  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
   pivot_longer(everything()) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
   facet_wrap(~ name, scales = "free") +
   labs(x = "", y = "Frequência") + 
-  theme_classic() +
-  scale_x_continuous(breaks = scales::breaks_pretty())
+  theme_classic()
 
 ggsave("tex/imagens/indicadores.png", gg, width = 8, height = 2.75, dpi = 250)
 gg
 ```
 
-```{r plot_verticalizacao_CA}
+```{r plot_verticalizacao_CA, cache = T}
 IPTU %>% 
   filter(residencial == 1) %>% 
   ggplot(aes(x = verticalizacao, y = CA)) +
@@ -285,8 +285,38 @@ IPTU %>%
   geom_abline(intercept = 0, slope = 1, color = "blue") +
   geom_smooth() +
   theme_classic() +
-  coord_cartesian(xlim = c(0,30), ylim = c(0,30)) +
+  coord_cartesian(xlim = c(0,50), ylim = c(0,20)) +
   theme(aspect.ratio = 1)
+```
+
+```{r plot_indicadores_tempo, cache = T}
+gg <- IPTU %>% 
+  filter(residencial == 1, !is.na(ano_construcao), ano_construcao > 1950) %>% 
+  mutate(ano_construcao = ano_construcao %>% round()) %>% 
+  group_by(ano_construcao) %>% 
+  # Cria quantis, o primeiro e último são o mínimo e máximo, respectivamente
+  summarize(cota_parte = quantile(cota_parte,  0:6/6),
+            CA = quantile(CA,  0:6/6),
+            verticalizacao = quantile(verticalizacao,  0:6/6)) %>% 
+  mutate(quantil = row_number() - 1,
+         ano_construcao = as.Date(as.character(ano_construcao), format = "%Y")) %>% 
+  pivot_longer(cota_parte:verticalizacao) %>% 
+  group_by(ano_construcao, name) %>% 
+  mutate(ymin = lag(value) %>% replace_na(0)) %>% 
+  filter(quantil %in% 2:5) %>% 
+  ggplot() +
+  geom_ribbon(aes(x = ano_construcao, ymax = value, ymin = ymin, fill = factor(quantil)), color = "black") +
+  facet_grid(rows = "name", scales = "free_y", 
+             labeller = as_labeller(c("CA" = "CA", 
+                                      "verticalizacao" = "Verticalização", 
+                                      "cota_parte" = "Cota parte"))) +
+  scale_x_date(limits = as.Date(c("1960", "2022"), format = "%Y")) +
+  scale_fill_viridis_d(labels = c("20%", "40%", "60%", "80%")) +
+  theme_bw() +
+  labs(fill = "Quantil", x = "Ano da construção")
+
+ggsave("tex/imagens/indicadores_tempo.png", gg, width = 8, height = 9, dpi = 300)
+gg
 ```
 
 
@@ -530,6 +560,7 @@ IPTU.censo <- censo %>%
 
 IPTU.censo %>% 
   modelsummary::datasummary_skim()
+
 ```
 
 
@@ -608,10 +639,14 @@ ggsave("tex/imagens/mapa_pontos.png", gg, width = 16, height = 20, dpi = 300)
 gg
 ```
 
+# Análise de resultados via join
+
 ```{r data_regression_IPTU-censo, cache = TRUE}
 df <- IPTU.censo %>% 
   filter(residencial == 1) %>% 
-
+  
+  st_drop_geometry() %>% 
+  
   group_by(id_setor_censitario) %>% 
   summarize(# Setor censitário
             populacao = median(v0001),
@@ -624,12 +659,12 @@ df <- IPTU.censo %>%
             area_terreno = sum(area_terreno * percent_intersec),
             area_construida = sum(area_construida * percent_intersec),
             area_ocupada = sum(area_ocupada * percent_intersec),
-            pavimentos = weighted.mean(pavimentos, area_terreno * percent_intersec),
-            verticalizacao = weighted.mean(verticalizacao, area_terreno * percent_intersec)) %>% 
+            ) %>% 
   
   mutate(densidade = populacao * 10 ^ 6 / area_setor,
          cota_parte = area_terreno / unidades,
          CA = area_construida / area_terreno,
+         verticalizacao = area_construida / area_ocupada,
          balanco = unidades / (unidades + domicilios))
 
 modelsummary::datasummary_skim(df)
@@ -637,11 +672,7 @@ modelsummary::datasummary_skim(df)
 
 
 
-
-# Análise de resultados via join
-
-
-```{r analise_regressao}
+```{r analise_regressao1}
 modelo1 <- df %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
@@ -659,6 +690,35 @@ modelo3 <- df %>%
 modelsummary::modelsummary(
   list("Todos setores" = modelo1, "Balanço entre 25% e 75%" = modelo2, "Balanço entre 40% e 60%" = modelo3), 
   gof_omit = "RMSE", estimate = "{estimate} {stars}", 
+  statistic = "({std.error})")
+
+```
+
+
+
+
+```{r analise_regressao2}
+
+
+modelo1 <- df %>% 
+  filter(abs(balanco - .5) < .1) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelo2 <- df %>% 
+  filter(abs(balanco - .5) < .1) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA + area_setor, data = .) %>% 
+  summary()
+
+modelo3 <- df %>% 
+  filter(abs(balanco - .5) < .1) %>% 
+  mutate(area_setor_quad = area_setor^2) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA + area_setor + area_setor_quad, data = .) %>% 
+  summary()
+
+modelsummary::modelsummary(
+  list(modelo1, modelo2, modelo3), 
+  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
   statistic = NULL)
 
 ```
@@ -675,7 +735,7 @@ geoms.IPTU <- IPTU.lote %>%
   filter(! st_is_empty(geometry)) %>% 
   st_as_sf() %>% 
   mutate(area = st_area(geometry) %>% as.numeric()) %>% 
-  select(id = setor, area, unidades, area_construida, area_terreno, verticalizacao)
+  select(id = setor, area, unidades, area_construida, area_ocupada, area_terreno)
 
 geoms.censo <- censo %>% 
   mutate(area = st_area(geometry) %>% as.numeric()) %>% 
@@ -684,25 +744,26 @@ geoms.censo <- censo %>%
 bbox <- st_bbox(geoms.censo)
 
 raster <- raster::raster(xmn = bbox["xmin"], xmx = bbox["xmax"], ymn = bbox["ymin"], ymx = bbox["ymax"],
-            res = 1000, crs = st_crs(geoms.censo)$proj4string, vals = NA)
+            res = 800, crs = st_crs(geoms.censo)$proj4string, vals = NA)
 ```
 
 ```{r data_raster_extract, cache = T}
 result.IPTU <- exact_extract(raster, geoms.IPTU, include_xy = T, 
-                             include_cols = c("id", "area", "unidades", "area_construida", 
-                                              "area_terreno", "verticalizacao"), 
+                             include_cols = c("id", "area", "unidades", "area_construida", "area_ocupada",
+                                              "area_terreno"), 
                              force_df = T, coverage_area = T, progress = F) %>% 
   bind_rows %>% 
   mutate(percent_intersect = coverage_area / area,
          across(unidades:area_terreno, ~ .x * percent_intersect)) %>% 
   group_by(x, y) %>% 
   summarize(unidades = sum(unidades),
-            verticalizacao = weighted.mean(verticalizacao, area_terreno),
+            area_ocupada = sum(area_ocupada),
             area_construida = sum(area_construida),
             area_terreno = sum(area_terreno)) %>% 
   ungroup() %>% 
   mutate(cota_parte = area_terreno / unidades,
-         CA = area_construida / area_terreno)
+         CA = area_construida / area_terreno,
+         verticalizacao = area_construida / area_ocupada)
 
 result.censo <- exact_extract(raster, geoms.censo, include_xy = T, 
                         include_cols = c("id", "area", "populacao", "domicilios"), 
@@ -754,16 +815,16 @@ gg
 ```
 
 ```{r plot_raster_topDens}
-(result %>% 
-  filter(area > 9*10^5) %>% 
-  arrange(desc(densidade)) %>% 
-  mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
-  ggplot() +
-  geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
-  geom_tile(aes(x = x, y = y, fill = top)) +
-  scale_fill_viridis_d() +
-  theme_void()) %>% 
-  plotly::ggplotly()
+# (result %>% 
+#   filter(area > 9*10^5) %>% 
+#   arrange(desc(densidade)) %>% 
+#   mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
+#   ggplot() +
+#   geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
+#   geom_tile(aes(x = x, y = y, fill = top)) +
+#   scale_fill_viridis_d() +
+#   theme_void()) %>% 
+#   plotly::ggplotly()
 ```
 
 
@@ -798,9 +859,24 @@ result %>%
 ```
 
 ```{r analise_reg}
-result %>% 
-  lm(densidade ~ verticalizacao + CA + cota_parte, data = .) %>% 
+modelo1 <- result %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
+
+modelo2 <- result %>% 
+  filter(abs(balanco - .5) < .25) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelo3 <- result %>% 
+  filter(abs(balanco - .5) < .1) %>% 
+  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelsummary::modelsummary(
+  list("Todos setores" = modelo1, "Balanço entre 25% e 75%" = modelo2, "Balanço entre 40% e 60%" = modelo3), 
+  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
+  statistic = NULL)
 ```
 
 ```{r analise_split}
