@@ -694,11 +694,58 @@ modelsummary::modelsummary(
 
 ```
 
+```{r write_regression1, echo = FALSE}
+# Escrever a tabela em um documento .tex
+write(modelsummary::modelsummary(list("Todos setores" = modelo1, 
+                                      "Balanço entre 25% e 75%" = modelo2, 
+                                      "Balanço entre 40% e 60%" = modelo3), 
+                                 gof_omit = "RMSE", estimate = "{estimate} {stars}", 
+                                 statistic = "({std.error})", 
+                                 output = "latex", 
+                                 caption = "Tabela de regressão (metodologia join)",
+                                 label = "tab:reg1"), 
+      file="tex/tabelas/reg_join.tex")
+
+```
+
+```{r}
+modelsummary::modelsummary(list("Todos setores" = modelo1, 
+                                      "Balanço entre 25% e 75%" = modelo2, 
+                                      "Balanço entre 40% e 60%" = modelo3), 
+                                 gof_omit = "RMSE", estimate = "{estimate} {stars}", 
+                                 statistic = "({std.error})",
+                                 output = "gt") %>% 
+  tab_spanner(label = "Variável dependente: densidade populacional", columns = 2:4) %>% 
+  tab_footnote("Balanço é definido como unidades / (unidades + domicílios)") %>% 
+  gtsave("tex/tabelas/regressao.tex", as_latex = TRUE)
+```
+
+
+```{r analise_tree_join, cache = TRUE}
+split <- rsample::initial_split(df, prop = 0.7)
+train <- rsample::training(split)
+test <- rsample::testing(split)
+
+rf_model <- ranger::ranger(densidade ~ ., 
+                     data = train, num.trees = 5000, importance = "permutation")
+
+var.importance <- ranger::importance(rf_model)
+gg <- ggplot(NULL, aes(x = var.importance,
+                 y = fct_reorder(names(var.importance) %>% str_replace_all("_", " "),
+                                 var.importance))) +
+    geom_col(fill = "darkblue", alpha = 0.75) +
+    labs(x = "Importância", y = "", title = "Variáveis mais relevantes para explicar a densidade", 
+         subtitle = "Resultados da metodologia via join") +
+    theme_classic()
+
+ggsave("tex/imagens/importancia.png", gg, width = 7, height = 4, dpi = 300)
+
+gg
+```
 
 
 
 ```{r analise_regressao2}
-
 
 modelo1 <- df %>% 
   filter(abs(balanco - .5) < .1) %>% 
@@ -716,15 +763,20 @@ modelo3 <- df %>%
   lm(densidade ~ cota_parte + verticalizacao + CA + area_setor + area_setor_quad, data = .) %>% 
   summary()
 
-modelsummary::modelsummary(
+resultado <- modelsummary::modelsummary(
   list(modelo1, modelo2, modelo3), 
   gof_omit = "RMSE", estimate = "{estimate} {stars}", 
   statistic = NULL)
 
+
+resultado
+
 ```
 
 ```{r removesPre_raster, echo = FALSE}
-remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg, df, modelo1, modelo2, modelo3)
+remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg, 
+       df, modelo1, modelo2, modelo3,
+       split, test, train, rf_model)
 ```
 
 
@@ -879,24 +931,21 @@ modelsummary::modelsummary(
   statistic = NULL)
 ```
 
-```{r analise_split}
-split <- rsample::initial_split(result %>% drop_na() %>% select(-c(populacao)), prop = 0.7)
+
+```{r analise_tree_rastar, cache = TRUE}
+split <- rsample::initial_split(result %>% 
+                                  drop_na() %>% 
+                                  filter(area > 63950), 
+                                prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
-```
 
-```{r analise_tree}
-rtree <- rpart::rpart(densidade ~ CA + cota_parte + verticalizacao, data = train)
-visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
-```
-
-```{r analise_forest}
-rf_model <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 1000, importance = "impurity")
-rf_preds <- predict(rf_model, data = test)$predictions
+# rf_model <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
+#                      data = train, num.trees = 1000, importance = "permutation")
+# rf_preds <- predict(rf_model, data = test)$predictions
 
 rf_model_all <- ranger::ranger(densidade ~ ., 
-                     data = train, num.trees = 1000, importance = "impurity")
+                     data = train, num.trees = 5000, importance = "permutation")
 rf_preds_all <- predict(rf_model_all, data = test)$predictions
 
 ggplot(NULL, aes(x = rf_model_all$variable.importance,
@@ -904,16 +953,47 @@ ggplot(NULL, aes(x = rf_model_all$variable.importance,
                                  rf_model_all$variable.importance))) +
     geom_col(fill = "darkblue", alpha = 0.75) +
     labs(x = "Predictor", y = "Importance", title = "Random Forest") +
-    theme_bw()
+    theme_classic()
+```
+```{r}
+rf_model_rest <- ranger::ranger(densidade ~ ., 
+                     data = train %>% select(-c(populacao, domicilios)), num.trees = 5000, importance = "permutation")
+rf_preds_rest <- predict(rf_model_rest, data = test)$predictions
+
+ggplot(NULL, aes(x = rf_model_rest$variable.importance,
+                 y = fct_reorder(names(rf_model_rest$variable.importance),
+                                 rf_model_rest$variable.importance))) +
+    geom_col(fill = "darkblue", alpha = 0.75) +
+    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
+    theme_classic()
 ```
 
+```{r}
+rf_model_rest <- ranger::ranger(densidade ~ ., 
+                     data = train %>% 
+                       select(-c(populacao, domicilios)) %>% 
+                       filter(abs(balanco - .5) < .1), 
+                     num.trees = 5000, importance = "permutation")
+rf_preds_rest <- predict(rf_model_rest, data = test)$predictions
+
+ggplot(NULL, aes(x = rf_model_rest$variable.importance,
+                 y = fct_reorder(names(rf_model_rest$variable.importance),
+                                 rf_model_rest$variable.importance))) +
+    geom_col(fill = "darkblue", alpha = 0.75) +
+    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
+    theme_classic()
+```
 
 ```{r analise_result}
-ggplot(data = tibble(x = rf_preds, y = test$densidade)) +
-  geom_point(aes(x = x, y = y)) +
-  theme(aspect.ratio = 1) +
-  coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
-  geom_abline(slope = 1)
+ggplot(data = tibble(x = rf_preds_all, y = test$densidade, balanco = test$balanco)) +
+  geom_point(aes(x = x, y = y, color = balanco), alpha = .5, size = 2.5) +
+  scale_color_gradient2(high = "blue", low = "red", mid = "grey", midpoint = .5) +
+  # coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
+  geom_abline(slope = 1) +
+  labs(x = "Previsto", y = "Observado") +
+  theme_classic() +
+  theme(aspect.ratio = 1)
+
 ```
 
 

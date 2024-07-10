@@ -116,7 +116,7 @@ Com estas novas premissas, um tomador de decisão que tem como objetivo garantir
 
 
 \chapter{Dados}
-\label{sec:emp}
+\label{sec:dados}
 
 \section*{Dados do Censo}
 
@@ -184,7 +184,7 @@ Todavia, os dados do IPTU não são georreferenciados, então desacompanhados de
 
 Agora, com os dados do censo georreferenciados e os dados do IPTU também georreferenciados, é necessário juntar estas bases. Entretanto, como o recorte dos setores censitários não respeita os recortes dos lotes, algum tipo de critério deve ser adotado para conectar essas geometrias. Duas abordagens foram feitas, a primeira com um join geográfico e a segunda, a partir da rasterização de ambos os dados. Na primeira, para cada um dos 27.592 setores censitários foram identificados todos os lotes que se interseccionam com os setores. A partir disso, foram cortados os lotes que não estão contidos apenas em um setor, de forma a atribuir seus dados a todos os setores que pertence, ponderado pelo percentual de sua área que intersecciona com cada setor. A segunda abordagem envolve dividir a cidade em um quadriculado (\textit{raster}) e converter tanto os dados do IPTU quanto do censo para esta escala. A metodologia é parecida, visto que formado o quadriculado, os lotes são dividos entre cada quadrado, ponderando-se pelo percentual de sua área que intersecciona com cada um.
 
-Dessa forma, para cada setor censitário ou para cada célula do raster, há varios lotes, que devem ser agregados segundo algum critério. Para a área construída, área ocupada, área do terreno e unidades, os valores de cada lotes podem ser simplesmente somados. Entretanto, no caso da verticalização fica mais complicado. A primeira possibilidade, de fazer uma média dos pavimentos, é bastante problemática, visto que se um lote fosse cortado no meio, tornando-se dois lotes e mantiver a construção com o mesmo número de pavimentos, a medida de verticalização vai se alterar, o que é um problema. A mediana também não funciona bem, visto que um local, por exemplo, com três lotes com diferentes pavimentos: 1, 3 e 10; e outro com 1, 3 e 30, vão apresentar a mesma verticalização. Caso a medida de verticalização seja uma média ponderada pela área ocupada, é possível que ao construir novos pavimentos em um terreno antes desocupado, haja uma redução na verticalização, caso esse número de pavimentos seja menor do que a média ponderada antes deste choque. 
+Dessa forma, para cada setor censitário ou para cada célula do raster, há varios lotes, que devem ser agregados segundo algum critério. Para a área construída, área ocupada, área do terreno e unidades, os valores de cada lotes podem ser simplesmente somados. Entretanto, no caso da verticalização fica mais complicado. A primeira possibilidade, $(i)$ de fazer uma média dos pavimentos, é bastante problemática, visto que se um lote fosse cortado no meio, tornando-se dois lotes e mantiver a construção com o mesmo número de pavimentos, a medida de verticalização vai se alterar, o que é um problema. A mediana $(ii)$ também não funciona bem, visto que um local, por exemplo, com três lotes com diferentes pavimentos: 1, 3 e 10; e outro com 1, 3 e 30, vão apresentar a mesma verticalização. Caso a medida de verticalização seja uma média ponderada pela área ocupada $(iii)$, é possível que ao construir novos pavimentos em um terreno antes desocupado, haja uma redução na verticalização, caso esse número de pavimentos seja menor do que a média ponderada antes deste choque. 
 
 O critério adotado nessa pesquisa foi de multiplicar o número de pavimentos pela taxa de ocupação do terreno (área ocupada / área do terreno) somado a (1 - taxa de ocupação) por zero pavimentos, Equação \ref{eq:verticaliz}. Depois, basta fazer uma média ponderada pelo tamanho do terreno desse índice de verticalização. Com este indicador, sempre que for construído algum pavimento, a verticalização vai aumentar e se um lote for cortado no meio, o índice não vai mudar. O único problema desse método é que o resultado acaba sendo muito parecido com o CA, visto que a área ocupada vezes o número de pavimentos é bastante parecida com a área construída, que ao ser dividida pela área do terreno é igual ao CA. Entretanto essa relação não é perfeita e a correlação entre o CA e a verticalização seguindo este método é de 83\% no caso da metodologia de join e 92\% na metodologia de \textit{raster}. A partir deste critério, CA e verticalização são variáveis um pouco redundantes, mas outras formas de calcular essa verticalização se mostraram mais problemáticas.
 
@@ -237,20 +237,43 @@ Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instr
 
 \section*{Alguns resultados preliminares}
 
-Apenas através da análise descritiva já é possível concluir que em boa parte da cidade os instrumentos regulatórios não funcionam, visto que as moradias não estão nem registradas nos sistemas públicos. Dessa forma, não importa qual regra for adotada pelo governo, estas áreas não serão impactadas por isso. Em termos numéricos, dos 4.996.529 domicílios registrados pelo Censo, há apenas 3.096.719 unidades registradas no IPTU, o que representa um índice de moradia regular (em termos legais) de aproximadamente 61,98\%. Além disso, entre as regiões mais densas da cidade, muitas estão nestes 38\% que não estão registradas no IPTU, portanto há outras forças além da regulação que levam a esse adensamento.
+Apenas através da análise descritiva já é possível concluir que em boa parte da cidade os instrumentos regulatórios não funcionam, visto que as moradias não estão nem registradas nos sistemas públicos. Dessa forma, não importa qual regra for adotada pelo governo, estas áreas não serão impactadas por isso. Em termos numéricos, dos 4.996.529 domicílios registrados pelo Censo, há apenas 2.641.635 unidades registradas no IPTU, o que representa um índice de moradia regular (em termos legais) de aproximadamente 52,87\%. Além disso, entre as regiões mais densas da cidade, muitas estão nestes 48\% que não estão registradas no IPTU, portanto há outras forças além da regulação que levam a esse adensamento.
 
 
 \chapter{Análise}
 
-Considerando o modelo microeconômico apresentado na Seção \ref{sec:micro}, a forma como a densidade é definida segue a Equação \ref{eq:emp-densidade}, na qual $D$ representa a densidade habitacional e $x$, a distância em relação ao centro. Os parâmetros $\alpha_0$ e $\alpha_1$ são importantes para capturar a magnitude do efeito da distância.
+Para identificar como os indicadores estão relacionados à densidade habitacional, foi elaborada uma regressão linear, especificada na Equação \ref{eq:reg}. 
 
 \begin{equation}
-    D = \alpha_0\cdot e^{-\alpha_1\cdot x}
-    \label{eq:emp-densidade}
+    \textit{densidade}_i = \beta_0 + \beta_1 \cdot \textit{CA}_i + \beta_2 \cdot\textit{cota parte}_i + \beta_3\cdot\textit{verticalização}_i + \varepsilon
+    \label{eq:reg}
 \end{equation}
 
-Para que o modelo seja estimável econometricamente, ele deve ser linear nos parâmetros, necessitando uma transformação logarítimica
+Na primeira análise conduzida, $i$ representava o setor censitário. Entretanto, ao conduzir a análise no nível mais micro possível, enfrenta-se a dificuldade de controlar pelo tamanho da área do setor censitário. Como discutido na Seção \ref{sec:dados}, o setor é construído de forma que um entrevistador sozinho consiga cobrí-lo por completo. Como consequência, áreas mais densas apresentarão setores censitários menores e, caso isso não seja controlado na regressão, haverá um grande problema de endogeneidade. Inclusive, na metodologia de separação dos setores censitários, há valores definidos de domicílios que cada setor censitário deve apresentar, de acordo com suas características \cite{IBGE2024}.
 
-\begin{equation}
-    \ln{D} = \ln{(\alpha_0)} - \alpha_1\cdot x
-\end{equation}
+Uma dificuldade então surge, decorrente da relação de simultaneidade entre a área e a densidade, visto que regiões mais densas apresentarão áreas menores. Essa dificuldade impede esta variável de ser inclusa na regressão, visto que a endogeneidade causada pela simultaneidade viola as suposições necessárias para a interpretabilidade da regressão. Apesar disso, para validar essa relação apresentada, foi construído um modelo de \textit{random forest} , que possibilita compreender a importância das variáveis que estão disponíveis \cite{wright2015ranger}.
+
+Ao construir as árvores de regressão, é possível realizar um procedimento de permutação no qual é introduzido ruído nos regressores para testar como isso afeta o erro do modelo \cite{breiman2001random, Nembrini2018}. Esse processo de permutação permite quantificar a importância de cada regressor para explicar a variável dependente. Na Figura \ref{fig:importancia} é possível observar os resultados. De fato, como era de se esperar, a área do setor aparece como a variável mais importante para explicar densidade.
+
+\begin{figure}[h]
+    \centering
+    \caption{Variáveis relevantes que foram omitidas}
+    \includegraphics[width = .8\linewidth]{imagens/importancia.png}
+    \label{fig:importancia}
+\end{figure}
+
+Entretanto, antes de comentar os resultados, é importante retomar a discussão sobre moradias que não estão registradas no IPTU. Em áreas em que há uma diferença muito grande entre número de domicílios registrados pelo Censo e unidades do IPTU, há menos confiança de que os indicadores calculados representam de fato a realidade. Portanto, em áreas em que o balanço (definido formalmente na Seção \ref{sec:dados}) está muito distante de 50\%, haverá viés nas estimações. Nesse sentido, foram rodadas três regressões, para diferentes recortes de balanço, sendo o mais leniente o irrestrito, e o mais rigoroso o que considera apenas valores de balanço entre 40 e 60\%.
+
+\begin{table}[h]
+    \caption{Regressão para densidade populacional em São Paulo, 2022}
+    \input{tabelas/regressao.tex}
+    \label{tab:reg1}
+\end{table}
+
+A partir da tabela \ref{tab:reg1}, é possível observar como os coeficientes mudam na medida em que são excluídos da análise os setores censitários onde o balanço está muito distante de 50\%. É interessante observar o coeficiente associado à cota parte, que inclusive muda de sinal, adquirindo significância no sentido contrário. De fato, é reazoável
+
+
+
+
+
+
