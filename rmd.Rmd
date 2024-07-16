@@ -576,10 +576,10 @@ gg <- censo %>%
               group_by(id_setor_censitario) %>% 
               summarize(unidades = sum(unidades * percent_intersec))) %>% 
   mutate(unidades = replace_na(unidades, 0)) %>% 
-  mutate(balanco = unidades / (unidades + domicilios)) %>% 
+  mutate(espectro_irregularidade = unidades / (unidades + domicilios)) %>% 
   ggplot() +
-  geom_histogram(aes(x = balanco)) +
-  labs(x = "Balanço: unidades / (unidades + domicilios)", y = "Frequência") +
+  geom_histogram(aes(x = espectro_irregularidade)) +
+  labs(x = "Espectro de irregularidade: unidades / (unidades + domicilios)", y = "Frequência") +
   theme_classic() +
     theme(plot.caption = element_text(hjust = 0)) +
   scale_x_continuous(labels = scales::percent)
@@ -665,24 +665,69 @@ df <- IPTU.censo %>%
          cota_parte = area_terreno / unidades,
          CA = area_construida / area_terreno,
          verticalizacao = area_construida / area_ocupada,
-         balanco = unidades / (unidades + domicilios))
+         espectro_irregularidade = unidades / (unidades + domicilios))
 
 modelsummary::datasummary_skim(df)
 ```
 
 ```{r}
 df %>% 
-  select(id_setor_censitario, populacao, domicilios, unidades) %>% 
+  select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
   bind_rows(censo %>% 
-              select(id_setor_censitario, populacao = v0001, domicilios = v0002) %>% 
+              select(id_setor_censitario, populacao = v0001, domicilios = v0002, area_setor) %>% 
               mutate(unidades = 0) %>% 
               anti_join(df %>% select(id_setor_censitario))) %>% 
-  mutate(pop_por_domicilio = populacao / domicilios,
-         domicilios_irregulares = domicilios - unidades,
-         populacao_irregular = pop_por_domicilio * domicilios_irregulares) %>% 
+  filter(domicilios > 0) %>% 
+  mutate(domicilios_irregulares = domicilios - unidades,
+         taxa_irregular = domicilios_irregulares / domicilios,
+         populacao_irregular = populacao * taxa_irregular,
+         area_irregular = area_setor * taxa_irregular) %>% 
   summarize(populacao = sum(populacao),
-            populacao_irregular = sum(populacao_irregular, na.rm = TRUE)) %>% 
-  mutate(percent_irregular = populacao_irregular / populacao)
+            populacao_irregular = sum(populacao_irregular, na.rm = TRUE),
+            area_total = sum(area_setor),
+            area_irregular = sum(area_irregular, na.rm = TRUE)) %>% 
+  mutate(taxa_pop_irregular = populacao_irregular / populacao,
+         taxa_area_irregular = area_irregular / area_total) %>% 
+  pivot_longer(everything())
+```
+```{r}
+df %>% 
+  select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
+  bind_rows(censo %>% 
+              st_drop_geometry() %>% 
+              select(id_setor_censitario, populacao = v0001, domicilios = v0002, area_setor) %>% 
+              mutate(unidades = 0) %>% 
+              anti_join(df %>% select(id_setor_censitario))) %>% 
+  filter(populacao > 0) %>% 
+  mutate(taxa_irregular = (domicilios - unidades) / domicilios) %>% 
+  arrange(desc(populacao/area_setor)) %>% 
+  pivot_longer(c(populacao, area_setor, domicilios), names_to = "variavel", values_to = "total") %>% 
+  mutate(irregular = total * taxa_irregular,
+         regular = total - irregular) %>% 
+  group_by(variavel) %>% 
+  mutate(irregular_cum = cumsum(irregular),
+         regular_cum = cumsum(regular),
+         setor = row_number()) %>% 
+  ggplot() +
+  geom_line(aes(x = setor, y = regular_cum, color = "Regular")) +
+  geom_line(aes(x = setor, y = irregular_cum, color = "Irregular")) +
+  facet_grid(rows = "variavel", scales = "free") +
+  theme_classic()
+```
+```{r}
+df %>% 
+  select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
+  bind_rows(censo %>% 
+              st_drop_geometry() %>% 
+              select(id_setor_censitario, populacao = v0001, domicilios = v0002, area_setor) %>% 
+              mutate(unidades = 0) %>% 
+              anti_join(df %>% select(id_setor_censitario))) %>% 
+  filter(populacao > 0) %>% 
+  mutate(densidade = populacao/area_setor,
+         taxa_irregular = (domicilios - unidades) / domicilios,
+         espectro_irregularidade = unidades / (unidades + domicilios)) %>% 
+  lm(log(densidade) ~ espectro_irregularidade, .) %>% 
+  summary()
 ```
 
 
@@ -692,12 +737,12 @@ modelo1 <- df %>%
   summary()
 
 modelo2 <- df %>% 
-  filter(abs(balanco - .5) < .25) %>% 
+  filter(abs(espectro_irregularidade - .5) < .25) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo3 <- df %>% 
-  filter(abs(balanco - .5) < .1) %>% 
+  filter(abs(espectro_irregularidade - .5) < .1) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
@@ -724,13 +769,13 @@ write(modelsummary::modelsummary(list("Todos setores" = modelo1,
 
 ```{r}
 modelsummary::modelsummary(list("Todos setores" = modelo1, 
-                                      "Balanço entre 25% e 75%" = modelo2, 
-                                      "Balanço entre 40% e 60%" = modelo3), 
+                                "Até 50% de irregularidade" = modelo2,
+                                "Até 20% de irregularidade" = modelo3), 
                                  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
                                  statistic = "({std.error})",
                                  output = "gt") %>% 
   tab_spanner(label = "Variável dependente: densidade populacional", columns = 2:4) %>% 
-  tab_footnote("Balanço é definido como unidades / (unidades + domicílios)") %>% 
+  tab_footnote("Espectro de irregularidade é definido como unidades / (unidades + domicílios)") %>% 
   gtsave("tex/tabelas/regressao.tex", as_latex = TRUE)
 ```
 
@@ -762,17 +807,17 @@ gg
 ```{r analise_regressao2}
 
 modelo1 <- df %>% 
-  filter(abs(balanco - .5) < .1) %>% 
+  filter(abs(espectro_irregularidade - .5) < .1) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo2 <- df %>% 
-  filter(abs(balanco - .5) < .1) %>% 
+  filter(abs(espectro_irregularidade - .5) < .1) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA + area_setor, data = .) %>% 
   summary()
 
 modelo3 <- df %>% 
-  filter(abs(balanco - .5) < .1) %>% 
+  filter(abs(espectro_irregularidade - .5) < .1) %>% 
   mutate(area_setor_quad = area_setor^2) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA + area_setor + area_setor_quad, data = .) %>% 
   summary()
@@ -844,7 +889,7 @@ result.censo <- exact_extract(raster, geoms.censo, include_xy = T,
   mutate(densidade = populacao * 10^6 / area)
 
 result <- full_join(result.IPTU, result.censo) %>% 
-  mutate(balanco = unidades / (unidades + domicilios))
+  mutate(espectro_irregularidade = unidades / (unidades + domicilios))
 
 result %>% 
   modelsummary::datasummary_skim()
@@ -899,14 +944,14 @@ gg <- result %>%
   drop_na() %>% 
   ggplot() +
   geom_sf(data = distrito, color = NA) +
-  geom_tile(aes(x = x, y = y, fill = balanco), alpha = .75, color = "grey") +
+  geom_tile(aes(x = x, y = y, fill = espectro_irregularidade), alpha = .75, color = "grey") +
   theme_void() +
   scale_fill_gradient2(high = "#2F191B", low = "#D32934", mid = "white", na.value = NA,
                        midpoint = .5, limits = c(0,1)) +
   theme(legend.position = c(.8, .35), legend.title = element_markdown(size = 25), 
         plot.title = element_markdown(), legend.text = element_text(size = 25),
         legend.key.size = unit(1.75, 'cm')) +
-  labs(fill = "Balanço", title = "<span style='font-size: 35pt;'>Áreas com <span style = 'color:#D32934;'>menos domicílios registrados no IPTU, comparados <br>ao censo</span> geralmente estão em regiões afastadas do centro</span>")
+  labs(fill = "Espectro de irregularidade", title = "<span style='font-size: 35pt;'>Áreas com <span style = 'color:#D32934;'>menos domicílios registrados no IPTU, comparados <br>ao censo</span> geralmente estão em regiões afastadas do centro</span>")
 
 ggsave("tex/imagens/balanco_raster.png", gg, width = 16, height = 20, dpi = 300)
 
@@ -930,17 +975,17 @@ modelo1 <- result %>%
   summary()
 
 modelo2 <- result %>% 
-  filter(abs(balanco - .5) < .25) %>% 
+  filter(abs(espectro_irregularidade - .5) < .25) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo3 <- result %>% 
-  filter(abs(balanco - .5) < .1) %>% 
+  filter(abs(espectro_irregularidade - .5) < .1) %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelsummary::modelsummary(
-  list("Todos setores" = modelo1, "Balanço entre 25% e 75%" = modelo2, "Balanço entre 40% e 60%" = modelo3), 
+  list("Todos setores" = modelo1, "Até 50% de irregularidade" = modelo2, "Até 20% de irregularidade" = modelo3), 
   gof_omit = "RMSE", estimate = "{estimate} {stars}", 
   statistic = NULL)
 ```
@@ -986,7 +1031,7 @@ ggplot(NULL, aes(x = rf_model_rest$variable.importance,
 rf_model_rest <- ranger::ranger(densidade ~ ., 
                      data = train %>% 
                        select(-c(populacao, domicilios)) %>% 
-                       filter(abs(balanco - .5) < .1), 
+                       filter(abs(espectro_irregularidade - .5) < .1), 
                      num.trees = 5000, importance = "permutation")
 rf_preds_rest <- predict(rf_model_rest, data = test)$predictions
 
@@ -999,8 +1044,8 @@ ggplot(NULL, aes(x = rf_model_rest$variable.importance,
 ```
 
 ```{r analise_result}
-ggplot(data = tibble(x = rf_preds_all, y = test$densidade, balanco = test$balanco)) +
-  geom_point(aes(x = x, y = y, color = balanco), alpha = .5, size = 2.5) +
+ggplot(data = tibble(x = rf_preds_all, y = test$densidade, espectro_irregularidade = test$espectro_irregularidade)) +
+  geom_point(aes(x = x, y = y, color = espectro_irregularidade), alpha = .5, size = 2.5) +
   scale_color_gradient2(high = "blue", low = "red", mid = "grey", midpoint = .5) +
   # coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
   geom_abline(slope = 1) +
