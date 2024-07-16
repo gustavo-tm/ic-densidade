@@ -1,20 +1,20 @@
 # Fdb version 4
-["bibtex main"] 1720587052.82328 "main.aux" "main.bbl" "main" 1720587061.8839 0
+["bibtex main"] 1721088889.66887 "main.aux" "main.bbl" "main" 1721088905.13339 0
   "./bibliografia.bib" 1720587035 3899 69fb55e9be601b984cc0247674bd3648 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/bibtex/bib/abntex2/abntex2-options.bib" 1543103229 5396 4eb260dac60f150ae608d45252853090 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/bibtex/bst/abntex2/abntex2-alf.bst" 1543103230 60064 0819ac8568f9a482510a46e3a8a6f605 ""
-  "main.aux" 1720587058 12017 c442695ed60270fd7513423f9333d866 "pdflatex"
+  "main.aux" 1721088904 12017 7d559124e4983004ed0fa3eb9c53f80e "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["makeindex main.idx"] 1720583000.20378 "main.idx" "main.ind" "main" 1720587061.88206 0
-  "main.idx" 1720587056 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+["makeindex main.idx"] 1720583000.20378 "main.idx" "main.ind" "main" 1721088905.13299 0
+  "main.idx" 1721088903 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
   (generated)
   "main.ilg"
   "main.ind"
   (rewritten before read)
-["pdflatex"] 1720587053.33407 "c:/git/densidade/tex/main.tex" "main.pdf" "main" 1720587061.88632 0
+["pdflatex"] 1721088901.78529 "c:/git/densidade/tex/main.tex" "main.pdf" "main" 1721088905.13391 0
   "C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1716659654 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/gusth/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1716659646 24240354 82e8f79682626a11b5fe69dad5ca8106 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -339,13 +339,13 @@
   "imagens/micro.tex" 1715730172 515 680c10908e0dbcfc551140ae0aaf4721 ""
   "imagens/rasters.png" 1719890236 1196950 2d3c74b23934b14c2d286ed484c7a7ca ""
   "imagens/tree_area_construida.png" 1719878187 115244 ea092022f275d4b411f7385e4528a24b ""
-  "main.aux" 1720587058 12017 c442695ed60270fd7513423f9333d866 "pdflatex"
-  "main.bbl" 1720587053 4201 ee57c3643d7f72139b5e5fcaa66d4529 "bibtex main"
-  "main.brf" 1720587058 1002 d08cc58875afc6b6e707d71e2c9eba9b "pdflatex"
+  "main.aux" 1721088904 12017 7d559124e4983004ed0fa3eb9c53f80e "pdflatex"
+  "main.bbl" 1721088889 4201 ee57c3643d7f72139b5e5fcaa66d4529 "bibtex main"
+  "main.brf" 1721088904 1002 d08cc58875afc6b6e707d71e2c9eba9b "pdflatex"
   "main.ind" 1720583000 0 d41d8cd98f00b204e9800998ecf8427e "makeindex main.idx"
   "main.tex" 1720582992 13481 92cec6aba0770415d3b3df0e9ade89ef ""
   "tabelas/regressao.tex" 1720585168 897 2b5c9b8b86a37ee9f3f381befb1d7552 ""
-  "texto.tex" 1720587035 40833 06347387ec4a39bcde85464bd71a4100 ""
+  "texto.tex" 1721088901 41092 7089565b42b917df1648de39064822b5 ""
   (generated)
   "main.aux"
   "main.brf"

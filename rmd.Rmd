@@ -670,6 +670,20 @@ df <- IPTU.censo %>%
 modelsummary::datasummary_skim(df)
 ```
 
+```{r}
+df %>% 
+  select(id_setor_censitario, populacao, domicilios, unidades) %>% 
+  bind_rows(censo %>% 
+              select(id_setor_censitario, populacao = v0001, domicilios = v0002) %>% 
+              mutate(unidades = 0) %>% 
+              anti_join(df %>% select(id_setor_censitario))) %>% 
+  mutate(pop_por_domicilio = populacao / domicilios,
+         domicilios_irregulares = domicilios - unidades,
+         populacao_irregular = pop_por_domicilio * domicilios_irregulares) %>% 
+  summarize(populacao = sum(populacao),
+            populacao_irregular = sum(populacao_irregular, na.rm = TRUE)) %>% 
+  mutate(percent_irregular = populacao_irregular / populacao)
+```
 
 
 ```{r analise_regressao1}
