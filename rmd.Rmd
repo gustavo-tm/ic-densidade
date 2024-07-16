@@ -68,7 +68,7 @@ gg <- ggplot() +
   theme_void() +
   theme(legend.position = c(.8, .3))
 
-ggsave("tex/imagens/mapa.png", gg, width = 7, height = 12, dpi = 500)
+ggsave("tex/imagens/mapa.pdf", gg, width = 7, height = 12)
 gg
 ```
 
@@ -105,7 +105,7 @@ gg <- censo %>%
        y = expression("Densidade populacional por" ~ km^2)) +
   theme_classic()
 
-ggsave("tex/imagens/densidade_distcentro.png", gg, width = 5, height = 3, dpi = 200)
+ggsave("tex/imagens/densidade_distcentro.pdf", gg, width = 5, height = 3)
 gg
 ```
 
@@ -213,10 +213,10 @@ gg.left <- IPTU %>%
   theme_void() +
   theme(legend.position = "none")
 
-ggsave("tex/imagens/tree_area_construida.png", 
+ggsave("tex/imagens/tree_area_construida.pdf", 
        (gg.left | gg.right) + 
          plot_layout(widths = c(1,6)), 
-       width = 6.75, height = 5, dpi = 250)
+       width = 6.75, height = 5)
 
 (gg.left | gg.right)
 ```
@@ -250,7 +250,6 @@ IPTU %>%
 ```
 
 
-
 ```{r table_IPTU_unidades}
 IPTU %>% 
   mutate(Tipo = ifelse(unidades == 1, "Unidade", "Condomínio")) %>% 
@@ -273,7 +272,7 @@ gg <- IPTU %>%
   labs(x = "", y = "Frequência") + 
   theme_classic()
 
-ggsave("tex/imagens/indicadores.png", gg, width = 8, height = 2.75, dpi = 250)
+ggsave("tex/imagens/indicadores.pdf", gg, width = 8, height = 2.75)
 gg
 ```
 
@@ -315,7 +314,7 @@ gg <- IPTU %>%
   theme_bw() +
   labs(fill = "Quantil", x = "Ano da construção")
 
-ggsave("tex/imagens/indicadores_tempo.png", gg, width = 8, height = 9, dpi = 300)
+ggsave("tex/imagens/indicadores_tempo.pdf", gg, width = 8, height = 9)
 gg
 ```
 
@@ -499,7 +498,7 @@ gg <- IPTU.lote %>%
   scale_y_continuous(breaks = (1:6)) +
   theme_classic()
 
-ggsave("tex/imagens/verticalizacao.png", gg, width = 6, height = 4, dpi = 250)
+ggsave("tex/imagens/verticalizacao.pdf", gg, width = 6, height = 4)
 gg
 ```
 
@@ -519,8 +518,8 @@ gg.setor <- IPTU.setor %>%
   theme_void() +
   scale_fill_gradient(low = "#004D40FF", high = "#E0F2F1FF")
 
-ggsave("tex/imagens/mapa_verticalizacao.png", 
-       (gg.lotes | gg.setor), width = 20, height = 20, dpi = 300)
+ggsave("tex/imagens/mapa_verticalizacao.pdf", 
+       (gg.lotes | gg.setor), width = 20, height = 20)
 
 (gg.lotes | gg.setor)
 ```
@@ -585,7 +584,7 @@ gg <- censo %>%
   scale_x_continuous(labels = scales::percent)
 
 
-ggsave("tex/imagens/disparidade_censoIPTU.png", gg, width = 7, height = 3, dpi = 300)
+ggsave("tex/imagens/disparidade_censoIPTU.pdf", gg, width = 7, height = 3)
 gg
 ```
 
@@ -601,9 +600,13 @@ lotes_irregulares <- read_sf("dados/lotes_irregulares/SIRGAS_SHP_loteamento.shp"
 favela <- read_sf("dados/favela/SIRGAS_SHP_favela.shp") %>% 
   st_set_crs("epsg:31983")
 
+
 censo.pontos <- censo %>%
-  select(id_setor_censitario, geometry, pessoas = v0001, domicilios = v0002) %>%
-  mutate(pontos = round(pessoas / 100)) %>% 
+  select(id_setor_censitario, geometry, pessoas = v0001) %>%
+  
+  # Um ponto a cada 1.000 pessoas
+  mutate(pontos = pessoas %/% 1000 + (runif(length(pessoas)) * 1000 < pessoas %% 1000)) %>% 
+  select(-pessoas) %>% 
   as_tibble() %>% 
   left_join(
             # Seleção dos setores censitários que não apresentam nenhum contribuinte do IPTU
@@ -613,6 +616,7 @@ censo.pontos <- censo %>%
               select(id_setor_censitario) %>% 
               mutate(erro = TRUE)) %>% 
   mutate(erro = replace_na(erro, FALSE)) %>% 
+  filter(pontos > 0) %>% 
   mutate(samples = purrr::map2(geometry, pontos, ~st_sample(.x, size = .y))) %>%
   unnest(cols = samples) %>%
   as_tibble()
@@ -623,19 +627,19 @@ gg <- censo.pontos %>%
   geom_sf(data = st_union(favela %>% st_union() %>% st_buffer(10),
                           lotes_irregulares %>% st_union() %>% st_buffer(10)),
           aes(fill = "Favelas e lotes irregulares"), 
-        color = "black", size = .1, alpha = .7) +
-  geom_sf(aes(geometry = samples, color = erro), alpha = .25, size = .2) +
+        color = "black", size = .1, alpha = .5) +
+  geom_sf(aes(geometry = samples, color = erro), alpha = .5, size = .8) +
   scale_color_manual(values = c("FALSE" = NA,#248232
                                "TRUE" = "#D32934FF"),
                      labels = NULL) +
   scale_fill_manual("", values = c("Favelas e lotes irregulares" = "#2BAA92FF")) +
-  labs(title = "<span style='font-size: 35pt;'>População em <span style = 'color:#D32934FF;'>áreas sem registro de IPTU</span> geralmente estão em <br><span style = 'color:#2BAA92FF;'>favelas ou lotes irregulares</span> (cada ponto representa 100 pessoas)</span>") + 
+  labs(title = "<span style='font-size: 34pt;'>População em <span style = 'color:#D32934FF;'>áreas sem registro de IPTU</span> geralmente estão em <br><span style = 'color:#2BAA92FF;'>favelas ou lotes irregulares</span> (cada ponto representa 1000 pessoas)</span>") + 
   theme_void() +
   theme(plot.title = element_markdown(), legend.position = "none")
 
 # scale_colour_paletteer_d("lisa::AndyWarhol_2")
 
-ggsave("tex/imagens/mapa_pontos.png", gg, width = 16, height = 20, dpi = 300)
+ggsave("tex/imagens/mapa_pontos.pdf", gg, width = 16, height = 20)
 gg
 ```
 
@@ -670,50 +674,7 @@ df <- IPTU.censo %>%
 modelsummary::datasummary_skim(df)
 ```
 
-```{r}
-df %>% 
-  select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
-  bind_rows(censo %>% 
-              select(id_setor_censitario, populacao = v0001, domicilios = v0002, area_setor) %>% 
-              mutate(unidades = 0) %>% 
-              anti_join(df %>% select(id_setor_censitario))) %>% 
-  filter(domicilios > 0) %>% 
-  mutate(domicilios_irregulares = domicilios - unidades,
-         taxa_irregular = domicilios_irregulares / domicilios,
-         populacao_irregular = populacao * taxa_irregular,
-         area_irregular = area_setor * taxa_irregular) %>% 
-  summarize(populacao = sum(populacao),
-            populacao_irregular = sum(populacao_irregular, na.rm = TRUE),
-            area_total = sum(area_setor),
-            area_irregular = sum(area_irregular, na.rm = TRUE)) %>% 
-  mutate(taxa_pop_irregular = populacao_irregular / populacao,
-         taxa_area_irregular = area_irregular / area_total) %>% 
-  pivot_longer(everything())
-```
-```{r}
-df %>% 
-  select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
-  bind_rows(censo %>% 
-              st_drop_geometry() %>% 
-              select(id_setor_censitario, populacao = v0001, domicilios = v0002, area_setor) %>% 
-              mutate(unidades = 0) %>% 
-              anti_join(df %>% select(id_setor_censitario))) %>% 
-  filter(populacao > 0) %>% 
-  mutate(taxa_irregular = (domicilios - unidades) / domicilios) %>% 
-  arrange(desc(populacao/area_setor)) %>% 
-  pivot_longer(c(populacao, area_setor, domicilios), names_to = "variavel", values_to = "total") %>% 
-  mutate(irregular = total * taxa_irregular,
-         regular = total - irregular) %>% 
-  group_by(variavel) %>% 
-  mutate(irregular_cum = cumsum(irregular),
-         regular_cum = cumsum(regular),
-         setor = row_number()) %>% 
-  ggplot() +
-  geom_line(aes(x = setor, y = regular_cum, color = "Regular")) +
-  geom_line(aes(x = setor, y = irregular_cum, color = "Irregular")) +
-  facet_grid(rows = "variavel", scales = "free") +
-  theme_classic()
-```
+
 ```{r}
 df %>% 
   select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
@@ -797,7 +758,7 @@ gg <- ggplot(NULL, aes(x = var.importance,
          subtitle = "Resultados da metodologia via join") +
     theme_classic()
 
-ggsave("tex/imagens/importancia.png", gg, width = 7, height = 4, dpi = 300)
+ggsave("tex/imagens/importancia.pdf", gg, width = 7, height = 4)
 
 gg
 ```
@@ -920,7 +881,7 @@ gg <- result %>%
   labs(fill = "Decil") +
   scale_fill_viridis_d()
 
-ggsave("tex/imagens/rasters.png", gg, width = 8, height = 12, dpi = 300)
+ggsave("tex/imagens/rasters.pdf", gg, width = 8, height = 12)
 
 gg
 ```
@@ -953,7 +914,7 @@ gg <- result %>%
         legend.key.size = unit(1.75, 'cm')) +
   labs(fill = "Espectro de irregularidade", title = "<span style='font-size: 35pt;'>Áreas com <span style = 'color:#D32934;'>menos domicílios registrados no IPTU, comparados <br>ao censo</span> geralmente estão em regiões afastadas do centro</span>")
 
-ggsave("tex/imagens/balanco_raster.png", gg, width = 16, height = 20, dpi = 300)
+ggsave("tex/imagens/balanco_raster.pdf", gg, width = 16, height = 20)
 
 gg
 ```
