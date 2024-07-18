@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  16 JUL 2024 18:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  18 JUL 2024 15:14
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1378,63 +1378,50 @@ Package pdftex.def Info: imagens/desenho.pdf  used on input line 195.
 <imagens/disparidade_censoIPTU.pdf, id=249, 505.89pt x 216.81pt>
 File: imagens/disparidade_censoIPTU.pdf Graphic file (type pdf)
 <use imagens/disparidade_censoIPTU.pdf>
-Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 237.
+Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 216.
 (pdftex.def)             Requested size: 455.0pt x 195.00478pt.
 <imagens/mapa_pontos.pdf, id=250, 1156.32pt x 1445.4pt>
 File: imagens/mapa_pontos.pdf Graphic file (type pdf)
 <use imagens/mapa_pontos.pdf>
-Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 245.
+Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 224.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
 <imagens/balanco_raster.pdf, id=251, 1156.32pt x 1445.4pt>
 File: imagens/balanco_raster.pdf Graphic file (type pdf)
 <use imagens/balanco_raster.pdf>
-Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 251.
+Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 230.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[17 <./imagens/disparidade_censoIPTU.pdf>]
-<imagens/rasters.pdf, id=265, 578.16pt x 867.24pt>
+[17 <./imagens/disparidade_censoIPTU.pdf>] (tabelas/top5.tex)
+<imagens/rasters.pdf, id=266, 578.16pt x 867.24pt>
 File: imagens/rasters.pdf Graphic file (type pdf)
 <use imagens/rasters.pdf>
-Package pdftex.def Info: imagens/rasters.pdf  used on input line 263.
-(pdftex.def)             Requested size: 455.0pt x 682.49197pt.
-
-
-LaTeX Warning: Float too large for page by 10.74196pt on input line 265.
+Package pdftex.def Info: imagens/rasters.pdf  used on input line 253.
+(pdftex.def)             Requested size: 450.4525pt x 675.67699pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[18 <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] [19] [20 <./imagens/rasters.pdf>]
-<imagens/importancia.pdf, id=318, 505.89pt x 289.08pt>
-File: imagens/importancia.pdf Graphic file (type pdf)
-<use imagens/importancia.pdf>
-Package pdftex.def Info: imagens/importancia.pdf  used on input line 294.
-(pdftex.def)             Requested size: 364.00139pt x 208.0051pt.
 
+Overfull \vbox (16.50185pt too high) has occurred while \output is active []
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+ [18 <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] [19 <./imagens/rasters.pdf>] [20
 
-(tabelas/regressao.tex
-Underfull \hbox (badness 10000) in paragraph at lines 22--23
-
- []
-
-)
+] (tabelas/regressao.tex)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[21
-
-]) (main.bbl (main.brf)
+) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [22 <./imagens/importancia.pdf>]
+ [21
+
+] [22]
 bibitemlist
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 82.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 77.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )) [23
@@ -1451,20 +1438,20 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: DCFFCC0AF7BF288FE17D0D20B7E2A9CA;1061.
+(rerunfilecheck)             Checksum: 860E594F6FEF664E48BF86B1C5DE2392;918.
  ) 
 Here is how much of TeX's memory you used:
- 48946 strings out of 474370
- 1119994 string characters out of 5740535
+ 48949 strings out of 474370
+ 1119730 string characters out of 5740535
  1941754 words of memory out of 5000000
- 70200 multiletter control sequences out of 15000+600000
- 621065 words of font info for 260 fonts, out of 8000000 for 9000
+ 70183 multiletter control sequences out of 15000+600000
+ 627029 words of font info for 272 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1579b,2499s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (23 pages, 10705353 bytes).
+Output written on main.pdf (23 pages, 10698763 bytes).
 PDF statistics:
- 439 PDF objects out of 1000 (max. 8388607)
- 75 named destinations out of 1000 (max. 500000)
- 70782 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 425 PDF objects out of 1000 (max. 8388607)
+ 74 named destinations out of 1000 (max. 500000)
+ 78969 words of extra memory for PDF output out of 89155 (max. 10000000)
 

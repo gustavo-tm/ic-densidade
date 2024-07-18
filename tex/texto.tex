@@ -202,34 +202,13 @@ Assumindo prédios como paralelepípedos, ou seja, todos os andares apresentam a
 \end{equation}
 
 
-    
-% \frac{\text{CA}}{\text{tx\_ocup}}
-
-% O critério adotado nesta pesquisa foi de utilizar uma relação entre o CA do terreno e sua taxa de ocupação, como pode ser visto na Equação \ref{eq:vert}.
-
-% \begin{equation}
-%     V=\frac{\text{CA}}{\text{Taxa de Ocupação}} = \frac{\frac{\text{Área Construída}}{\text{Área do Terreno}}}{\frac{\text{Área Ocupada}}{\text{Área do Terreno}}} = \frac{\text{Área Construída}}{\text{Área Ocupada}}
-%     \label{eq:vert}
-% \end{equation}
-
-
-% A primeira possibilidade, $(i)$ de fazer uma média dos pavimentos, é bastante problemática, visto que se um lote fosse cortado no meio, tornando-se dois lotes e mantiver a construção com o mesmo número de pavimentos, a medida de verticalização vai se alterar, o que é um problema, já que na prática nada se alterou. A mediana $(ii)$ também não funciona bem, visto que um local, por exemplo, com três lotes com diferentes pavimentos: 1, 3 e 10; e outro com 1, 3 e 30, vão apresentar a mesma verticalização. Caso a medida de verticalização seja uma média ponderada pela área ocupada $(iii)$, é possível que ao construir novos pavimentos em um terreno antes desocupado, haja uma redução na verticalização, caso esse número de pavimentos seja menor do que a média ponderada antes deste choque. 
-
-% O critério adotado nessa pesquisa foi de multiplicar o número de pavimentos pela taxa de ocupação do terreno (área ocupada / área do terreno) somado a (1 - taxa de ocupação) por zero pavimentos, Equação \ref{eq:verticaliz}. Depois, basta fazer uma média ponderada pelo tamanho do terreno desse índice de verticalização. Com este indicador, sempre que for construído algum pavimento, a verticalização vai aumentar e se um lote for cortado no meio, o índice não vai mudar. O único problema desse método é que o resultado acaba sendo muito parecido com o CA, visto que a área ocupada vezes o número de pavimentos é bastante parecida com a área construída, que ao ser dividida pela área do terreno é igual ao CA. Entretanto essa relação não é perfeita e a correlação entre o CA e a verticalização seguindo este método é de 83\% no caso da metodologia de join e 92\% na metodologia de \textit{raster}. A partir deste critério, CA e verticalização são variáveis um pouco redundantes, mas outras formas de calcular essa verticalização se mostraram mais problemáticas.
-
-% \begin{equation}
-%     \text{Verticalização} = \text{Pavimentos} * \frac{\text{Área Ocupada}}{\text{Área do Terreno}} + 0 * \frac{\text{Área não Ocupada}}{\text{Área do Terreno}}
-%     \label{eq:verticaliz}
-% \end{equation}
-
-
 Com as bases relacionadas, é importante fazer um balanço para analisar se as informações batem. A única informação em comum entre as bases é o número de unidades habitacionais, que nos dados do IPTU são classificadas como unidades, e na do Censo como domicílios. A definição deles não é exatamente a mesma, porém é a única informação possível de ser validada. Caso o número de domicílios no Censo seja maior do que o de unidades no IPTU, é um forte indicativo de que há moradias irregulares. Para medir essa diferença, foi criado um espectro de irregularidade, que é construído a partir do número de unidades dividido pelo número de unidades mais domicílios. Caso o valor calculado seja próximo de 50\%, as informações são consistentes, ou seja, o número de unidades do IPTU é igual ao número de domicílios no censo. Na medida em que o balanço se aproxima de 0\%, significa que há mais unidades no censo do que no IPTU, enquanto mais próximo de 100\% indica o contrário.
 
 \begin{quote}
     ``Domicílio é o local estruturalmente separado e independente que se destina a servir de habitação a uma ou mais pessoas, ou que esteja sendo utilizado como tal. A separação fica caracterizada quando o local de habitação for limitado por paredes, muros ou cercas e coberto por um teto, permitindo a uma ou mais pessoas, que nele habitam, isolar-se das demais, com a finalidade de dormir, preparar e/ ou consumir seus alimentos e proteger-se do meio ambiente, arcando, total ou parcialmente, com suas despesas de alimentação ou moradia. A independência fica caracterizada quando o local de habitação tem acesso direto, permitindo a seus moradores entrar e sair sem necessidade de passar por locais de moradia de outras pessoas'' \cite{IBGE2013}.
 \end{quote}
 
-Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas.  Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de balanço para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
+Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas.  Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de irregularidade para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
 
 \begin{figure}[h]
     \centering
@@ -255,14 +234,27 @@ Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é 
     \label{fig:erros-join}
 \end{figure}
 
-Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte. Dentre as 5 células com maior densidade, uma está no centro da cidade (Sé) e as outras quatro estão em favelas: duas em Paraisópolis, uma em Heliópolis e outra no distrito Pedreira da subprefeitura Cidade Ademar, onde há diversas pequenas favelas. É importante destacar que quanto mais lotes irregulares há em uma região, menos confiáveis são os indicadores calculados de CA, cota parte e verticalização, visto que estes são inteiramente calculados com base nos dados do IPTU, que são disponíveis apenas para lotes regulares.
+Na tabela \ref{tab:top5} estão descritas as 5 células do \textit{raster} que apresentam maior densidade populacional. É interessante observar que 4 das 5 regiões mais densas da cidade são de territórios de favelas e repleta quase completamente de domicílios que não estão registrados no IPTU. A densidade habitacional do município de São Paulo no geral é de 7.529 habitantes por quilômetro quadrado, o que significa que esta célula do \textit{raster} posicionada na região de Paraisópolis apresenta uma densidade quase quatro vezes maior do que o resto da cidade.
+
+\begin{table}[h]
+    \caption{Células do \textit{raster} que apresentam a maior densidade populacional}
+    \input{tabelas/top5.tex}
+    \label{tab:top5}
+    \addtocounter{table}{-1}
+\end{table}
+
+Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte. 
+% Dentre as 5 células com maior densidade, uma está no centro da cidade (Sé) e as outras quatro estão em favelas: duas em Paraisópolis, uma em Heliópolis e outra no distrito Pedreira da subprefeitura Cidade Ademar, onde há diversas pequenas favelas. 
+É importante destacar que quanto mais lotes irregulares há em uma região, menos confiáveis são os indicadores calculados de CA, cota parte e verticalização, visto que estes são inteiramente calculados com base nos dados do IPTU, que são disponíveis apenas para lotes regulares.
 
 \begin{figure}[h]
     \centering
     \caption{Rasters com os indicadores utilizados na regulação}
-    \includegraphics[width = \linewidth]{imagens/rasters.pdf}
+    \includegraphics[width = .99\linewidth]{imagens/rasters.pdf}
     \label{fig:rasters}
 \end{figure}
+
+\clearpage
 
 \section*{Alguns resultados preliminares}
 
@@ -282,28 +274,41 @@ Para identificar como os indicadores estão relacionados à densidade habitacion
     \label{eq:reg}
 \end{equation}
 
-Na primeira análise conduzida, $i$ representava o setor censitário. Entretanto, ao conduzir a análise no nível mais micro possível, enfrenta-se a dificuldade de controlar pelo tamanho da área do setor censitário. Como discutido na Seção \ref{sec:dados}, o setor é construído de forma que um entrevistador sozinho consiga cobrí-lo por completo. Como consequência, áreas mais densas apresentarão setores censitários menores e, caso isso não seja controlado na regressão, haverá um grande problema de endogeneidade. Inclusive, na metodologia de separação dos setores censitários, há valores definidos de domicílios que cada setor censitário deve apresentar, de acordo com suas características \cite{IBGE2024}.
+Na análise conduzida, o nível da observação $i$ não pode ser o setor censitário, pois como discutido na Seção \ref{sec:dados}, o setor é construído de forma que um entrevistador sozinho consiga cobrí-lo por completo. Como consequência, áreas mais densas apresentarão setores censitários menores e, caso isso não seja controlado na regressão, haverá um grande problema de endogeneidade. Inclusive, na metodologia de separação dos setores censitários, há valores definidos de domicílios que cada setor censitário deve apresentar, de acordo com suas características \cite{IBGE2024}. Todavia, a área não pode ser um regressor, visto que haveria uma relação de simultaneidade: ao mesmo tempo que a área explica a densidade, a densidade também explica a área. Essa relação viola as suposições necessárias para interpretabilidade dos resultados.
 
-Uma dificuldade então surge, decorrente da relação de simultaneidade entre a área e a densidade, visto que regiões mais densas apresentarão áreas menores. Essa dificuldade impede esta variável de ser inclusa na regressão, visto que a endogeneidade causada pela simultaneidade viola as suposições necessárias para a interpretabilidade da regressão. Apesar disso, para validar essa relação apresentada, foi construído um modelo de \textit{random forest} , que possibilita compreender a importância das variáveis que estão disponíveis \cite{wright2015ranger}.
+Para contornar este problema, o nível da observação foi definido como cada célula do \textit{raster}, metodologia apresentada na Seção \ref{sec:dados}. Dessa forma, todas células apresentam o mesmo tamanho e este problema deixa de existir. Note que foram desconsideradas as células em que há dados do Censo, mas não há dados do IPTU, já que não se sabe o valor dos indicadores de regulação urbana nessas regiões. Em áreas em que há uma diferença muito grande entre número de domicílios registrados pelo Censo e unidades do IPTU, há menos confiança de que os indicadores calculados representam de fato a realidade. Portanto, em áreas em que o espectro de irregularidade está muito distante de 50\%, haverá viés nas estimações. 
 
-Ao construir as árvores de regressão, é possível realizar um procedimento de permutação no qual é introduzido ruído nos regressores para testar como isso afeta o erro do modelo \cite{breiman2001random, Nembrini2018}. Esse processo de permutação permite quantificar a importância de cada regressor para explicar a variável dependente. Na Figura \ref{fig:importancia} é possível observar os resultados. De fato, como era de se esperar, a área do setor aparece como a variável mais importante para explicar densidade.
-
-\begin{figure}[h]
-    \centering
-    \caption{Variáveis relevantes que foram omitidas}
-    \includegraphics[width = .8\linewidth]{imagens/importancia.pdf}
-    \label{fig:importancia}
-\end{figure}
-
-Entretanto, antes de comentar os resultados, é importante retomar a discussão sobre moradias que não estão registradas no IPTU. Em áreas em que há uma diferença muito grande entre número de domicílios registrados pelo Censo e unidades do IPTU, há menos confiança de que os indicadores calculados representam de fato a realidade. Portanto, em áreas em que o balanço (definido formalmente na Seção \ref{sec:dados}) está muito distante de 50\%, haverá viés nas estimações. Nesse sentido, foram rodadas três regressões, para diferentes recortes de balanço, sendo o mais leniente o irrestrito, e o mais rigoroso o que considera apenas valores de balanço entre 40 e 60\%.
+Nesse sentido, foram feitas duas regressões, um deles irrestrito, e o outro considera apenas valores do espectro entre 40 e 60\%. Além disso, em cada uma dessas regressões a densidade, que é a variável dependente, foi computada em nível e em log. Os resultados podem ser observados na Tabela \ref{tab:reg}
 
 \begin{table}[h]
     \caption{Regressão para densidade populacional em São Paulo, 2022}
     \input{tabelas/regressao.tex}
-    \label{tab:reg1}
+    \label{tab:reg}
+    \addtocounter{table}{-1}
 \end{table}
 
-A partir da tabela \ref{tab:reg1}, é possível observar como os coeficientes mudam na medida em que são excluídos da análise os setores censitários onde o balanço está muito distante de 50\%. É interessante observar o coeficiente associado à cota parte, que inclusive muda de sinal, adquirindo significância no sentido contrário. De fato, é reazoável
+\cite{wright2015ranger}.
+
+% Ao construir as árvores de regressão, é possível realizar um procedimento de permutação no qual é introduzido ruído nos regressores para testar como isso afeta o erro do modelo \cite{breiman2001random, Nembrini2018}. Esse processo de permutação permite quantificar a importância de cada regressor para explicar a variável dependente. Na Figura \ref{fig:importancia} é possível observar os resultados. De fato, como era de se esperar, a área do setor aparece como a variável mais importante para explicar densidade.
+
+% \begin{figure}[h]
+%     \centering
+%     \caption{Variáveis relevantes que foram omitidas}
+%     \includegraphics[width = .8\linewidth]{imagens/importancia.pdf}
+%     \label{fig:importancia}
+% \end{figure}
+
+% Entretanto, antes de comentar os resultados, é importante retomar a discussão sobre moradias que não estão registradas no IPTU. 
+
+
+
+% \begin{table}[h]
+%     \caption{Regressão para densidade populacional em São Paulo, 2022}
+%     \input{tabelas/reg_raster.tex}
+%     \label{tab:reg1}
+% \end{table}
+
+% A partir da tabela \ref{tab:reg1}, é possível observar como os coeficientes mudam na medida em que são excluídos da análise os setores censitários onde o balanço está muito distante de 50\%. É interessante observar o coeficiente associado à cota parte, que inclusive muda de sinal, adquirindo significância no sentido contrário. De fato, é reazoável
 
 
 

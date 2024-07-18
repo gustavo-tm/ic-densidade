@@ -28,6 +28,7 @@ library(patchwork)
 library(ggtext)
 library(units)
 
+library(modelsummary)
 library(gt)
 
 
@@ -714,32 +715,6 @@ modelsummary::modelsummary(
 
 ```
 
-```{r write_regression1, echo = FALSE}
-# Escrever a tabela em um documento .tex
-write(modelsummary::modelsummary(list("Todos setores" = modelo1, 
-                                      "Balanço entre 25% e 75%" = modelo2, 
-                                      "Balanço entre 40% e 60%" = modelo3), 
-                                 gof_omit = "RMSE", estimate = "{estimate} {stars}", 
-                                 statistic = "({std.error})", 
-                                 output = "latex", 
-                                 caption = "Tabela de regressão (metodologia join)",
-                                 label = "tab:reg1"), 
-      file="tex/tabelas/reg_join.tex")
-
-```
-
-```{r}
-modelsummary::modelsummary(list("Todos setores" = modelo1, 
-                                "Até 50% de irregularidade" = modelo2,
-                                "Até 20% de irregularidade" = modelo3), 
-                                 gof_omit = "RMSE", estimate = "{estimate} {stars}", 
-                                 statistic = "({std.error})",
-                                 output = "gt") %>% 
-  tab_spanner(label = "Variável dependente: densidade populacional", columns = 2:4) %>% 
-  tab_footnote("Espectro de irregularidade é definido como unidades / (unidades + domicílios)") %>% 
-  gtsave("tex/tabelas/regressao.tex", as_latex = TRUE)
-```
-
 
 ```{r analise_tree_join, cache = TRUE}
 split <- rsample::initial_split(df, prop = 0.7)
@@ -760,42 +735,15 @@ gg <- ggplot(NULL, aes(x = var.importance,
 
 ggsave("tex/imagens/importancia.pdf", gg, width = 7, height = 4)
 
+remove(rf_model)
+
 gg
 ```
 
 
-
-```{r analise_regressao2}
-
-modelo1 <- df %>% 
-  filter(abs(espectro_irregularidade - .5) < .1) %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
-  summary()
-
-modelo2 <- df %>% 
-  filter(abs(espectro_irregularidade - .5) < .1) %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA + area_setor, data = .) %>% 
-  summary()
-
-modelo3 <- df %>% 
-  filter(abs(espectro_irregularidade - .5) < .1) %>% 
-  mutate(area_setor_quad = area_setor^2) %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA + area_setor + area_setor_quad, data = .) %>% 
-  summary()
-
-resultado <- modelsummary::modelsummary(
-  list(modelo1, modelo2, modelo3), 
-  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
-  statistic = NULL)
-
-
-resultado
-
-```
-
 ```{r removesPre_raster, echo = FALSE}
 remove(censo.pontos, lotes_irregulares, favela, IPTU.censo, IPTU.quadra, IPTU.setor, gg, 
-       df, modelo1, modelo2, modelo3,
+       df, modelo1, modelo2, modelo3, var.importance,
        split, test, train, rf_model)
 ```
 
@@ -886,19 +834,45 @@ ggsave("tex/imagens/rasters.pdf", gg, width = 8, height = 12)
 gg
 ```
 
-```{r plot_raster_topDens}
-# (result %>% 
-#   filter(area > 9*10^5) %>% 
-#   arrange(desc(densidade)) %>% 
-#   mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
-#   ggplot() +
-#   geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
-#   geom_tile(aes(x = x, y = y, fill = top)) +
-#   scale_fill_viridis_d() +
-#   theme_void()) %>% 
-#   plotly::ggplotly()
+```{r plot_raster_topDens, cache = TRUE}
+(result %>%
+  filter(area > max(area) * .99) %>%
+  arrange(desc(densidade)) %>%
+  mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
+  ggplot() +
+  geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
+  geom_tile(aes(x = x, y = y, fill = top, text = paste("pop: ", populacao, "\n", 
+                                                       "unidades: ", unidades, "\n",
+                                                       "domicilios: ", domicilios, "\n",
+                                                       "densidade: ", densidade, "\n",
+                                                       "area: ", area,
+                                                       sep = ""))) +
+  scale_fill_viridis_d() +
+  theme_void()) %>%
+  plotly::ggplotly()
 ```
 
+```{r tab_raster_topDens, cache = TRUE}
+tabela <- result %>%
+  filter(area > max(area) * .99) %>%
+  mutate(across(everything(), ~ replace_na(., 0))) %>% 
+  arrange(desc(densidade)) %>%
+  head(5) %>% 
+  mutate(localizacao = c("1. Paraisópolis", "2. Heliópolis ", "3. Sé (Bela Vista)", "4. Paraisópolis", "5. Heliópolis")) %>% 
+  select("Localização" = localizacao, "População" = populacao, "Domicílios (Censo)" = domicilios,
+         "Unidades (IPTU)" = unidades, "Espectro irregularidade" = espectro_irregularidade,
+         "Densidade habitacional" = densidade, "Área" = area) %>% 
+  pivot_longer(cols = -Localização, names_to = "Variável") %>% 
+  pivot_wider(id_cols = Variável, names_from = Localização, values_from = value) %>% 
+  gt() %>% 
+  tab_spanner("Favelas", columns = c(2,3,5,6)) %>% 
+  fmt_number(rows = c(1,2,3,5,6), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
+  fmt_percent(rows = 4) %>% 
+  tab_options(table.font.size = 12)
+
+gtsave(tabela, "tex/tabelas/top5.tex")
+tabela
+```
 
 ```{r plot_raster_balanco, cache = T}
 gg <- result %>% 
@@ -921,23 +895,14 @@ gg
 
 # Análise resultados via Raster
 
-```{r plot_scatter_indicadores}
-result %>% 
-  pivot_longer(c(verticalizacao, CA, cota_parte)) %>% 
-  ggplot(aes(x = value, y = log(densidade))) +
-  geom_point() +
-  facet_wrap(~name, scales = "free_x") +
-  theme_bw()
-```
-
-```{r analise_reg}
+```{r analise_reg, cache = TRUE}
 modelo1 <- result %>% 
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo2 <- result %>% 
-  filter(abs(espectro_irregularidade - .5) < .25) %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  filter(populacao > 0) %>% 
+  lm(log(densidade) ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo3 <- result %>% 
@@ -945,76 +910,100 @@ modelo3 <- result %>%
   lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
-modelsummary::modelsummary(
-  list("Todos setores" = modelo1, "Até 50% de irregularidade" = modelo2, "Até 20% de irregularidade" = modelo3), 
-  gof_omit = "RMSE", estimate = "{estimate} {stars}", 
-  statistic = NULL)
+modelo4 <- result %>% 
+  filter(abs(espectro_irregularidade - .5) < .1,
+         populacao > 0) %>% 
+  lm(log(densidade) ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  summary()
+
+modelos <- list("Nível (A)" = modelo1,
+                "Log (B)" = modelo2,
+                "Nível (C)" = modelo3,
+                "Log (D)" = modelo4)
+  
+tabela <- modelsummary(modelos,
+             estimate = c("Coeficiente" = "estimate"),
+             statistic = c("*" = "stars"),
+             shape = term ~ model + statistic,
+             output = "gt",
+             align = "lrlrlrlrl",
+             add_rows = modelos %>% 
+               sapply(get_gof) %>% 
+               rbind %>% 
+               as_tibble(rownames = 'variable') %>% 
+               unnest(cols = c(`Nível (A)`, `Log (B)`, `Nível (C)`, `Log (D)`)) %>% 
+               mutate(across(c(`Nível (A)`, `Log (B)`, `Nível (C)`, `Log (D)`), ~ 
+                               ifelse(variable == "nobs", round(.) %>% as.character(), sprintf('%.3f',.))),
+                      variable = case_when(variable == "r.squared" ~ "R2",
+                                           variable == "adj.r.squared" ~ "R2 ajustado",
+                                           variable == "nobs" ~ "Observações",
+                                           .default = NA)) %>% 
+               drop_na() %>% 
+               mutate(!!!list("As" = "", "Bs" = "", "Cs" = "", "Ds" = "")) %>% 
+               select(variable, "Nível (A)", As, "Log (B)", Bs, "Nível (C)", Cs, "Log (D)", Ds,)) %>% 
+  tab_spanner("Todos os setores", columns = 2:5) %>% 
+  tab_spanner("Espectro irregularidade: 40 a 60%", columns = 6:8) %>% 
+  tab_style(style = cell_borders(sides = "top",  weight = px(0.5)),
+            locations = cells_body(rows = 5)) %>% 
+  tab_options(table.font.size = 14)
+
+gtsave(tabela, "tex/tabelas/regressao.tex")
+tabela
 ```
 
 
-```{r analise_tree_rastar, cache = TRUE}
+
+```{r analise_tree_raster, cache = TRUE}
 split <- rsample::initial_split(result %>% 
                                   drop_na() %>% 
-                                  filter(area > 63950), 
+                                  filter(abs(espectro_irregularidade - .5) <.1,
+                                         area > 63950) %>% 
+                                  select(-c(populacao, domicilios, espectro_irregularidade, area)), 
                                 prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
 
-# rf_model <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
-#                      data = train, num.trees = 1000, importance = "permutation")
-# rf_preds <- predict(rf_model, data = test)$predictions
-
-rf_model_all <- ranger::ranger(densidade ~ ., 
+rf_model <- ranger::ranger(densidade ~ ., 
                      data = train, num.trees = 5000, importance = "permutation")
-rf_preds_all <- predict(rf_model_all, data = test)$predictions
+rf_preds <- predict(rf_model, data = test)$predictions
 
-ggplot(NULL, aes(x = rf_model_all$variable.importance,
-                 y = fct_reorder(names(rf_model_all$variable.importance),
-                                 rf_model_all$variable.importance))) +
+gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
+                 y = fct_reorder(names(rf_model$variable.importance),
+                                 rf_model$variable.importance))) +
     geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
+    labs(x = "Importância", y = "Variável", title = "") +
     theme_classic()
-```
-```{r}
-rf_model_rest <- ranger::ranger(densidade ~ ., 
-                     data = train %>% select(-c(populacao, domicilios)), num.trees = 5000, importance = "permutation")
-rf_preds_rest <- predict(rf_model_rest, data = test)$predictions
 
-ggplot(NULL, aes(x = rf_model_rest$variable.importance,
-                 y = fct_reorder(names(rf_model_rest$variable.importance),
-                                 rf_model_rest$variable.importance))) +
+ggsave("tex/imagens/var_importance.pdf", gg, width = 6.5, heigh = 4)
+gg
+```
+
+```{r analise_tree_raster_densmod, cache = TRUE}
+split <- rsample::initial_split(result %>% 
+                                  drop_na() %>% 
+                                  mutate(densidade = populacao / area_terreno) %>% 
+                                  filter(abs(espectro_irregularidade - .5) <.1,
+                                         area > 63950) %>% 
+                                  select(-c(populacao, domicilios, espectro_irregularidade, area)), 
+                                prop = 0.7)
+train <- rsample::training(split)
+test <- rsample::testing(split)
+
+rf_model <- ranger::ranger(densidade ~ ., 
+                     data = train, num.trees = 5000, importance = "permutation")
+rf_preds <- predict(rf_model, data = test)$predictions
+
+gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
+                 y = fct_reorder(names(rf_model$variable.importance),
+                                 rf_model$variable.importance))) +
     geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
+    labs(x = "Importância", y = "Variável", title = "") +
     theme_classic()
+
+ggsave("tex/imagens/var_importance_densmod.pdf", gg, width = 6.5, heigh = 4)
+gg
 ```
 
-```{r}
-rf_model_rest <- ranger::ranger(densidade ~ ., 
-                     data = train %>% 
-                       select(-c(populacao, domicilios)) %>% 
-                       filter(abs(espectro_irregularidade - .5) < .1), 
-                     num.trees = 5000, importance = "permutation")
-rf_preds_rest <- predict(rf_model_rest, data = test)$predictions
-
-ggplot(NULL, aes(x = rf_model_rest$variable.importance,
-                 y = fct_reorder(names(rf_model_rest$variable.importance),
-                                 rf_model_rest$variable.importance))) +
-    geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Predictor", y = "Importance", title = "Random Forest") +
-    theme_classic()
-```
-
-```{r analise_result}
-ggplot(data = tibble(x = rf_preds_all, y = test$densidade, espectro_irregularidade = test$espectro_irregularidade)) +
-  geom_point(aes(x = x, y = y, color = espectro_irregularidade), alpha = .5, size = 2.5) +
-  scale_color_gradient2(high = "blue", low = "red", mid = "grey", midpoint = .5) +
-  # coord_cartesian(xlim = c(0, .1), ylim = c(0, .1)) +
-  geom_abline(slope = 1) +
-  labs(x = "Previsto", y = "Observado") +
-  theme_classic() +
-  theme(aspect.ratio = 1)
-
-```
 
 
 

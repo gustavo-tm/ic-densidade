@@ -1,24 +1,21 @@
-\setlength{\LTpost}{0mm}
-\begin{longtable}{lccc}
+\begingroup
+\fontsize{10.5pt}{12.6pt}\selectfont
+\begin{longtable}{lrlrlrlrl}
 \toprule
- & \multicolumn{3}{c}{Variável dependente: densidade populacional} \\ 
-\cmidrule(lr){2-4}
-  & Todos setores & Até 50\% de irregularidade & Até 20\% de irregularidade \\ 
+ & \multicolumn{4}{c}{Todos os setores} & \multicolumn{3}{c}{Espectro irregularidade: 40 a 60\%} &  \\ 
+\cmidrule(lr){2-5} \cmidrule(lr){6-8}
+ & \multicolumn{2}{c}{Nível (A)    } & \multicolumn{2}{c}{Log (B)    } & \multicolumn{2}{c}{Nível (C)    } & \multicolumn{2}{c}{Log (D)    } \\ 
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+  & Coeficiente & * & Coeficiente  & *  & Coeficiente   & *   & Coeficiente    & *    \\ 
 \midrule\addlinespace[2.5pt]
-(Intercept) & 8603.264 *** & 4242.744 *** & 348.108 \\ 
- & (311.878) & (347.853) & (608.823) \\ 
-cota\_parte & 0.095 *** & -0.018 & -4.176 * \\ 
- & (0.016) & (0.057) & (1.712) \\ 
-verticalizacao & 1058.806 *** & 1146.076 *** & 1283.914 *** \\ 
- & (59.059) & (61.902) & (76.170) \\ 
-CA & 6524.131 *** & 7221.037 *** & 7874.627 *** \\ 
- & (132.933) & (138.888) & (171.647) \\ 
-Num.Obs. & 18531 & 15616 & 9363 \\ 
-R2 & 0.314 & 0.374 & 0.410 \\ 
-R2 Adj. & 0.314 & 0.374 & 0.409 \\ 
+(Intercept) & 11046.375 & *** & 8.987 & *** & 8632.310 & *** & 9.109 & *** \\ 
+cota\_parte & -0.004 &  & 0.000 & *** & -6.973 & *** & -0.002 & *** \\ 
+verticalizacao & -249.059 &  & -0.075 & ** & -48.242 &  & -0.026 &  \\ 
+CA & 1211.554 & *** & 0.243 & *** & 1672.931 & *** & 0.143 & *** \\ 
+{R2} & {0.022} & {} & {0.052} & {} & {0.249} & {} & {0.328} & {} \\ 
+R2 ajustado & 0.020 &  & 0.050 &  & 0.245 &  & 0.325 &  \\ 
+Observações & 1255 &  & 1254 &  & 553 &  & 553 &  \\ 
 \bottomrule
 \end{longtable}
-\begin{minipage}{\linewidth}
-Espectro de irregularidade é definido como unidades / (unidades + domicílios)\\
-\end{minipage}
+\endgroup
 
