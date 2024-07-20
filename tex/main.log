@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  18 JUL 2024 15:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  20 JUL 2024 13:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1312,10 +1312,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--106
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8] [9]
-<imagens/test.pdf, id=114, 505.89pt x 867.24pt>
-File: imagens/test.pdf Graphic file (type pdf)
-<use imagens/test.pdf>
-Package pdftex.def Info: imagens/test.pdf  used on input line 128.
+<imagens/mapa.pdf, id=114, 505.89pt x 867.24pt>
+File: imagens/mapa.pdf Graphic file (type pdf)
+<use imagens/mapa.pdf>
+Package pdftex.def Info: imagens/mapa.pdf  used on input line 128.
 (pdftex.def)             Requested size: 386.75278pt x 663.013pt.
 
 
@@ -1338,7 +1338,7 @@ LaTeX Warning: Text page 11 contains only floats.
 
 Overfull \vbox (4.76299pt too high) has occurred while \output is active []
 
- [11 <./imagens/test.pdf>]
+ [11 <./imagens/mapa.pdf>]
 <imagens/tree_area_construida.pdf, id=142, 487.8225pt x 361.35pt>
 File: imagens/tree_area_construida.pdf Graphic file (type pdf)
 <use imagens/tree_area_construida.pdf>
@@ -1398,7 +1398,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <imagens/rasters.pdf, id=266, 578.16pt x 867.24pt>
 File: imagens/rasters.pdf Graphic file (type pdf)
 <use imagens/rasters.pdf>
-Package pdftex.def Info: imagens/rasters.pdf  used on input line 253.
+Package pdftex.def Info: imagens/rasters.pdf  used on input line 251.
 (pdftex.def)             Requested size: 450.4525pt x 675.67699pt.
 
 
@@ -1413,18 +1413,30 @@ Overfull \vbox (16.50185pt too high) has occurred while \output is active []
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+[21
+
+] [22]
+<imagens/var_importance.pdf, id=339, 469.755pt x 289.08pt>
+File: imagens/var_importance.pdf Graphic file (type pdf)
+<use imagens/var_importance.pdf>
+Package pdftex.def Info: imagens/var_importance.pdf  used on input line 308.
+(pdftex.def)             Requested size: 364.00139pt x 223.99939pt.
+ [23 <./imagens/var_importance.pdf>]
+<imagens/var_importance_densmod.pdf, id=357, 469.755pt x 289.08pt>
+File: imagens/var_importance_densmod.pdf Graphic file (type pdf)
+<use imagens/var_importance_densmod.pdf>
+Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 321.
+(pdftex.def)             Requested size: 364.00139pt x 223.99939pt.
 ) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [21
-
-] [22]
+ [24 <./imagens/var_importance_densmod.pdf>]
 bibitemlist
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 77.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 82.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) [23
+)) [25
 
 ] 
 enddocument/afterlastpage: lastpage setting LastPage.
@@ -1438,20 +1450,20 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: 860E594F6FEF664E48BF86B1C5DE2392;918.
+(rerunfilecheck)             Checksum: 901B8FCAFCE35B4FF6C660C98CBB81CC;1061.
  ) 
 Here is how much of TeX's memory you used:
- 48949 strings out of 474370
- 1119730 string characters out of 5740535
- 1941754 words of memory out of 5000000
- 70183 multiletter control sequences out of 15000+600000
- 627029 words of font info for 272 fonts, out of 8000000 for 9000
+ 48997 strings out of 474370
+ 1120861 string characters out of 5740535
+ 1946754 words of memory out of 5000000
+ 70218 multiletter control sequences out of 15000+600000
+ 627479 words of font info for 276 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1579b,2499s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (23 pages, 10698763 bytes).
+Output written on main.pdf (25 pages, 10719964 bytes).
 PDF statistics:
- 425 PDF objects out of 1000 (max. 8388607)
- 74 named destinations out of 1000 (max. 500000)
- 78969 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 467 PDF objects out of 1000 (max. 8388607)
+ 81 named destinations out of 1000 (max. 500000)
+ 78979 words of extra memory for PDF output out of 89155 (max. 10000000)
 

@@ -1,20 +1,20 @@
 # Fdb version 4
-["bibtex main"] 1721326479.66162 "main.aux" "main.bbl" "main" 1721326483.31683 0
-  "./bibliografia.bib" 1721151890 4265 c1b55ab097ed5b225f6e92280cab003b ""
+["bibtex main"] 1721492880.57688 "main.aux" "main.bbl" "main" 1721493901.562 0
+  "./bibliografia.bib" 1721431793 4265 c1b55ab097ed5b225f6e92280cab003b ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/bibtex/bib/abntex2/abntex2-options.bib" 1543103229 5396 4eb260dac60f150ae608d45252853090 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/bibtex/bst/abntex2/abntex2-alf.bst" 1543103230 60064 0819ac8568f9a482510a46e3a8a6f605 ""
-  "main.aux" 1721326482 12519 870b4cb12e39991653153cb335269e93 "pdflatex"
+  "main.aux" 1721493900 13933 99f4e06b2245e13cbfa3bf686d6d070f "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["makeindex main.idx"] 1721249154.52624 "main.idx" "main.ind" "main" 1721326483.31642 0
-  "main.idx" 1721326481 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+["makeindex main.idx"] 1721431998.94271 "main.idx" "main.ind" "main" 1721493901.56151 0
+  "main.idx" 1721493899 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
   (generated)
   "main.ilg"
   "main.ind"
   (rewritten before read)
-["pdflatex"] 1721326479.93878 "c:/git/densidade/tex/main.tex" "main.pdf" "main" 1721326483.31729 0
+["pdflatex"] 1721493898.07084 "c:/git/densidade/tex/main.tex" "main.pdf" "main" 1721493901.56252 0
   "C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1716659654 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/gusth/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1716659646 24240354 82e8f79682626a11b5fe69dad5ca8106 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -319,7 +319,7 @@
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xpatch/xpatch.sty" 1585221260 8510 7803f78066c4f9d008405191a4b43073 ""
-  "c:/git/densidade/tex/main.tex" 1721157195 13483 bf2160627e97d865e86b34ca7c0b2891 ""
+  "c:/git/densidade/tex/main.tex" 1721493897 13483 bf2160627e97d865e86b34ca7c0b2891 ""
   "imagens/CA_eixos.png" 1713820115 35768 49c11f059ddb6deeea53b22272cfc161 ""
   "imagens/CA_macroareas.png" 1713820110 37967 2e75812768fba28d7416bceb91c06b13 ""
   "imagens/balanco_raster.pdf" 1721162634 747844 c0b5ab6ed7098790f616a1947dcb31ae ""
@@ -328,20 +328,22 @@
   "imagens/disparidade_censoIPTU.pdf" 1721157376 4564 fd3683c153a3f5bf1a1897865c6e0fa7 ""
   "imagens/indicadores.pdf" 1721157136 5516 4677ed1958871dab0e32f4093b388652 ""
   "imagens/indicadores_tempo.pdf" 1721157141 11459 e972f552697d13255a893cc6293476ab ""
+  "imagens/mapa.pdf" 1721157093 4164176 83019628d8c37dd916d6e37f0246d7bc ""
   "imagens/mapa_pontos.pdf" 1721164353 3062115 8c72f65c2525266228b6666c89ab603d ""
   "imagens/micro-2.tex" 1716143463 753 a5b1f808732561424a45f6113a84ed0e ""
   "imagens/micro.tex" 1715730172 515 680c10908e0dbcfc551140ae0aaf4721 ""
   "imagens/rasters.pdf" 1721162628 2312724 4115b353c61d360756b2270159ed1d91 ""
-  "imagens/test.pdf" 1721156710 4164176 66c17ea6a5f855289483381f095e1d66 ""
   "imagens/tree_area_construida.pdf" 1721157131 6793 9880dfa6f799da1be23e91eac232244d ""
-  "main.aux" 1721326482 12519 870b4cb12e39991653153cb335269e93 "pdflatex"
-  "main.bbl" 1721326479 4174 47d36a56c5a2223c1aa6167c8d66e9e7 "bibtex main"
-  "main.brf" 1721326482 918 860e594f6fef664e48bf86b1c5de2392 "pdflatex"
-  "main.ind" 1721249154 0 d41d8cd98f00b204e9800998ecf8427e "makeindex main.idx"
-  "main.tex" 1721157195 13483 bf2160627e97d865e86b34ca7c0b2891 ""
-  "tabelas/regressao.tex" 1721320186 1108 981e4f10d571a71f6405d9f3a94b668d ""
-  "tabelas/top5.tex" 1721326246 719 7beef2faa55a4b7c5b1064df6e7d448c ""
-  "texto.tex" 1721326475 42375 ea488f4cc3f69dc3c55dd96e3b7554fa ""
+  "imagens/var_importance.pdf" 1721493888 4785 8f183a2d8269e7515f32602774cdf1e3 ""
+  "imagens/var_importance_densmod.pdf" 1721326836 4788 3627e4ea109bcf63cbeb9285403bcb65 ""
+  "main.aux" 1721493900 13933 99f4e06b2245e13cbfa3bf686d6d070f "pdflatex"
+  "main.bbl" 1721492880 4663 cf6092a39f1e5a8bc8d0ad0b31a0a2e5 "bibtex main"
+  "main.brf" 1721493900 1061 901b8fcafce35b4ff6c660c98cbb81cc "pdflatex"
+  "main.ind" 1721431999 0 d41d8cd98f00b204e9800998ecf8427e "makeindex main.idx"
+  "main.tex" 1721493897 13483 bf2160627e97d865e86b34ca7c0b2891 ""
+  "tabelas/regressao.tex" 1721329304 1108 981e4f10d571a71f6405d9f3a94b668d ""
+  "tabelas/top5.tex" 1721326832 719 7beef2faa55a4b7c5b1064df6e7d448c ""
+  "texto.tex" 1721493439 47209 355fdb3c645408fa7c943a8cfbe0d863 ""
   (generated)
   "main.aux"
   "main.brf"
