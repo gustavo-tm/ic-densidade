@@ -30,7 +30,7 @@ library(units)
 
 library(modelsummary)
 library(gt)
-
+library(rayshader)
 
 set.seed(123)
 
@@ -316,6 +316,8 @@ gg <- IPTU %>%
   labs(fill = "Quantil", x = "Ano da construção")
 
 ggsave("tex/imagens/indicadores_tempo.pdf", gg, width = 8, height = 9)
+ggsave("tex/imagens/indicadores_tempo_small.pdf", gg, width = 5.5, height = 6)
+
 gg
 ```
 
@@ -563,6 +565,54 @@ IPTU.censo %>%
 
 ```
 
+```{r plot_lotecortado, cache = TRUE}
+geometria <- IPTU.censo %>% 
+                filter(id_setor_censitario == "355030810000143P") %>% 
+                select(geometria_setor_censitario) %>% 
+                st_as_sf()
+
+zoom <- 60
+
+bbox <- geometria %>% 
+  st_transform("epsg:31983") %>% 
+  st_bbox()
+
+x_min <- (bbox$xmin - zoom) %>% as.numeric()
+y_min <- (bbox$ymin - zoom) %>% as.numeric()
+x_max <- (bbox$xmax + zoom) %>% as.numeric()
+y_max <- (bbox$ymax + zoom) %>% as.numeric()
+
+corte <- list(xmin = x_min - zoom, ymin = y_min - zoom, 
+              xmax = x_max + zoom, ymax = y_max + zoom)
+
+df <- IPTU.censo %>%
+  st_as_sf() %>%
+  st_transform("epsg:31983") %>% 
+  st_crop(corte %>% unlist()) %>% 
+  mutate(percent_intersec = round(percent_intersec * 100))
+
+
+gg <- df %>% 
+  mutate(texto = ifelse(percent_intersec != 100, percent_intersec, NA),
+         color = ifelse(percent_intersec == 100, "blue", "red")) %>% 
+  ggplot() +
+  geom_sf(aes(geometry = geometria_setor_censitario), color = "black", fill = "grey", 
+          lwd = 1.5, linetype ="solid") +
+  geom_sf(aes(geometry = geometria_intersec, fill = color, color = color), 
+          alpha = .25, linetype = "dashed", lwd = 1) +
+  geom_sf_label(aes(geometry = geometria_intersec, label = texto), label.size = .01) +
+  scale_fill_manual(values = c("red" = "red", "blue" = "blue")) +
+  scale_color_manual(values = c("red" = "red", "blue" = "blue")) +
+  labs(fill = "Decil de densidade") +
+  theme_void() +
+  theme(legend.position = "none") +
+  coord_sf(xlim = c(x_min, x_max), ylim = c(y_min, y_max))
+  
+
+ggsave("tex/imagens/corte_lote.pdf", gg, width = abs(x_min - x_max)/40, height = abs(y_min- y_max)/40)
+
+gg
+```
 
 Teoricamente o número de domicílios deveria ser próximo do número de unidades habitacionais enunciadas pelo IPTU. Caso haja mais unidades habitacionais do que domicílios, houve algum equívoco na medição do censo, visto que entre domicílios não contam apenas os ocupados. Caso haja mais domicílios, há unidades que não são contribuintes do IPTU. O que é preocupante é que casos em que o número é diferente não são exceções.
 
@@ -676,7 +726,7 @@ modelsummary::datasummary_skim(df)
 ```
 
 
-```{r}
+```{r analise_espectroirr}
 df %>% 
   select(id_setor_censitario, populacao, domicilios, unidades, area_setor) %>% 
   bind_rows(censo %>% 
@@ -823,15 +873,55 @@ gg <- result %>%
   ggplot() +
   geom_sf(data = distrito) +
   geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = "grey") +
-  facet_wrap(~name) +
+  # facet_wrap(~name, ncol = 4) +
   theme_void() +
   theme(strip.text = element_text(size = 12)) +
   labs(fill = "Decil") +
   scale_fill_viridis_d()
 
-ggsave("tex/imagens/rasters.pdf", gg, width = 8, height = 12)
+ggsave("tex/imagens/rasters.pdf", gg + facet_wrap(~name, ncol = 2), width = 8, height = 12)
+ggsave("tex/imagens/rasters_wide.pdf", gg + facet_wrap(~name, ncol = 4), width = 16, height = 6)
 
-gg
+gg + facet_wrap(~name, ncol = 2)
+```
+
+```{r}
+represa <- read_sf("dados/represa/SIRGAS_SHP_represanivelmax.shp") %>% st_set_crs("epsg:31983")
+
+
+r <- raster::rasterize(x = result %>% select(x, y), y = raster,
+                       field = result %>%
+                         select(populacao))
+result.raster <- raster_to_matrix(r)
+
+
+result.raster %>% 
+  sphere_shade(texture = "imhof1") %>%
+  plot_3d(result.raster, zscale = 1000, triangulate = T)
+
+
+
+gg <- result %>% 
+  ggplot(aes(x = x, y = y)) +
+  geom_raster(aes(fill = populacao)) +
+  theme(
+        legend.position = "none",
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank()
+        ) +
+  labs(title = "População em São Paulo (2022)", x = "", y = "") +
+  coord_equal() +
+  scale_fill_viridis_c()
+
+# plot_gg(gg, width = 5, height = 6, raytrace = FALSE, preview = TRUE)
+
+plot_gg(gg, multicore = TRUE, scale = 150, width = 5, height = 7, pointcontract = 1, 
+        theta = -50, phi = 40, zoom = .65, fov = 16, windowsize = c(3840, 2160))
+
+render_snapshot("tex/imagens/mapa3d", software_render = TRUE, width = 3840, height = 2160)
+
 ```
 
 ```{r plot_raster_topDens, cache = TRUE}
@@ -850,6 +940,8 @@ gg
   scale_fill_viridis_d() +
   theme_void()) %>%
   plotly::ggplotly()
+
+
 ```
 
 ```{r tab_raster_topDens, cache = TRUE}
@@ -867,10 +959,11 @@ tabela <- result %>%
   gt() %>% 
   tab_spanner("Favelas", columns = c(2,3,5,6)) %>% 
   fmt_number(rows = c(1,2,3,5,6), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
-  fmt_percent(rows = 4) %>% 
-  tab_options(table.font.size = 12)
+  fmt_percent(rows = 4) 
 
-gtsave(tabela, "tex/tabelas/top5.tex")
+gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/top5.tex")
+gtsave(tabela %>% tab_options(table.font.size = 9), "tex/tabelas/top5_small.tex")
+
 tabela
 ```
 
@@ -942,12 +1035,13 @@ tabela <- modelsummary(modelos,
                mutate(!!!list("As" = "", "Bs" = "", "Cs" = "", "Ds" = "")) %>% 
                select(variable, "Nível (A)", As, "Log (B)", Bs, "Nível (C)", Cs, "Log (D)", Ds,)) %>% 
   tab_spanner("Todos os setores", columns = 2:5) %>% 
-  tab_spanner("Espectro irregularidade: 40 a 60%", columns = 6:8) %>% 
+  tab_spanner("Espectro irregularidade: 40 a 60%", columns = 6:9) %>% 
   tab_style(style = cell_borders(sides = "top",  weight = px(0.5)),
-            locations = cells_body(rows = 5)) %>% 
-  tab_options(table.font.size = 14)
+            locations = cells_body(rows = 5)) 
 
-gtsave(tabela, "tex/tabelas/regressao.tex")
+gtsave(tabela %>% tab_options(table.font.size = 14), "tex/tabelas/regressao.tex")
+gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/regressao_small.tex")
+
 tabela
 ```
 
@@ -982,13 +1076,13 @@ ggsave("tex/imagens/var_importance.pdf", gg, width = 6.5, heigh = 4)
 gg
 ```
 
-```{r}
+```{r plot_tree, cache = TRUE}
 rtree <- rpart::rpart(densidade ~ CA + cota_parte + verticalizacao, data = train)
 
 visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
 ```
 
-```{r}
+```{r analise_comparacao_modelos}
 lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train)
 lm_preds <- predict(lm_model, newdata = test)
 
@@ -997,6 +1091,7 @@ lm_preds <- predict(lm_model, newdata = test)
 1 - sum((lm_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
 
 ```
+
 
 ```{r analise_tree_raster_densmod, cache = TRUE}
 split <- rsample::initial_split(result %>% 

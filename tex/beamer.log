@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  20 JUL 2024 17:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  26 JUL 2024 11:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -127,8 +127,8 @@ Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
 \pgfmath@stack@operation=\toks25
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.basic.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.trigonometric.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.random.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.comparison.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.base.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.round.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.misc.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunctions.integerarithmetics.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.code.tex) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count289
-))) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.clo
-File: size11.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+))) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/extsizes\size9.clo
+File: size9.clo 1999/11/11 v1.4a NON-Standard LaTeX file (size option)
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.sty (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
@@ -782,30 +782,88 @@ Package biblatex Info: ... and expl3
 Package: blx-case-expl3 2024/03/21 v3.20 expl3 case changing code for biblatex
 )) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/graphics\dvipsnam.def
 File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\svgnam.def
+File: svgnam.def 2023/11/15 v3.01 Predefined colors according to SVG 1.1 (UK)
+) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/subfigure\subfigure.sty
+Package: subfigure 2002/07/30 v2.1.4 subfigure package
+\subfigtopskip=\skip87
+\subfigcapskip=\skip88
+\subfigcaptopadj=\dimen294
+\subfigbottomskip=\skip89
+\subfigcapmargin=\dimen295
+\subfiglabelskip=\skip90
+\c@subfigure=\count465
+\c@lofdepth=\count466
+\c@subtable=\count467
+\c@lotdepth=\count468
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/subfigure\subfigure.cfg)
+\subfig@top=\skip91
+\subfig@bottom=\skip92
+) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
+Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
+\LTleft=\skip93
+\LTright=\skip94
+\LTpre=\skip95
+\LTpost=\skip96
+\LTchunksize=\count469
+\LTcapwidth=\dimen296
+\LT@head=\box77
+\LT@firsthead=\box78
+\LT@foot=\box79
+\LT@lastfoot=\box80
+\LT@gbox=\box81
+\LT@cols=\count470
+\LT@rows=\count471
+\c@LT@tables=\count472
+\c@LT@chunks=\count473
+\LT@p@ftn=\toks46
+) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen297
+\lightrulewidth=\dimen298
+\cmidrulewidth=\dimen299
+\belowrulesep=\dimen300
+\belowbottomsep=\dimen301
+\aboverulesep=\dimen302
+\abovetopsep=\dimen303
+\cmidrulesep=\dimen304
+\cmidrulekern=\dimen305
+\defaultaddspace=\dimen306
+\@cmidla=\count474
+\@cmidlb=\count475
+\@aboverulesep=\dimen307
+\@belowrulesep=\dimen308
+\@thisruleclass=\count476
+\@lastruleclass=\count477
+\@thisrulewidth=\dimen309
 )
-\@quotelevel=\count465
-\@quotereset=\count466
- (beamer.aux)
+\@quotelevel=\count478
+\@quotereset=\count479
+ (beamer.aux (tabelas/regressao_small.aux))
 \openout1 = `beamer.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -826,12 +884,12 @@ LaTeX Font Info:    ... okay on input line 17.
 * \topmargin=-72.26999pt
 * \headheight=14.22636pt
 * \headsep=0.0pt
-* \topskip=11.0pt
+* \topskip=9.0pt
 * \footskip=14.22636pt
 * \marginparwidth=4.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=8.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -843,77 +901,77 @@ LaTeX Font Info:    ... okay on input line 17.
 
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count467
-\scratchdimen=\dimen294
-\scratchbox=\box77
-\nofMPsegments=\count468
-\nofMParguments=\count469
-\everyMPshowfont=\toks46
-\MPscratchCnt=\count470
-\MPscratchDim=\dimen295
-\MPnumerator=\count471
-\makeMPintoPDFobject=\count472
-\everyMPtoPDFconversion=\toks47
+\scratchcounter=\count480
+\scratchdimen=\dimen310
+\scratchbox=\box82
+\nofMPsegments=\count481
+\nofMParguments=\count482
+\everyMPshowfont=\toks47
+\MPscratchCnt=\count483
+\MPscratchDim=\dimen311
+\MPnumerator=\count484
+\makeMPintoPDFobject=\count485
+\everyMPtoPDFconversion=\toks48
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 17.
+Package hyperref Info: Link coloring OFF on input line 30.
  (beamer.out) (beamer.out)
 \@outlinefile=\write6
 \openout6 = `beamer.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 17.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 30.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 17.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 30.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 17.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 17.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 17.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 17.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 30.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 17.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 17.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 17.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 30.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 17.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 17.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 17.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 30.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 17.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 17.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 30.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 17.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 30.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 17.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 17.
+(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 17.
+(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 17.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 17.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 30.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 17.
-LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 17.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 30.
+LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 30.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `normal'
-(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 17.
+(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 30.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 17.
+(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 30.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on input line 17.
+(Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on input line 30.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-bibliography-dictionary-English.dict
@@ -1001,27 +1059,27 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'beamer.bbl' found.
  (beamer.bbl)
-Package biblatex Info: Reference section=0 on input line 17.
-Package biblatex Info: Reference segment=0 on input line 17.
+Package biblatex Info: Reference section=0 on input line 30.
+Package biblatex Info: Reference segment=0 on input line 30.
  (beamer.nav) [1{C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 ] (beamer.toc) [2
 
+] [3
+
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 40.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 74.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 40.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 74.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on input line 40.
+LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on input line 74.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/sansmathaccent\ot1mathkerncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mathkerncmss.
-) [3
-
-] [4
+) [4
 
 ] [5
 
@@ -1035,50 +1093,200 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 
 ] [10
 
-]
-<imagens/mapa.pdf, id=749, 505.89pt x 867.24pt>
-File: imagens/mapa.pdf Graphic file (type pdf)
-<use imagens/mapa.pdf>
-Package pdftex.def Info: imagens/mapa.pdf  used on input line 99.
-(pdftex.def)             Requested size: 130.75636pt x 224.1547pt.
-<imagens/densidade_distcentro.pdf, id=750, 361.35pt x 216.81pt>
-File: imagens/densidade_distcentro.pdf Graphic file (type pdf)
-<use imagens/densidade_distcentro.pdf>
-Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 99.
-(pdftex.def)             Requested size: 167.30318pt x 100.38222pt.
+] [11
 
-Overfull \vbox (22.07512pt too high) detected at line 99
- []
+] [12
 
-[11
+] (beamer.toc) [13
 
- <./imagens/mapa.pdf> <./imagens/densidade_distcentro.pdf>]
-<imagens/indicadores.pdf, id=826, 578.16pt x 198.7425pt>
-File: imagens/indicadores.pdf Graphic file (type pdf)
-<use imagens/indicadores.pdf>
-Package pdftex.def Info: imagens/indicadores.pdf  used on input line 111.
-(pdftex.def)             Requested size: 239.00558pt x 82.15817pt.
- [12
-
- <./imagens/indicadores.pdf>]
-<imagens/tree_area_construida.pdf, id=896, 487.8225pt x 361.35pt>
-File: imagens/tree_area_construida.pdf Graphic file (type pdf)
-<use imagens/tree_area_construida.pdf>
-Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 119.
-(pdftex.def)             Requested size: 302.61058pt x 224.1547pt.
-
-Overfull \vbox (20.07512pt too high) detected at line 119
- []
-
-[13
-
- <./imagens/tree_area_construida.pdf>] [14
+] [14
 
 ] [15
 
 ] [16
 
-] [17
+] (beamer.toc) [17
+
+]
+<imagens/mapa.pdf, id=1505, 505.89pt x 867.24pt>
+File: imagens/mapa.pdf Graphic file (type pdf)
+<use imagens/mapa.pdf>
+Package pdftex.def Info: imagens/mapa.pdf  used on input line 154.
+(pdftex.def)             Requested size: 131.30443pt x 225.10469pt.
+<imagens/densidade_distcentro.pdf, id=1506, 361.35pt x 216.81pt>
+File: imagens/densidade_distcentro.pdf Graphic file (type pdf)
+<use imagens/densidade_distcentro.pdf>
+Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 154.
+(pdftex.def)             Requested size: 167.30318pt x 100.38222pt.
+
+Overfull \vbox (15.16673pt too high) detected at line 154
+ []
+
+[18
+
+ <./imagens/mapa.pdf> <./imagens/densidade_distcentro.pdf>]
+<imagens/indicadores.pdf, id=1604, 578.16pt x 198.7425pt>
+File: imagens/indicadores.pdf Graphic file (type pdf)
+<use imagens/indicadores.pdf>
+Package pdftex.def Info: imagens/indicadores.pdf  used on input line 194.
+(pdftex.def)             Requested size: 338.59023pt x 116.38974pt.
+ [19
+
+ <./imagens/indicadores.pdf>]
+
+pdfTeX warning: pdflatex (file ./imagens/desenho.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<imagens/desenho.pdf, id=1699, 963.6pt x 542.025pt>
+File: imagens/desenho.pdf Graphic file (type pdf)
+<use imagens/desenho.pdf>
+Package pdftex.def Info: imagens/desenho.pdf  used on input line 203.
+(pdftex.def)             Requested size: 379.12544pt x 213.25632pt.
+
+Overfull \vbox (2.31836pt too high) detected at line 203
+ []
+
+[20
+
+ <./imagens/desenho.pdf>]
+File: imagens/desenho.pdf Graphic file (type pdf)
+<use imagens/desenho.pdf>
+Package pdftex.def Info: imagens/desenho.pdf  used on input line 215.
+(pdftex.def)             Requested size: 252.75029pt x 142.17328pt.
+ [21
+
+]
+<imagens/tree_area_construida.pdf, id=1904, 487.8225pt x 361.35pt>
+File: imagens/tree_area_construida.pdf Graphic file (type pdf)
+<use imagens/tree_area_construida.pdf>
+Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 223.
+(pdftex.def)             Requested size: 303.89087pt x 225.10469pt.
+
+Overfull \vbox (14.16673pt too high) detected at line 223
+ []
+
+[22
+
+ <./imagens/tree_area_construida.pdf>]
+<imagens/indicadores_tempo_small.pdf, id=2004, 397.485pt x 433.62pt>
+File: imagens/indicadores_tempo_small.pdf Graphic file (type pdf)
+<use imagens/indicadores_tempo_small.pdf>
+Package pdftex.def Info: imagens/indicadores_tempo_small.pdf  used on input line 246.
+(pdftex.def)             Requested size: 195.48503pt x 213.25632pt.
+<imagens/verticalizacao.pdf, id=2005, 433.62pt x 289.08pt>
+File: imagens/verticalizacao.pdf Graphic file (type pdf)
+<use imagens/verticalizacao.pdf>
+Package pdftex.def Info: imagens/verticalizacao.pdf  used on input line 246.
+(pdftex.def)             Requested size: 159.33604pt x 106.2257pt.
+
+Overfull \vbox (3.31836pt too high) detected at line 246
+ []
+
+[23
+
+ <./imagens/indicadores_tempo_small.pdf> <./imagens/verticalizacao.pdf>]
+<imagens/corte_lote.pdf, id=2102, 413.545pt x 345.29pt>
+File: imagens/corte_lote.pdf Graphic file (type pdf)
+<use imagens/corte_lote.pdf>
+Package pdftex.def Info: imagens/corte_lote.pdf  used on input line 256.
+(pdftex.def)             Requested size: 239.00558pt x 199.56232pt.
+ [24
+
+ <./imagens/corte_lote.pdf>]
+<imagens/rasters_wide.pdf, id=2197, 1156.32pt x 433.62pt>
+File: imagens/rasters_wide.pdf Graphic file (type pdf)
+<use imagens/rasters_wide.pdf>
+Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 266.
+(pdftex.def)             Requested size: 398.3386pt x 149.3741pt.
+ [25
+
+ <./imagens/rasters_wide.pdf>]
+<imagens/disparidade_censoIPTU.pdf, id=2293, 505.89pt x 216.81pt>
+File: imagens/disparidade_censoIPTU.pdf Graphic file (type pdf)
+<use imagens/disparidade_censoIPTU.pdf>
+Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 293.
+(pdftex.def)             Requested size: 278.83578pt x 119.5039pt.
+ [26
+
+ <./imagens/disparidade_censoIPTU.pdf>]
+<imagens/mapa_pontos.pdf, id=2385, 1156.32pt x 1445.4pt>
+File: imagens/mapa_pontos.pdf Graphic file (type pdf)
+<use imagens/mapa_pontos.pdf>
+Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 311.
+(pdftex.def)             Requested size: 199.1693pt x 248.95683pt.
+<imagens/balanco_raster.pdf, id=2386, 1156.32pt x 1445.4pt>
+File: imagens/balanco_raster.pdf Graphic file (type pdf)
+<use imagens/balanco_raster.pdf>
+Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 311.
+(pdftex.def)             Requested size: 199.1693pt x 248.95683pt.
+
+Overfull \vbox (43.96887pt too high) detected at line 311
+ []
+
+[27
+
+ <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] (tabelas/top5_small.tex) [28
+
+] (beamer.toc) [29
+
+] [30
+
+]
+<imagens/tabela_ibge.png, id=2762, 760.64175pt x 483.0045pt>
+File: imagens/tabela_ibge.png Graphic file (type png)
+<use imagens/tabela_ibge.png>
+Package pdftex.def Info: imagens/tabela_ibge.png  used on input line 355.
+(pdftex.def)             Requested size: 199.1693pt x 126.46997pt.
+ [31
+
+ <./imagens/tabela_ibge.png>]
+\openout2 = `tabelas/regressao_small.aux'.
+
+ (tabelas/regressao_small.tex) [32
+
+
+
+
+] [33
+
+] [34
+
+]
+<imagens/tree_example.png, id=3070, 1284.8pt x 888.31876pt>
+File: imagens/tree_example.png Graphic file (type png)
+<use imagens/tree_example.png>
+Package pdftex.def Info: imagens/tree_example.png  used on input line 400.
+(pdftex.def)             Requested size: 278.83578pt x 192.78757pt.
+ [35
+
+ <./imagens/tree_example.png>] [36
+
+]
+<imagens/var_importance.pdf, id=3245, 469.755pt x 289.08pt>
+File: imagens/var_importance.pdf Graphic file (type pdf)
+<use imagens/var_importance.pdf>
+Package pdftex.def Info: imagens/var_importance.pdf  used on input line 434.
+(pdftex.def)             Requested size: 318.67209pt x 196.10422pt.
+ [37
+
+ <./imagens/var_importance.pdf>]
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
+(Font)              using `OT1/cmss/bx/n' instead on input line 453.
+
+[38
+
+] [39
+
+]
+<imagens/var_importance_densmod.pdf, id=3513, 469.755pt x 289.08pt>
+File: imagens/var_importance_densmod.pdf Graphic file (type pdf)
+<use imagens/var_importance_densmod.pdf>
+Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 499.
+(pdftex.def)             Requested size: 318.67209pt x 196.10422pt.
+ [40
+
+ <./imagens/var_importance_densmod.pdf>] (beamer.toc) [41
+
+] [42
 
 ]
 \tf@nav=\write7
@@ -1090,11 +1298,15 @@ Overfull \vbox (20.07512pt too high) detected at line 119
 \tf@snm=\write9
 \openout9 = `beamer.snm'.
 
- (beamer.aux)
+ (beamer.aux (tabelas/regressao_small.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 Package rerunfilecheck Info: File `beamer.out' has not changed.
 (rerunfilecheck)             Checksum: DB7D39A2523E7E568CC04CD8D6E2660D;412.
 Package logreq Info: Writing requests to 'beamer.run.xml'.
@@ -1102,20 +1314,29 @@ Package logreq Info: Writing requests to 'beamer.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29349 strings out of 474370
- 580895 string characters out of 5740535
- 1946754 words of memory out of 5000000
- 51171 multiletter control sequences out of 15000+600000
- 564819 words of font info for 60 fonts, out of 8000000 for 9000
+ 30215 strings out of 474370
+ 597940 string characters out of 5740535
+ 1965754 words of memory out of 5000000
+ 51932 multiletter control sequences out of 15000+600000
+ 571714 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,19n,123p,700b,4317s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,19n,123p,940b,4317s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{cite.0@glaeser2011triumph} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{cite.0@coase2013problem} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{cite.0@brueckner2011lectures} has been referenced but does not exist, replaced by a fixed one
+
 
 pdfTeX warning (dest): name{cite.0@bauman2003city} has been referenced but does not exist, replaced by a fixed one
 
-<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on beamer.pdf (17 pages, 4399580 bytes).
+<C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
+Output written on beamer.pdf (42 pages, 11416890 bytes).
 PDF statistics:
- 1241 PDF objects out of 1440 (max. 8388607)
- 41 named destinations out of 1000 (max. 500000)
- 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3834 PDF objects out of 4296 (max. 8388607)
+ 95 named destinations out of 1000 (max. 500000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 
