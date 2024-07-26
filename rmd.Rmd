@@ -885,22 +885,7 @@ ggsave("tex/imagens/rasters_wide.pdf", gg + facet_wrap(~name, ncol = 4), width =
 gg + facet_wrap(~name, ncol = 2)
 ```
 
-```{r}
-represa <- read_sf("dados/represa/SIRGAS_SHP_represanivelmax.shp") %>% st_set_crs("epsg:31983")
-
-
-r <- raster::rasterize(x = result %>% select(x, y), y = raster,
-                       field = result %>%
-                         select(populacao))
-result.raster <- raster_to_matrix(r)
-
-
-result.raster %>% 
-  sphere_shade(texture = "imhof1") %>%
-  plot_3d(result.raster, zscale = 1000, triangulate = T)
-
-
-
+```{r plot_3d, cache = TRUE}
 gg <- result %>% 
   ggplot(aes(x = x, y = y)) +
   geom_raster(aes(fill = populacao)) +
@@ -918,10 +903,10 @@ gg <- result %>%
 # plot_gg(gg, width = 5, height = 6, raytrace = FALSE, preview = TRUE)
 
 plot_gg(gg, multicore = TRUE, scale = 150, width = 5, height = 7, pointcontract = 1, 
-        theta = -50, phi = 40, zoom = .65, fov = 16, windowsize = c(3840, 2160))
+        theta = -50, phi = 40, zoom = .65, fov = 8, windowsize = c(3840, 2160))
 
-render_snapshot("tex/imagens/mapa3d", software_render = TRUE, width = 3840, height = 2160)
-
+render_snapshot("tex/imagens/mapa3d", software_render = TRUE, width = 3840, height = 2160,
+                camera_lookat = c(50, -125, 50))
 ```
 
 ```{r plot_raster_topDens, cache = TRUE}
