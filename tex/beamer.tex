@@ -24,6 +24,23 @@
 \usepackage{booktabs}
 
 \usepackage{tikz}
+\usepackage{pgfplots} % Pacote para criação de gráficos
+
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{statistics, fillbetween}
+\usetikzlibrary{decorations.markings,decorations.pathmorphing, intersections}
+
+\pgfplotsset{
+    standard/.style={
+    axis line style = thick,
+    enlargelimits,
+    axis x line=middle,
+    axis y line=middle,
+    enlarge x limits=0.15,
+    enlarge y limits=0.15,
+    width = \linewidth
+    }
+}
 
 \title{Miopia ou controle? Análise da eficiência dos instrumentos regulatórios urbanos para determinação de densidade habitacional}
 \author{Gustavo Theil}
@@ -116,28 +133,88 @@
 
 \begin{frame}
     \frametitle{Regulação em São Paulo}
+
+    Os mecanismos de regulação são principalmente definidos pelo atual Plano Diretor Estratégico \cite[PDE]{PDE}
+
+    \begin{itemize}
+        \item Entre os 17 objetivos estabelecidos, ao menos nove estão relacionados a estratégias de adensamento urbano \cite{lima2021alem}
+        \item Dispositivos para imóveis já existentes e para novos empreendimentos
+        \item Principais instrumentos: CA, cota-parte e gabarito
+        \item Regulação incentiva adensamento em áreas mais desejáveis (no entorno de serviços públicos, trabalho, transporte público de alta capacidade, etc.)
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{O problema}
+    \centering
+
+    Estes instrumentos de regulação são capazes de determinar a densidade populacional?
+
 \end{frame}
 
 \section{Teoria}
 
 \begin{frame}
     \frametitle{Construção do modelo econômico}
+    \framesubtitle{\cite{papageorgiou2012essay, fujita1989urban,brueckner2011lectures}}
+
+    \begin{columns}
+        \column{.5\textwidth}
+        \begin{itemize}
+            \item Pessoas querem moradias e consumir bens
+            \begin{itemize}
+                \item Quanto mais perto do trabalho moram, menos é gasto com transporte
+                \item Com mais demanda pelas regiões centrais, mais caro fica o $m^2$
+            \end{itemize}
+            \item Imobiliárias querem maximizar seus lucros
+            \begin{itemize}
+                \item Prefere construir onde há um $m^2$ mais caro
+                \item Vale a pena construir mais pavimentos onde o custo marginal de verticalizar é igual ao custo marginal da terra
+            \end{itemize}
+            \item Resultado: A densidade aumenta na medida em que a distância ao centro diminui
+        \end{itemize}
+
+        \column{.5\textwidth}
+        \input{imagens/micro.tex}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Resultados principais}
+    \frametitle{Introdução de novos componentes}
+    \framesubtitle{\cite{papageorgiou2012essay, fujita1989urban,brueckner2011lectures}}
+
+    \begin{columns}
+        \column{.5\textwidth}
+        \input{imagens/micro.tex}
+
+        \column{.5\textwidth}
+        \input{imagens/micro-2.tex}
+    \end{columns}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Implicações em policy}
-\end{frame}
+% \begin{frame}
+%     \frametitle{Implicações em policy}
+% \end{frame}
 
 
 \section{Dados}
+
+% \begin{frame}
+%     \frametitle{Sumário}
+%     \begin{columns}
+%         \column{.5\textwidth}
+%         \tableofcontents[currentsection]
+
+%         \column{.5\textwidth}
+%         \begin{enumerate}
+%             \item Dados do Censo
+%             \item Dados do IPTU
+%             \item Cruzamento dos dados
+%             \item Resultados preliminares
+%         \end{enumerate}
+%     \end{columns}
+    
+% \end{frame}
 
 \begin{frame}
     \frametitle{Dados do Censo}
@@ -223,7 +300,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Dados do IPTU}
+    \frametitle{Área construída em São Paulo}
     \begin{figure}
         \centering
         \includegraphics[height = .95\textheight]{imagens/tree_area_construida.pdf}
@@ -510,7 +587,7 @@
 \section{Conclusão}
 
 \begin{frame}
-    \frametitle{Resultados}
+    \frametitle{?}
 \end{frame}
 
 % \section{teste2}

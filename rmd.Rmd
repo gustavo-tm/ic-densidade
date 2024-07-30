@@ -1093,6 +1093,10 @@ rf_model <- ranger::ranger(densidade ~ .,
                      data = train, num.trees = 5000, importance = "permutation")
 rf_preds <- predict(rf_model, data = test)$predictions
 
+rf_model_restrito <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
+                     data = train, num.trees = 5000, importance = "permutation")
+rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
+
 gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
                  y = fct_reorder(names(rf_model$variable.importance),
                                  rf_model$variable.importance))) +
@@ -1104,6 +1108,15 @@ ggsave("tex/imagens/var_importance_densmod.pdf", gg, width = 6.5, heigh = 4)
 gg
 ```
 
+```{r analise_comparacao_modelos}
+lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train)
+lm_preds <- predict(lm_model, newdata = test)
+
+1 - sum((rf_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
+1 - sum((rf_preds_restrito - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
+1 - sum((lm_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
+
+```
 
 
 

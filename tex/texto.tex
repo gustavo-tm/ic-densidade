@@ -264,6 +264,7 @@ Outra descoberta relevante é de que grande parte das áreas mais densas da cida
 
 
 \chapter{Análise}
+\label{sec:analise}
 
 Para identificar como os indicadores estão relacionados à densidade habitacional, foi elaborada uma regressão linear, especificada na Equação \ref{eq:reg}. 
 
@@ -287,7 +288,7 @@ Nesse sentido, foram feitas duas regressões, uma delas irrestrita, e a outra co
 
 O primeiro resultado interessante de ser analisado é como a verticalização não influencia a densidade. Do ponto de vista teórico isso faz sentido, visto que o número de andares é um fator principalmente estético, enquanto o CA computa quanto de área está sendo construída em relação ao tamanho do lote. Este resultado é consistente para as regressões (C) e (D), nas quais são considerados apenas os setores em que não há muita irregularidade e os estimadores são mais confiáveis. 
 
-Ao analisar a regressão (D), com a densidade em log, pode-se inferir que ao diminuir a cota parte em um metro quadrado, espera-se que com os outros componentes constantes, a densidade aumente em média 0,2\%. O aumento de 1 no CA, segundo os resultados da regressão (D), tem como consequência um aumento esperado médio na densidade de 14\%, caso os outros componentes se mantenham iguais. Infelizmente o intercepto não apresenta interpretação, visto que na prática é impossível que uma área tenha cota parte igual a zero, visto que é calculada pela área do terreno sobre o número de unidades, então apresenta o valor máximo igual o terreno e se aproxima de zero na medida em que o número de unidades é infinito. 
+Ao analisar a regressão (D), com a densidade em log, pode-se inferir que ao diminuir a cota parte em um metro quadrado, espera-se que com os outros componentes constantes, a densidade aumente em média 0,2\%. O aumento de 1 no CA, segundo os resultados da regressão (D), tem como consequência um aumento esperado médio na densidade de 14\%, caso os outros componentes se mantenham iguais. Infelizmente o intercepto não apresenta interpretação, visto que na prática é impossível que uma área tenha cota parte igual a zero, visto que é calculada pela área do terreno sobre o número de unidades, então apresenta o valor máximo igual a área do terreno e se aproxima de zero na medida em que o número de unidades é infinito. 
 
 Todavia, há dois pontos que devem ser levantados. Primeiramente, partindo da hipótese de que os instrumentos de regulação apresentados não são eficientes para definir a densidade, os parâmetros da regressão estarão contaminados pelo viés advindo da omissão de regressores relevantes. Em segundo lugar, a forma funcional não foi especificada com base em alguma teoria econômica ou algum tipo de embasamento. Inclusive, ela pode ser reescrita como apresentado na Equação \ref{eq:reg2}, na qual se observa o que está por trás dos indicadores.
 
@@ -296,7 +297,17 @@ Todavia, há dois pontos que devem ser levantados. Primeiramente, partindo da hi
     \label{eq:reg2}
 \end{equation}
 
-Nesse sentido, foi tomada uma abordagem diferente, na qual foi construída uma \textit{random forest} \cite{wright2015ranger}. A vantagem dessa abordagem é que não é necessário especificar uma forma funcional, já que a própria metodologia seleciona as variáveis mais importantes e cria nós de decisão, como demonstrado na Figura ???. Para construir o modelo de floresta de regressão, é necessário dividir a base de dados em treino e teste, de forma que não haja \textit{overfit}, ou seja, o modelo não ``decora'' os dados. Com o objetivo de tornar a comparação justa, foi refeita a equação de regressão linear, como especificado na Tabela \ref{tab:reg} (C), mas apenas com os dados de treino. Depois, tanto a floresta de regressão, quanto a regressão linear previram os dados de teste, para comparar os modelos. O $R^2$ na base de teste para o modelo de regressão linear foi de 23,9\%, enquanto da floresta de regressão foi de 28,8\%.
+Nesse sentido, foi tomada uma abordagem diferente, na qual foi construída uma \textit{random forest} \cite{wright2015ranger}. A vantagem dessa abordagem é que não é necessário especificar uma forma funcional, já que a própria metodologia seleciona as variáveis mais importantes. No exemplo de árvore de regressão apresentado na figura \ref{fig:tree}, cada círculo representa um nó de decisão, então no primeiro à esquerda, por exemplo, para cada observação da amostra gerada via \textit{bootstrap}, é testado se a sua cota parte é menor ou maior que 147 metros quadrados. A depender do resultado, a observação é direcionada para o próximo nó de decisão até que chegue na folha (quadrado na figura). É interessante notar que as folhas cuja predição apresenta a maior densidade são as com cota parte pequena e CA alto.
+
+\begin{figure}[h]
+    \centering
+    \caption{Exemplo de uma das árvores de regressão}
+    \includegraphics[width = .8\linewidth]{imagens/tree_example.png}
+    \label{fig:tree}
+\end{figure}
+
+Para construir o modelo de floresta de regressão, é necessário dividir a base de dados em treino e teste, de forma que não haja \textit{overfit}, ou seja, o modelo não ``decora'' os dados. Com o objetivo de tornar a comparação justa, foi refeita a equação de regressão linear, como especificado na Tabela \ref{tab:reg} (C), mas apenas com os dados de treino. Depois, tanto a floresta de regressão, quanto a regressão linear previram os dados de teste, para comparar os modelos. O $R^2$ na base de teste para o modelo de regressão linear foi de 23,9\%, enquanto da floresta de regressão foi de 28,8\%.
+
 
 Depois, foi fornecido à floresta de regressão mais informações que estão disponíveis na base de dados do IPTU, para avaliar se há algum outro componente importante para definir a densidade. Como resultado, o novo $R^2$ passou a ser de 84,8\%, o que é cerca de três vezes maior. Isso é um forte indicativo de que há variáveis muito importantes para definir a densidade que não estavam sendo consideradas. Entre as novas variáveis do modelo, estão o número total de unidades, a latitude e longitude do \textit{raster}, e as áreas do terreno, construída e ocupada.
 
@@ -323,3 +334,19 @@ Nesse sentido, para criar uma comparação justa, foram realizados novamente os 
 \end{figure}
 
 Com a densidade calculada sobre a área do terreno, a performance dos modelos aumentaram bastante, sendo que a regressão linear passa a ter um $R^2$ na base de teste de 43,6\%, a \textit{random forest} de 72,7\% e quando incluídas todas as variáveis, o $R^2$ aumenta marginalmente para 79,6\%. Isso significa que as outras variáveis além dos três instrumentos não agregam muitas novas informações para explicar a densidade.
+
+Portanto, os três instrumentos de regulação são mais eficientes ao definir a densidade populacional ao se considerar a área de terreno ao invés da total. Em termos práticos, se a área da região for composta por lotes não residenciais, elementos naturais como rios, ou outros fatores, os instrumentos perdem a eficácia. Entretanto, se um novo lote residencial for construído, apenas com base nos três indicadores é possível ter uma boa ideia de qual densidade ele apresentará, sendo que outras informações como o número de unidades, não ajudariam muito. 
+
+Portanto, os três instrumentos de regulação são mais eficientes para definir a densidade populacional quando se considera a área do terreno, ao invés da área total. Em termos práticos, a eficácia desses instrumentos diminui se a região incluir lotes não residenciais, elementos naturais como rios, ou outros fatores. No entanto, para um novo lote residencial, é possível prever a densidade com base nesses três indicadores, sendo que outras informações, como o número de unidades, não agregariam muita precisão adicional.
+
+Todavia, há outras variáveis que não estão contempladas na base de dados do IPTU ou do censo, que podem ser muito importantes, como proximidade a ofertas de emprego ou meios de tranporte de alta capacidade, amenidades, etc. Em outras palavras, não é possível afirmar que os três indicadores utilizados sejam os mais eficientes, mas eles certamente são bons indicativos de densidade populacional.
+
+\chapter{Conclusão}
+
+Responder categoricamente que os instrumentos são eficientes seria um forte reducionismo, visto que eficiência é um espectro largo e relativamente arbitrário. Ainda assim, os testes de hipótese apresentados ao longo da Seção \ref{sec:analise} apontam que o CA e a cota parte são importantes para definir a densidade populacional de uma região, enquanto a verticalização não. Ainda, foi quantificado que a cota parte apresenta uma maior importância, ao comparada com o CA.
+
+Todavia, também foi discutido como outros fatores que não foram medidos podem impactar a densidade. A teoria econômica indica que a proximidade à oferta de emprego é um fator central na fisiologia da cidade, por exemplo. No entanto este fator não é considerado no cálculo do CA ou cota parte permitida em cada região e, portanto, não foi considerada nessa análise. Como uma futura agenda de pesquisa é importante investigar estes outros fatores e como eles se comparam com a eficiência dos atuais instrumentos na determinação da densidade.
+
+Outra descoberta relevante foi sobre a gravidade da miopia que a prefeitura apresenta sobre a moradia na cidade, haja vista os milhões de domicílios que não estão inscritos no Cadastro Imobiliário Fiscal, e, portanto, não pagam imposto e não necessariamente seguem as regulamentações impostas para garantir o cumprimento dos objetivos da cidade. Em termos numéricos, foi estimado que aproximadamente 53\% dos domicílios estão cadastrado, enquanto todos os outros estão por fora dos sistemas públicos.
+
+Nesse sentido, mesmo que os instrumentos sejam os mais eficientes possíveis, eles podem impactar no máximo metade da cidade, enquanto a outra metade é regida por instituições informais. Entretanto, é importante destacar que observa-se nessas regiões de moradia informal um adensamento muitas vezes maior do que em regiões regulares. A região mais densa da cidade é a favela de Paraisópolis, o que indica que há forças de adensamento mais fortes que a regulação.
