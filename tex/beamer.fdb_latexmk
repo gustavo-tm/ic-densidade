@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber beamer"] 0 "beamer.bcf" "beamer.bbl" "beamer" 1722030015.67678 -1
-  "beamer.bcf" 1722030015 114288 fb7d7def11ca92aaff67906035026032 "pdflatex"
+["biber beamer"] 0 "beamer.bcf" "beamer.bbl" "beamer" 1722397190.4617 -1
+  "beamer.bcf" 1722397189 114288 fb7d7def11ca92aaff67906035026032 "pdflatex"
   "bibliografia.bib" 1721431793 4265 c1b55ab097ed5b225f6e92280cab003b ""
   (generated)
   "beamer.bbl"
   "beamer.blg"
   (rewritten before read)
-["pdflatex"] 1722029999.82397 "c:/git/densidade/tex/beamer.tex" "beamer.pdf" "beamer" 1722030015.67792 0
+["pdflatex"] 1722397176.38935 "c:/git/densidade/tex/beamer.tex" "beamer.pdf" "beamer" 1722397190.46271 0
   "C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1721592552 82686 2381c3433487640bf26aa76a10db7eb2 ""
   "C:/Users/gusth/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcss0900.pk" 1722022313 9548 5e63f7c3cd87fa00b0f5457846facfea ""
   "C:/Users/gusth/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1716659646 24240354 82e8f79682626a11b5fe69dad5ca8106 ""
@@ -43,6 +43,7 @@
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/tfm/public/sansmathaccent/mathkerncmssi8.tfm" 1363549514 1676 fb6c6a335484692abff897d6e8965829 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/tfm/public/sansmathaccent/mathkerncmssi9.tfm" 1363549522 1700 6cce8f71de5b3d676f417bc2a77d1db2 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1247596667 36741 0ee9e374ec3e30da87cdfb0ea3575226 ""
+  "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1247596666 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb" 1247596667 36094 798f80770b3b148ceedd006d487db67c ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb" 1247596666 24457 5cbb7bdf209d5d1ce9892a9b80a307cc ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb" 1247596666 24393 3b7eb51a67a0a62aec5849271bdb9c2e ""
@@ -309,14 +310,14 @@
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/svgnam.def" 1700127522 4705 ec4d2f4b7125d5a5145cc9aabae1d54b ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "C:/Users/gusth/AppData/Local/Programs/MiKTeX/tex/latex/xpatch/xpatch.sty" 1585221260 8510 7803f78066c4f9d008405191a4b43073 ""
-  "beamer.aux" 1722030015 8626 d788875afc1337c9c11f7be0237ab540 "pdflatex"
+  "beamer.aux" 1722397189 8626 d788875afc1337c9c11f7be0237ab540 "pdflatex"
   "beamer.bbl" 1722023402 11151 119478ac512c91bed230e9cab6e963a0 "biber beamer"
-  "beamer.nav" 1722030015 4371 17b0e42d84501fac89eb4edd02d8236b "pdflatex"
-  "beamer.out" 1722030015 412 db7d39a2523e7e568cc04cd8d6e2660d "pdflatex"
-  "beamer.run.xml" 1722030015 2459 f09902125f8329f3abbe1d82a83604e4 "pdflatex"
-  "beamer.tex" 1722029998 20761 03f4fd0cad783dcbe9a4a66d16d2281d ""
-  "beamer.toc" 1722030015 225 d80ccd9a6aa01dcaecc43d1291112d0e "pdflatex"
-  "c:/git/densidade/tex/beamer.tex" 1722029998 20761 03f4fd0cad783dcbe9a4a66d16d2281d ""
+  "beamer.nav" 1722397190 4371 17b0e42d84501fac89eb4edd02d8236b "pdflatex"
+  "beamer.out" 1722397189 412 db7d39a2523e7e568cc04cd8d6e2660d "pdflatex"
+  "beamer.run.xml" 1722397190 2459 f09902125f8329f3abbe1d82a83604e4 "pdflatex"
+  "beamer.tex" 1722397175 21438 8cb2740d3935ab3f791d12805746cd37 ""
+  "beamer.toc" 1722397190 225 d80ccd9a6aa01dcaecc43d1291112d0e "pdflatex"
+  "c:/git/densidade/tex/beamer.tex" 1722397175 21438 8cb2740d3935ab3f791d12805746cd37 ""
   "imagens/balanco_raster.pdf" 1721162634 747844 c0b5ab6ed7098790f616a1947dcb31ae ""
   "imagens/corte_lote.pdf" 1721764291 31082 6b2621d4a42846f3e6cb2a4616c68c63 ""
   "imagens/densidade_distcentro.pdf" 1721157110 5099 f1e6e2f9ef1eb2885ee90c297b956e8a ""
@@ -333,10 +334,10 @@
   "imagens/tabela_ibge.png" 1721664302 129030 3d49b4c3a143bebbda4495648446bdee ""
   "imagens/tree_area_construida.pdf" 1721157131 6793 9880dfa6f799da1be23e91eac232244d ""
   "imagens/tree_example.png" 1721765601 255631 0d13f9ea33a4ff112f0b0257a20d04db ""
-  "imagens/var_importance.pdf" 1721765256 4782 1ca622eecfad4406835870699e2dbc14 ""
-  "imagens/var_importance_densmod.pdf" 1721326836 4788 3627e4ea109bcf63cbeb9285403bcb65 ""
+  "imagens/var_importance.pdf" 1722297952 4802 85adcba684f7c80bdcbd753552b4f537 ""
+  "imagens/var_importance_densmod.pdf" 1722297974 4825 4416801474d28bf4e3ccffd3f04c82cd ""
   "imagens/verticalizacao.pdf" 1721157236 4563 8f38aebf7d811104119652441325dc18 ""
-  "tabelas/regressao_small.aux" 1722030012 4337 82756a1ab03ebe8849d15fad8aa66701 "pdflatex"
+  "tabelas/regressao_small.aux" 1722397187 4337 82756a1ab03ebe8849d15fad8aa66701 "pdflatex"
   "tabelas/regressao_small.tex" 1721764307 1104 ba4cb796df365c8d57a9be709fcc10a5 ""
   "tabelas/top5_small.tex" 1721764306 718 69552966ee089119de1394ee6c28c096 ""
   (generated)
