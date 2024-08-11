@@ -1,3 +1,12 @@
+% análise da capacidade de determinação OU insumo Evidências sobfre eficácia  (titulo)
+
+% Tabela de correlação (resultados preliminares)
+
+% VERTICALIZAÇÃO FATOR ESTÉTICO NÃO -> fórmula de adiron, era estimulado desde a década de 70, recuos davam ganhos de CA
+
+% Discutir resultados melhor: menos verticalização não necessariamente gera menos adensamento
+
+
 \chapter{Introdução}
 
 \subsection*{\textbf{Por que cidades existem?}}
@@ -163,7 +172,7 @@ Em São Paulo, 70\% da área construída é residencial, sendo que o padrão res
 
 \begin{figure}[h]
     \centering
-    \caption{Distribuição dos indicadores em cada lote de São Paulo}
+    \caption{Distribuição dos indicadores em cada lote residencial de São Paulo}
     \includegraphics[width = \linewidth]{imagens/indicadores.pdf}
     \label{fig:histogramas}
 \end{figure}
@@ -234,25 +243,29 @@ Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é 
     \label{fig:erros-join}
 \end{figure}
 
-Na tabela \ref{tab:top5} estão descritas as 5 células do \textit{raster} que apresentam maior densidade populacional. É interessante observar que 4 das 5 regiões mais densas da cidade são de territórios de favelas e repleta quase completamente de domicílios que não estão registrados no IPTU. A densidade habitacional do município de São Paulo no geral é de 7.529 habitantes por quilômetro quadrado, o que significa que esta célula do \textit{raster} posicionada na região de Paraisópolis apresenta uma densidade quase quatro vezes maior do que o resto da cidade.
+Na Tabela \ref{tab:top5} estão descritas as 5 células do \textit{raster} que apresentam maior densidade populacional. É interessante observar que 4 das 5 regiões mais densas da cidade são de territórios de favelas e repleta quase completamente de domicílios que não estão registrados no IPTU. A densidade habitacional do município de São Paulo no geral é de 7.529 habitantes por quilômetro quadrado, o que significa que esta célula do \textit{raster} posicionada na região de Paraisópolis apresenta uma densidade quase quatro vezes maior do que o resto da cidade.
 
-\begin{table}[h]
-    \caption{Células do \textit{raster} que apresentam a maior densidade populacional}
-    \input{tabelas/top5.tex}
-    \label{tab:top5}
-    \addtocounter{table}{-1}
-\end{table}
+\input{tabelas/top5.tex}
+
 
 Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte. É importante destacar que quanto mais lotes irregulares há em uma região, menos confiáveis são os indicadores calculados de CA, cota parte e verticalização, visto que estes são inteiramente calculados com base nos dados do IPTU, que são disponíveis apenas para lotes regulares.
 
 \begin{figure}[h]
     \centering
     \caption{Rasters com os indicadores utilizados na regulação}
-    \includegraphics[width = .99\linewidth]{imagens/rasters.pdf}
+    \includegraphics[width = \linewidth]{imagens/rasters_wide.pdf}
     \label{fig:rasters}
 \end{figure}
 
-\clearpage
+Por fim, foi construída uma matriz de correlação (Figura \ref{fig:corplot}) entre as variáveis mais importantes. É notável a baixa correlação linear que se observa entre a densidade e outras variáveis, mas na seção seguinte serão exploradas essas relações com maior profundidade. O importante de se observar é a forte correlação entre a verticalização e o CA, o que é natural, visto que o cálculo da verticalização utiliza o CA, como demonstrado na Figura \ref{fig:desenho}. Um raciocínio semelhante se aplica à taxa de ocupação, visto que para um gabarito pré estabelecido, quando maior a taxa de ocupação, maior o CA.
+
+\begin{figure}[h]
+    \centering
+    \caption{Matriz de correlação entre as variáveis de interesse}
+    \includegraphics[width = .6\textwidth]{imagens/corrplot.pdf}
+    \label{fig:corplot}
+\end{figure}
+
 
 \section*{Alguns resultados preliminares}
 

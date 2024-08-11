@@ -855,12 +855,7 @@ result %>%
 ```
 
 
-```{r data_raster_rasterize, cache = T}
-# r <- raster::rasterize(x = result %>% select(x, y), y = raster, 
-#                        field = result %>% 
-#                          select(CA, cota_parte, verticalizacao, densidade) %>% 
-#                          mutate(across(c(CA, cota_parte, verticalizacao), ~ replace_na(.x, 0))))
-
+```{r plot_rasters, cache = T}
 gg <- result %>% 
   pivot_longer(c(CA, cota_parte, verticalizacao, densidade)) %>% 
   group_by(name) %>% 
@@ -872,7 +867,7 @@ gg <- result %>%
                           .default = NA)) %>% 
   ggplot() +
   geom_sf(data = distrito) +
-  geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = "grey") +
+  geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = NA, lwd = .01) +
   # facet_wrap(~name, ncol = 4) +
   theme_void() +
   theme(strip.text = element_text(size = 12)) +
@@ -946,7 +941,15 @@ tabela <- result %>%
   fmt_number(rows = c(1,2,3,5,6), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
   fmt_percent(rows = 4) 
 
-gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/top5.tex")
+# gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/top5.tex")
+# workaround bug da gt quando exporta para latex
+as_latex(tabela %>% tab_options(table.font.size = 13)) |> 
+  as.character() |> 
+  sub(pattern = "(\\\\begin\\{longtable\\}\\{lrrrrr\\})",
+  replacement = "\\1 \n\\\\caption{Células do \\\\textit{raster} que apresentam a maior densidade populacional}\n\\\\label{tab:top5}\\\\\\\\",
+  x = _) |> 
+  write_lines("tex/tabelas/top5.tex")
+
 gtsave(tabela %>% tab_options(table.font.size = 9), "tex/tabelas/top5_small.tex")
 
 tabela
@@ -970,6 +973,22 @@ ggsave("tex/imagens/balanco_raster.pdf", gg, width = 16, height = 20)
 
 gg
 ```
+```{r plot_corr, cache = TRUE}
+gg <- ggcorrplot::ggcorrplot(result |> 
+                     mutate(tx_ocupacao = area_ocupada / area_terreno) |> 
+                     select(tx_ocupacao, verticalizacao, cota_parte, CA, densidade) |> 
+                     drop_na() |> 
+                     cor(),
+                     show.diag = FALSE, type = "upper", legend.title = "Correlação", 
+                     colors = c("red", "white", "blue"), lab = TRUE, outline.color = "white") + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+ggsave("tex/imagens/corrplot.pdf", gg, width = 5, height = 4)
+
+gg
+```
+
 
 # Análise resultados via Raster
 
