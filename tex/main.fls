@@ -553,6 +553,9 @@ INPUT texto.tex
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\helvetic\phvr8t.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\helvetic\phvr8t.vf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\helvetic\phvr8r.tfm
+INPUT .\imagens\micro gabarito.tex
+INPUT .\imagens\micro gabarito.tex
+INPUT imagens\micro gabarito.tex
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
@@ -572,23 +575,14 @@ INPUT .\imagens\CA_eixos.png
 INPUT .\imagens\CA_eixos.png
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
-INPUT .\imagens\desenho_proposta.pdf
-INPUT .\imagens\desenho_proposta.pdf
-INPUT .\imagens\desenho_proposta.pdf
-INPUT .\imagens\desenho_proposta.pdf
-INPUT .\imagens\desenho_proposta.pdf
-INPUT .\imagens\desenho_proposta.pdf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
 INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
-INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
-INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
-INPUT C:\Users\gusth\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
-INPUT .\imagens\micro.tex
-INPUT .\imagens\micro.tex
-INPUT imagens\micro.tex
-INPUT .\imagens\micro-2.tex
-INPUT .\imagens\micro-2.tex
-INPUT imagens\micro-2.tex
+INPUT .\imagens\desenho_proposta.pdf
+INPUT .\imagens\desenho_proposta.pdf
+INPUT .\imagens\desenho_proposta.pdf
+INPUT .\imagens\desenho_proposta.pdf
+INPUT .\imagens\desenho_proposta.pdf
+INPUT .\imagens\desenho_proposta.pdf
 INPUT .\imagens\mapa.pdf
 INPUT .\imagens\mapa.pdf
 INPUT .\imagens\mapa.pdf

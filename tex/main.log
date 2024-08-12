@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  11 AUG 2024 18:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  12 AUG 2024 00:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1148,28 +1148,32 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 203.
 
 
 Writing index file main.idx 
-(main.aux)
+(main.aux
+
+LaTeX Warning: Label `fig:CA' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 252.
-LaTeX Font Info:    ... okay on input line 252.
-Package hyperref Info: Link coloring ON on input line 252.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 246.
+LaTeX Font Info:    ... okay on input line 246.
+Package hyperref Info: Link coloring ON on input line 246.
 \myptabbox=\box93
 \myptabboxwidth=\skip274
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
@@ -1192,40 +1196,40 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 252.
-Package microtype Info: Applying patch `item' on input line 252.
-Package microtype Info: Applying patch `toc' on input line 252.
-Package microtype Info: Applying patch `eqnum' on input line 252.
-Package microtype Info: Applying patch `footnote' on input line 252.
-Package microtype Info: Applying patch `verbatim' on input line 252.
+LaTeX Info: Redefining \microtypecontext on input line 246.
+Package microtype Info: Applying patch `item' on input line 246.
+Package microtype Info: Applying patch `toc' on input line 246.
+Package microtype Info: Applying patch `eqnum' on input line 246.
+Package microtype Info: Applying patch `footnote' on input line 246.
+Package microtype Info: Applying patch `verbatim' on input line 246.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 252.
+LaTeX Info: Redefining \showhyphens on input line 246.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-LaTeX Info: Redefining \celsius on input line 252.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 252.
+LaTeX Info: Redefining \celsius on input line 246.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 246.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 252.
-Package gensymb Info: Using \Omega for \ohm on input line 252.
+LaTeX Info: Redefining \ohm on input line 246.
+Package gensymb Info: Using \Omega for \ohm on input line 246.
 
 Package gensymb Warning: Not defining \micro.
 
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\translations-basic-dictionary-brazil.trsl
 File: translations-basic-dictionary-brazil.trsl (brazil translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 252.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 246.
 
 Package pgfplots notification 'compat/show suggested version=true': document has been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
@@ -1238,7 +1242,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 264.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 258.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
@@ -1251,13 +1255,13 @@ Package microtype Info: Loading generic protrusion settings for font family
 {C:/Users/gusth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}] (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 266.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 260.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 266.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 260.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
@@ -1266,18 +1270,18 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.266 
+l.260 
        [1
 
 
 
 ]
-Overfull \hbox (16.12639pt too wide) in paragraph at lines 281--283
+Overfull \hbox (16.12639pt too wide) in paragraph at lines 275--277
 []  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--283
+Underfull \hbox (badness 10000) in paragraph at lines 275--277
 
  []
 
@@ -1295,203 +1299,191 @@ Package babel Info: Importing basic data for english
 ] (texto.tex [6
 
 
-] [7]
-<imagens/CA_macroareas.png, id=97, 963.6pt x 297.11pt>
+] [7] (imagens/micro gabarito.tex
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no t in font nullfont!
+)
+Overfull \hbox (29.1017pt too wide) in paragraph at lines 29--38
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--38
+
+ []
+
+[8]
+<imagens/CA_macroareas.png, id=119, 963.6pt x 297.11pt>
 File: imagens/CA_macroareas.png Graphic file (type png)
 <use imagens/CA_macroareas.png>
-Package pdftex.def Info: imagens/CA_macroareas.png  used on input line 52.
+Package pdftex.def Info: imagens/CA_macroareas.png  used on input line 67.
 (pdftex.def)             Requested size: 409.49722pt x 126.25874pt.
-<imagens/CA_eixos.png, id=98, 963.6pt x 294.09875pt>
+<imagens/CA_eixos.png, id=120, 963.6pt x 294.09875pt>
 File: imagens/CA_eixos.png Graphic file (type png)
 <use imagens/CA_eixos.png>
-Package pdftex.def Info: imagens/CA_eixos.png  used on input line 57.
+Package pdftex.def Info: imagens/CA_eixos.png  used on input line 72.
 (pdftex.def)             Requested size: 409.49722pt x 124.97908pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--59
+Underfull \hbox (badness 10000) in paragraph at lines 74--74
 [][]|\T1/ptm/m/n/12 (+20) Fonte: [][]$<[]https : / / gestaourbana . prefeitura . sp . gov . br / marco-[]regulatorio / plano-[]diretor /
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8]
+[9] [10 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>]
 
 pdfTeX warning: pdflatex (file ./imagens/desenho_proposta.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<imagens/desenho_proposta.pdf, id=112, 794.97pt x 180.675pt>
+<imagens/desenho_proposta.pdf, id=140, 794.97pt x 180.675pt>
 File: imagens/desenho_proposta.pdf Graphic file (type pdf)
 <use imagens/desenho_proposta.pdf>
-Package pdftex.def Info: imagens/desenho_proposta.pdf  used on input line 75.
+Package pdftex.def Info: imagens/desenho_proposta.pdf  used on input line 92.
 (pdftex.def)             Requested size: 455.0pt x 103.41037pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>] [10 <./imagens/desenho_proposta.pdf>] [11
-
-] (imagens/micro.tex)
-Overfull \hbox (14.55237pt too wide) in paragraph at lines 24--102
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 24--102
-
- []
-
-(imagens/micro-2.tex)
-Overfull \hbox (14.55237pt too wide) in paragraph at lines 28--116
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 28--116
-
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[12] [13]
-<imagens/mapa.pdf, id=174, 505.89pt x 867.24pt>
+[11 <./imagens/desenho_proposta.pdf>]
+<imagens/mapa.pdf, id=167, 505.89pt x 867.24pt>
 File: imagens/mapa.pdf Graphic file (type pdf)
 <use imagens/mapa.pdf>
-Package pdftex.def Info: imagens/mapa.pdf  used on input line 138.
+Package pdftex.def Info: imagens/mapa.pdf  used on input line 111.
 (pdftex.def)             Requested size: 386.75278pt x 663.013pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<imagens/densidade_distcentro.pdf, id=179, 361.35pt x 216.81pt>
+<imagens/densidade_distcentro.pdf, id=172, 361.35pt x 216.81pt>
 File: imagens/densidade_distcentro.pdf Graphic file (type pdf)
 <use imagens/densidade_distcentro.pdf>
-Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 154.
+Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 127.
 (pdftex.def)             Requested size: 341.25pt x 204.75089pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[14
+[12
 
 ]
 
-LaTeX Warning: Text page 15 contains only floats.
+LaTeX Warning: Text page 13 contains only floats.
 
 
 Overfull \vbox (4.76299pt too high) has occurred while \output is active []
 
- [15 <./imagens/mapa.pdf>]
-<imagens/tree_area_construida.pdf, id=201, 487.8225pt x 361.35pt>
+ [13 <./imagens/mapa.pdf>]
+<imagens/tree_area_construida.pdf, id=193, 487.8225pt x 361.35pt>
 File: imagens/tree_area_construida.pdf Graphic file (type pdf)
 <use imagens/tree_area_construida.pdf>
-Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 168.
+Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 141.
 (pdftex.def)             Requested size: 364.00139pt x 269.63339pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<imagens/indicadores.pdf, id=204, 578.16pt x 198.7425pt>
+<imagens/indicadores.pdf, id=196, 578.16pt x 198.7425pt>
 File: imagens/indicadores.pdf Graphic file (type pdf)
 <use imagens/indicadores.pdf>
-Package pdftex.def Info: imagens/indicadores.pdf  used on input line 177.
+Package pdftex.def Info: imagens/indicadores.pdf  used on input line 150.
 (pdftex.def)             Requested size: 455.0pt x 156.40439pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[16 <./imagens/densidade_distcentro.pdf>]
-<imagens/indicadores_tempo.pdf, id=219, 578.16pt x 650.43pt>
+[14 <./imagens/densidade_distcentro.pdf>]
+<imagens/indicadores_tempo.pdf, id=211, 578.16pt x 650.43pt>
 File: imagens/indicadores_tempo.pdf Graphic file (type pdf)
 <use imagens/indicadores_tempo.pdf>
-Package pdftex.def Info: imagens/indicadores_tempo.pdf  used on input line 186.
+Package pdftex.def Info: imagens/indicadores_tempo.pdf  used on input line 159.
 (pdftex.def)             Requested size: 455.0pt x 511.86897pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[17 <./imagens/tree_area_construida.pdf> <./imagens/indicadores.pdf>] [18 <./imagens/indicadores_tempo.pdf>] [19]
+[15 <./imagens/tree_area_construida.pdf> <./imagens/indicadores.pdf>] [16 <./imagens/indicadores_tempo.pdf>] [17]
 
 pdfTeX warning: pdflatex (file ./imagens/desenho.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<imagens/desenho.pdf, id=267, 963.6pt x 542.025pt>
+<imagens/desenho.pdf, id=257, 963.6pt x 542.025pt>
 File: imagens/desenho.pdf Graphic file (type pdf)
 <use imagens/desenho.pdf>
-Package pdftex.def Info: imagens/desenho.pdf  used on input line 205.
+Package pdftex.def Info: imagens/desenho.pdf  used on input line 178.
 (pdftex.def)             Requested size: 455.0pt x 255.93448pt.
-[20 <./imagens/desenho.pdf>]
-<imagens/disparidade_censoIPTU.pdf, id=308, 505.89pt x 216.81pt>
+[18 <./imagens/desenho.pdf>]
+<imagens/disparidade_censoIPTU.pdf, id=299, 505.89pt x 216.81pt>
 File: imagens/disparidade_censoIPTU.pdf Graphic file (type pdf)
 <use imagens/disparidade_censoIPTU.pdf>
-Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 226.
+Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 199.
 (pdftex.def)             Requested size: 455.0pt x 195.00478pt.
-<imagens/mapa_pontos.pdf, id=309, 1156.32pt x 1445.4pt>
+<imagens/mapa_pontos.pdf, id=300, 1156.32pt x 1445.4pt>
 File: imagens/mapa_pontos.pdf Graphic file (type pdf)
 <use imagens/mapa_pontos.pdf>
-Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 234.
+Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 207.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
-<imagens/balanco_raster.pdf, id=310, 1156.32pt x 1445.4pt>
+<imagens/balanco_raster.pdf, id=301, 1156.32pt x 1445.4pt>
 File: imagens/balanco_raster.pdf Graphic file (type pdf)
 <use imagens/balanco_raster.pdf>
-Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 240.
+Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 213.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[21 <./imagens/disparidade_censoIPTU.pdf>] (tabelas/top5.tex) [22 <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>]
-<imagens/rasters_wide.pdf, id=349, 1156.32pt x 433.62pt>
+[19 <./imagens/disparidade_censoIPTU.pdf>] (tabelas/top5.tex) [20 <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>]
+<imagens/rasters_wide.pdf, id=340, 1156.32pt x 433.62pt>
 File: imagens/rasters_wide.pdf Graphic file (type pdf)
 <use imagens/rasters_wide.pdf>
-Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 257.
+Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 230.
 (pdftex.def)             Requested size: 455.0pt x 170.61967pt.
-<imagens/corrplot.pdf, id=352, 361.35pt x 289.08pt>
+<imagens/corrplot.pdf, id=343, 361.35pt x 289.08pt>
 File: imagens/corrplot.pdf Graphic file (type pdf)
 <use imagens/corrplot.pdf>
-Package pdftex.def Info: imagens/corrplot.pdf  used on input line 266.
+Package pdftex.def Info: imagens/corrplot.pdf  used on input line 239.
 (pdftex.def)             Requested size: 273.00278pt x 218.40182pt.
- [23 <./imagens/rasters_wide.pdf> <./imagens/corrplot.pdf>] [24] (tabelas/regressao.tex)
+ [21 <./imagens/rasters_wide.pdf> <./imagens/corrplot.pdf>] [22] (tabelas/regressao.tex)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[25
+[23
 
 ]
-<imagens/tree_example.png, id=394, 1284.8pt x 888.31876pt>
+<imagens/tree_example.png, id=383, 1284.8pt x 888.31876pt>
 File: imagens/tree_example.png Graphic file (type png)
 <use imagens/tree_example.png>
-Package pdftex.def Info: imagens/tree_example.png  used on input line 319.
+Package pdftex.def Info: imagens/tree_example.png  used on input line 292.
 (pdftex.def)             Requested size: 364.00139pt x 251.66891pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[26]
-<imagens/var_importance.pdf, id=410, 469.755pt x 289.08pt>
+[24]
+<imagens/var_importance.pdf, id=400, 469.755pt x 289.08pt>
 File: imagens/var_importance.pdf Graphic file (type pdf)
 <use imagens/var_importance.pdf>
-Package pdftex.def Info: imagens/var_importance.pdf  used on input line 333.
+Package pdftex.def Info: imagens/var_importance.pdf  used on input line 306.
 (pdftex.def)             Requested size: 364.00139pt x 223.99939pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[27 <./imagens/tree_example.png>]
-<imagens/var_importance_densmod.pdf, id=421, 469.755pt x 289.08pt>
+[25 <./imagens/tree_example.png>]
+<imagens/var_importance_densmod.pdf, id=411, 469.755pt x 289.08pt>
 File: imagens/var_importance_densmod.pdf Graphic file (type pdf)
 <use imagens/var_importance_densmod.pdf>
-Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 346.
+Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 319.
 (pdftex.def)             Requested size: 364.00139pt x 223.99939pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[28 <./imagens/var_importance.pdf>] [29 <./imagens/var_importance_densmod.pdf>]) (main.bbl (main.brf)
+[26 <./imagens/var_importance.pdf>] [27 <./imagens/var_importance_densmod.pdf>]) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [30
+ [28
 
 ]
 bibitemlist
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 72.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) [31
+)) [29
 
 ]
 \tf@toc=\write7
@@ -1504,21 +1496,25 @@ enddocument/afterlastpage: lastpage setting LastPage.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: 44570C7CCDD8DD77BD41411FAF3DA678;992.
+(rerunfilecheck)             Checksum: 53C17F02A6C39FA76C232422BC7F11B5;1130.
  ) 
 Here is how much of TeX's memory you used:
- 49196 strings out of 474370
- 1125420 string characters out of 5740535
+ 49173 strings out of 474370
+ 1125181 string characters out of 5740535
  1947754 words of memory out of 5000000
- 70383 multiletter control sequences out of 15000+600000
- 628998 words of font info for 284 fonts, out of 8000000 for 9000
+ 70380 multiletter control sequences out of 15000+600000
+ 625725 words of font info for 275 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,13n,107p,1579b,2499s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,107p,1579b,2445s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (32 pages, 10993232 bytes).
+Output written on main.pdf (30 pages, 10987538 bytes).
 PDF statistics:
- 572 PDF objects out of 1000 (max. 8388607)
- 95 named destinations out of 1000 (max. 500000)
- 81106 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 569 PDF objects out of 1000 (max. 8388607)
+ 90 named destinations out of 1000 (max. 500000)
+ 77034 words of extra memory for PDF output out of 89155 (max. 10000000)
 
