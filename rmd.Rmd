@@ -1,14 +1,11 @@
 ---
-title: "Miopia ou controle? Análise da eficiência dos instrumentos regulatórios urbanos para determinação de densidade habitacional"
+title: "Para o bem ou para o mal: análise da capacidade do governo de controlar a densidade populacional"
 author: "Theil, Gustavo"
-date: today()
+date: "2024"
 output:
   html_document: default
   pdf_document: default
 ---
-
-
-
 
 ```{r, include=FALSE}
 library(knitr)
@@ -38,11 +35,6 @@ distrito <- read_sf("dados/distrito/SIRGAS_SHP_distrito.shp") %>% st_set_crs("ep
 ```
 
 ## Microdados do Censo de 2022
-
-É importante destacar que os resultados disponíveis são parciais do censo, com dados atualizados até o momento da divulgação. No entanto, mesmo parciais, esses dados podem ser extremamente úteis para suas análises.
-
-Um ponto crucial a considerar é que o nível mínimo de observação georreferenciada nos microdados do censo são os setores censitários. Os setores censitários são unidades geográficas definidas pelo Instituto Brasileiro de Geografia e Estatística (IBGE) para coleta e tabulação de dados censitários. Eles são delimitados de forma a garantir uma cobertura completa e homogênea de todo o território nacional, facilitando a análise comparativa entre diferentes áreas geográficas. A delimitação geográfica do setor também considera questões logísticas para o entrevistador conseguir entrevistar a todos.
-
 
 ```{r data_censo_import, cache = TRUE}
 # Read dados do censo 2022
@@ -112,13 +104,6 @@ gg
 
 # Base de Dados do IPTU
 
-A base de dados do IPTU (Imposto Predial e Territorial Urbano) é uma fonte abrangente de informações sobre imóveis urbanos dentro do município. Essa base é considerada completa, pois abrange todos os imóveis sujeitos à tributação do IPTU, representando uma fonte confiável e abrangente de informações sobre a propriedade urbana. Propriedades que não foram construídas dentro da legalidade não constam nessa base.
-
-O número do contribuinte, utilizado para identificar exclusivamente cada imóvel na base de dados do IPTU, é representado diretamente pelo SQL, sendo essencial para consultas e manipulação dos dados relacionados ao imposto predial e territorial urbano. Esse formato permite a integração e cruzamento com outras bases de dados, como a base de lotes, que está georreferenciada, fornecendo informações espaciais adicionais que não estão disponíveis na base do IPTU.
-
-Quando um lote é um condomínio, ou seja, quando não se classifica de acordo com `condominio == "00-0"`, é necessário substituir os múltiplos números de SQL pelo número do condomínio. Isso ocorre porque cada unidade dentro do condomínio pode ser tratada como uma entidade separada para fins tributários, mas para a base de lotes, estão todos juntos.
-
-
 ```{r data_IPTU_import, cache = TRUE}
 IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>% 
     as_tibble() %>% 
@@ -143,11 +128,9 @@ IPTU <- read.csv("dados/IPTU/IPTU_2024.csv", sep=";", encoding = "latin1") %>%
            residencial = str_detect(tipo, "Residencial"))
 
 IPTU %>% 
+  select(-c(condominio, tipo)) |> 
   modelsummary::datasummary_skim()
 ```
-
-
-Todos os empreendimentos não públicos regulares (de acordo com a lei) constam nesta base de dados. A seguir está uma análise de quais são estes tipos. O tipo de interesse para esta análise é apenas os residenciais.
 
 
 ```{r plot_area_construida, cache = TRUE}
@@ -223,10 +206,6 @@ ggsave("tex/imagens/tree_area_construida.pdf",
 ```
 
 
-Quando há um condomínio com múltiplos contribuintes de IPTU, ele deve ser agregado a nível lote, para que possa ser cruzado com a base de lotes, possibilitando que seja georreferenciada. Todos os contribuintes dentro de um condomínio compartilham das mesmas características de área de terreno, área ocupada, ano de construção e pavimentos, então a mediana funciona para agregar estes dados, mas o máximo, mínimo, média ou pegar o primeiro valor também funcionaria.
-
-
-
 ```{r data_IPTU_tidy, cache = TRUE}
 IPTU <- IPTU %>% 
   # Agregar por SQL
@@ -265,7 +244,9 @@ IPTU %>%
 gg <- IPTU %>% 
   filter(residencial == 1) %>% 
   filter(cota_parte < 600, CA < 5, verticalizacao < 6) %>% 
-  select("Cota Parte" = cota_parte, "Coeficiente de Aproveitamento (CA)" = CA, "Verticalização" = verticalizacao) %>% 
+  select("Cota Parte" = cota_parte, 
+         "Coeficiente de Aproveitamento (CA)" = CA, 
+         "Verticalização" = verticalizacao) %>% 
   pivot_longer(everything()) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
@@ -273,20 +254,29 @@ gg <- IPTU %>%
   labs(x = "", y = "Frequência") + 
   theme_classic()
 
-ggsave("tex/imagens/indicadores.pdf", gg, width = 8, height = 2.75)
+ggsave("tex/imagens/indicadores.pdf", gg, width = 9, height = 3)
 gg
 ```
 
 ```{r plot_verticalizacao_CA, cache = T}
-IPTU %>% 
+gg <- IPTU %>% 
   filter(residencial == 1) %>% 
   ggplot(aes(x = verticalizacao, y = CA)) +
-  geom_point(alpha = .75) +
-  geom_abline(intercept = 0, slope = 1, color = "blue") +
-  geom_smooth() +
+  geom_bin2d(binwidth = c(1,1) * .5)  +
+  geom_abline(intercept = 0, slope = 1, color = "black", lwd = 0.8, linetype = "dashed") +
+  geom_smooth(aes(color = "Associação")) +
   theme_classic() +
-  coord_cartesian(xlim = c(0,50), ylim = c(0,20)) +
+  scale_color_manual(values = c("Associação" = "red")) +
+  scale_fill_gradient(high = "darkblue", low = "white", trans = "log10", 
+                      labels = scales::label_number(), breaks = 10^c(2, 3, 4, 5)) +
+  coord_cartesian(xlim = c(0,15), ylim = c(0,15)) +
+  labs(fill = "Número de ocorrências", colour = "", x = "Verticalização",
+       y = "Coeficiente de Aproveitamento (CA)") +
   theme(aspect.ratio = 1)
+
+ggsave("tex/imagens/ca_vs_verticalizacao.pdf", gg, width = 7.5, height = 5)
+gg
+
 ```
 
 ```{r plot_indicadores_tempo, cache = T}
@@ -324,12 +314,6 @@ gg
 
 # Geosampa
 
-GeoSampa é o portal de mapas e dados geoespaciais da cidade de São Paulo, mantido pela prefeitura. Ele fornece uma vasta gama de informações geográficas, incluindo mapas, dados demográficos, infraestruturas e muito mais. Este portal é uma ferramenta valiosa para pesquisadores, urbanistas e qualquer pessoa interessada em informações espaciais detalhadas sobre a cidade.
-
-https://geosampa.prefeitura.sp.gov.br/
-
-Base de Lotes: No GeoSampa, a base de lotes representa a divisão da cidade em pequenos segmentos, geralmente correspondentes a terrenos individuais ou condomínios. Esta base está organizada de forma que cada bairro tem seu próprio conjunto de dados e os dados de lotes para cada bairro podem ser baixados diretamente do site do GeoSampa em formato zip, contendo arquivos como .shp (shapefile), .dbf (database file), e .shx (index file).
-
 ```{r data_lotes_extractzip}
 # Extração do zip file com lotes de cada bairro
 if (!"zip" %in% list.files(path = "dados/lotes")){
@@ -358,15 +342,6 @@ lotes <- list.files(path="dados/lotes/unzip", full.names = FALSE) %>%
 
 ```
 
-Os lotes podem ser classificados de três formas
-
-- Lotes fiscais: apresentam contribuintes do IPTU
-- Espaço livre: espaços públicos
-- Via de acesso: Ruas fechadas para acesso dentro de uma quadra
-
-Os lotes fiscais podem ser unidades ou condomínios. Um prédio, por exemplo, fica em um único lote, mas dentro pode haver diversas unidades, então se configura como um condomínio. Não é possível saber através dos dados de lotes quantas unidades estão no condomínio, nem alguma forma de discriminá-los.
-
-
 ```{r plot_lotes, cache = TRUE}
 lotes %>% 
   mutate(condominio = case_when(lo_condomi == "00" ~ "Unidade",
@@ -383,14 +358,6 @@ lotes %>%
   labs(title = "Área dos lotes em SP" , x = "", y = "Área em metros quadrados", fill = "Tipo de lote") +
   theme_classic()
 ```
-
-
-Na base de dados de lotes, cada lote é identificado por três componentes principais:
-
-1. Setor (lo_setor): Uma divisão maior dentro do município que agrupa várias quadras.
-2. Quadra (lo_quadra): Uma subdivisão dentro de um setor que agrupa vários lotes.
-3. Lote (lo_lote): A menor unidade de divisão, que representa um terreno ou uma parcela específica dentro de uma quadra.
-Essa estrutura de Setor-Quadra-Lote é crucial para identificar de forma única cada lote dentro do município. No código, esses identificadores são utilizados para manipular e cruzar os dados de lotes com outras bases de dados, como a base de IPTU.
 
 ```{r data_lotes_tidy, cache = TRUE}
 lotes <- lotes %>% 
@@ -532,11 +499,6 @@ remove(gg.lotes, gg.setor, gg, lotes, quadras, setores, IPTU)
 ```
 
 # Join IPTU - Censo
-
-O processo de cruzamento foi realizado com base na intersecção das geometrias dos setores censitários e dos lotes do IPTU. Cada setor censitário e cada lote do IPTU possui uma geometria associada, representando sua área geográfica no mapa. Ao cruzar essas geometrias, é possível identificar quais lotes estão contidos em cada setor censitário e vice-versa.
-
-É importante destacar que, em casos onde um lote foi dividido entre dois ou mais setores censitários, ocorrerá uma intersecção em ambas as áreas. Para lidar com essa situação, foi calculado o percentual da área do lote que está contida em cada setor censitário.
-
 
 ```{r data_join_IPTU-censo, cache = TRUE}
 # Join dados do IPTU com do Censo através da intersecção das geometrias
@@ -809,13 +771,14 @@ geoms.IPTU <- IPTU.lote %>%
 
 geoms.censo <- censo %>% 
   mutate(area = st_area(geometry) %>% as.numeric()) %>% 
-  select(id = id_setor_censitario, area, populacao = v0001, domicilios = v0002)
+  select(id = id_setor_censitario, area, populacao = v0001, domicilios = v0002, domicilios_ocupados = v0007)
 
 bbox <- st_bbox(geoms.censo)
 
 raster <- raster::raster(xmn = bbox["xmin"], xmx = bbox["xmax"], ymn = bbox["ymin"], ymx = bbox["ymax"],
             res = 800, crs = st_crs(geoms.censo)$proj4string, vals = NA)
 ```
+
 
 ```{r data_raster_extract, cache = T}
 result.IPTU <- exact_extract(raster, geoms.IPTU, include_xy = T, 
@@ -832,23 +795,26 @@ result.IPTU <- exact_extract(raster, geoms.IPTU, include_xy = T,
             area_terreno = sum(area_terreno)) %>% 
   ungroup() %>% 
   mutate(cota_parte = area_terreno / unidades,
+         cota_parte_inversa = unidades / area_terreno,
          CA = area_construida / area_terreno,
          verticalizacao = area_construida / area_ocupada)
 
 result.censo <- exact_extract(raster, geoms.censo, include_xy = T, 
-                        include_cols = c("id", "area", "populacao", "domicilios"), 
+                        include_cols = c("id", "area", "populacao", "domicilios", "domicilios_ocupados"), 
                         force_df = T, coverage_area = T, progress = F) %>% 
   bind_rows %>% 
   mutate(percent_intersect = coverage_area / area,
-         across(c(area, populacao, domicilios), ~ .x * percent_intersect)) %>% 
+         across(c(area, populacao, domicilios, domicilios_ocupados), ~ .x * percent_intersect)) %>% 
   group_by(x, y) %>% 
   summarize(populacao = sum(populacao),
             area = sum(area),
-            domicilios = sum(domicilios)) %>% 
-  mutate(densidade = populacao * 10^6 / area)
+            domicilios = sum(domicilios),
+            domicilios_ocupados = sum(domicilios_ocupados))
 
 result <- full_join(result.IPTU, result.censo) %>% 
-  mutate(espectro_irregularidade = unidades / (unidades + domicilios))
+  mutate(espectro_irregularidade = unidades / (unidades + domicilios),
+         densidade_residencial = populacao / area_terreno,
+         densidade_total = populacao / area)
 
 result %>% 
   modelsummary::datasummary_skim()
@@ -857,12 +823,12 @@ result %>%
 
 ```{r plot_rasters, cache = T}
 gg <- result %>% 
-  pivot_longer(c(CA, cota_parte, verticalizacao, densidade)) %>% 
+  pivot_longer(c(CA, cota_parte, verticalizacao, densidade_total)) %>% 
   group_by(name) %>% 
   mutate(value = ntile(value, 10) %>% as.factor(),
          name = case_when(name == "CA" ~ "Coeficiente de Aproveitamento (CA)",
                           name == "cota_parte" ~ "Cota-parte",
-                          name == "densidade" ~ "Densidade populacional",
+                          name == "densidade_total" ~ "Densidade populacional",
                           name == "verticalizacao" ~ "Verticalização",
                           .default = NA)) %>% 
   ggplot() +
@@ -879,6 +845,31 @@ ggsave("tex/imagens/rasters_wide.pdf", gg + facet_wrap(~name, ncol = 4), width =
 
 gg + facet_wrap(~name, ncol = 2)
 ```
+
+```{r plot_rasters_corte, cache = TRUE}
+gg <- result |>
+  mutate(corte = "todos") |> 
+  bind_rows(result |> filter(abs(espectro_irregularidade - .5) <= .4) |> mutate(corte = "<.4")) |> 
+  bind_rows(result |> filter(abs(espectro_irregularidade - .5) <= .3) |> mutate(corte = "<.3")) |> 
+  bind_rows(result |> filter(abs(espectro_irregularidade - .5) <= .2) |> mutate(corte = "<.2")) |> 
+  bind_rows(result |> filter(abs(espectro_irregularidade - .5) <= .1) |> mutate(corte = "<.1")) |> 
+  bind_rows(result |> filter(abs(espectro_irregularidade - .5) <= .05) |> mutate(corte = "<.05")) |> 
+  filter(area > max(area) * .99) |> 
+  mutate(value = ntile(densidade_residencial, 10) %>% as.factor()) |> 
+  ggplot() +
+  geom_sf(data = distrito) +
+  geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = NA, lwd = .01) +
+  facet_wrap(~corte) +
+  theme_void() +
+  theme(strip.text = element_text(size = 12)) +
+  labs(fill = "Decil") +
+  scale_fill_viridis_d()
+
+ggsave("tex/imagens/rasters_densidade.pdf", gg, width = 10, height = 10)
+gg
+```
+
+
 
 ```{r plot_3d, cache = TRUE}
 gg <- result %>% 
@@ -907,14 +898,14 @@ render_snapshot("tex/imagens/mapa3d", software_render = TRUE, width = 3840, heig
 ```{r plot_raster_topDens, cache = TRUE}
 (result %>%
   filter(area > max(area) * .99) %>%
-  arrange(desc(densidade)) %>%
+  arrange(desc(densidade_total)) %>%
   mutate(top = ifelse(row_number() <= 5, row_number(), NA) %>% as.factor()) %>% 
   ggplot() +
   geom_sf(data = distrito, color = "grey", aes(text = ds_nome)) +
   geom_tile(aes(x = x, y = y, fill = top, text = paste("pop: ", populacao, "\n", 
                                                        "unidades: ", unidades, "\n",
                                                        "domicilios: ", domicilios, "\n",
-                                                       "densidade: ", densidade, "\n",
+                                                       "densidade: ", densidade_total, "\n",
                                                        "area: ", area,
                                                        sep = ""))) +
   scale_fill_viridis_d() +
@@ -927,19 +918,20 @@ render_snapshot("tex/imagens/mapa3d", software_render = TRUE, width = 3840, heig
 ```{r tab_raster_topDens, cache = TRUE}
 tabela <- result %>%
   filter(area > max(area) * .99) %>%
-  mutate(across(everything(), ~ replace_na(., 0))) %>% 
-  arrange(desc(densidade)) %>%
+  mutate(across(everything(), ~ replace_na(., 0)),
+         across(c(densidade_residencial, densidade_total), ~ . * 10^6)) %>% 
+  arrange(desc(densidade_total)) %>%
   head(5) %>% 
   mutate(localizacao = c("1. Paraisópolis", "2. Heliópolis ", "3. Sé (Bela Vista)", "4. Paraisópolis", "5. Heliópolis")) %>% 
   select("Localização" = localizacao, "População" = populacao, "Domicílios (Censo)" = domicilios,
-         "Unidades (IPTU)" = unidades, "Espectro irregularidade" = espectro_irregularidade,
-         "Densidade habitacional" = densidade, "Área" = area) %>% 
+         "Domicílios Ocupados" = domicilios_ocupados, "Unidades (IPTU)" = unidades, 
+         "Espectro irregularidade" = espectro_irregularidade, "Densidade populacional" = densidade_total, "Área" = area) %>% 
   pivot_longer(cols = -Localização, names_to = "Variável") %>% 
   pivot_wider(id_cols = Variável, names_from = Localização, values_from = value) %>% 
   gt() %>% 
   tab_spanner("Favelas", columns = c(2,3,5,6)) %>% 
-  fmt_number(rows = c(1,2,3,5,6), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
-  fmt_percent(rows = 4) 
+  fmt_number(rows = c(1,2,3, 4, 6, 7), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
+  fmt_percent(rows = 5) 
 
 # gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/top5.tex")
 # workaround bug da gt quando exporta para latex
@@ -973,10 +965,12 @@ ggsave("tex/imagens/balanco_raster.pdf", gg, width = 16, height = 20)
 
 gg
 ```
+
 ```{r plot_corr, cache = TRUE}
 gg <- ggcorrplot::ggcorrplot(result |> 
+                               filter(abs(espectro_irregularidade - .5) < .1) |> 
                      mutate(tx_ocupacao = area_ocupada / area_terreno) |> 
-                     select(tx_ocupacao, verticalizacao, cota_parte, CA, densidade) |> 
+                     select(tx_ocupacao, verticalizacao, cota_parte, CA, densidade_total, densidade_residencial) |> 
                      drop_na() |> 
                      cor(),
                      show.diag = FALSE, type = "upper", legend.title = "Correlação", 
@@ -984,33 +978,39 @@ gg <- ggcorrplot::ggcorrplot(result |>
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
-ggsave("tex/imagens/corrplot.pdf", gg, width = 5, height = 4)
+ggsave("tex/imagens/corrplot.pdf", gg, width = 7, height = 4)
 
 gg
 ```
+
 
 
 # Análise resultados via Raster
 
 ```{r analise_reg, cache = TRUE}
 modelo1 <- result %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  mutate(across(c(densidade_residencial, densidade_total), ~ . * 10^6)) %>% 
+  filter(abs(espectro_irregularidade - .5) < .15, populacao > 0) %>% 
+  lm(densidade_residencial ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo2 <- result %>% 
-  filter(populacao > 0) %>% 
-  lm(log(densidade) ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  mutate(across(c(densidade_residencial, densidade_total), ~ . * 10^6)) %>% 
+  filter(abs(espectro_irregularidade - .5) < .15, populacao > 0) %>% 
+  lm(log(densidade_residencial) ~ cota_parte + verticalizacao + CA, data = .)  %>%  
   summary()
 
 modelo3 <- result %>% 
-  filter(abs(espectro_irregularidade - .5) < .1) %>% 
-  lm(densidade ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  mutate(across(c(densidade_residencial, densidade_total), ~ . * 10^6)) %>% 
+  filter(abs(espectro_irregularidade - .5) < .05) %>% 
+  lm(densidade_residencial ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelo4 <- result %>% 
-  filter(abs(espectro_irregularidade - .5) < .1,
+  mutate(across(c(densidade_residencial, densidade_total), ~ . * 10^6)) %>% 
+  filter(abs(espectro_irregularidade - .5) < .05,
          populacao > 0) %>% 
-  lm(log(densidade) ~ cota_parte + verticalizacao + CA, data = .) %>% 
+  lm(log(densidade_residencial) ~ cota_parte + verticalizacao + CA, data = .) %>% 
   summary()
 
 modelos <- list("Nível (A)" = modelo1,
@@ -1028,7 +1028,7 @@ tabela <- modelsummary(modelos,
                sapply(get_gof) %>% 
                rbind %>% 
                as_tibble(rownames = 'variable') %>% 
-               unnest(cols = c(`Nível (A)`, `Log (B)`, `Nível (C)`, `Log (D)`)) %>% 
+               unnest(cols = c(`Nível (A)`, `Log (B)`, `Nível (C)`, `Log (D)`)) %>%
                mutate(across(c(`Nível (A)`, `Log (B)`, `Nível (C)`, `Log (D)`), ~ 
                                ifelse(variable == "nobs", round(.) %>% as.character(), sprintf('%.3f',.))),
                       variable = case_when(variable == "r.squared" ~ "R2",
@@ -1038,10 +1038,11 @@ tabela <- modelsummary(modelos,
                drop_na() %>% 
                mutate(!!!list("As" = "", "Bs" = "", "Cs" = "", "Ds" = "")) %>% 
                select(variable, "Nível (A)", As, "Log (B)", Bs, "Nível (C)", Cs, "Log (D)", Ds,)) %>% 
-  tab_spanner("Todos os setores", columns = 2:5) %>% 
-  tab_spanner("Espectro irregularidade: 40 a 60%", columns = 6:9) %>% 
+  tab_spanner("Espectro irregularidade: 35 a 65%", columns = 2:5) %>% 
+  tab_spanner("Espectro irregularidade: 45 a 55%", columns = 6:9) %>% 
   tab_style(style = cell_borders(sides = "top",  weight = px(0.5)),
-            locations = cells_body(rows = 5)) 
+            locations = cells_body(rows = 5)) %>% 
+  sub_values(values = "+", replacement = ".")
 
 gtsave(tabela %>% tab_options(table.font.size = 14), "tex/tabelas/regressao.tex")
 gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/regressao_small.tex")
@@ -1049,24 +1050,89 @@ gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/regressao_smal
 tabela
 ```
 
+```{r analise_robustez_pvals, cache = T}
+pvals <- tibble()
+corte <- .05
+
+for (corte in seq(.005, .5, length.out = 1000)){
+  pval.nivel <- result |> 
+    filter(abs(espectro_irregularidade - .5) < corte) |> 
+    lm(densidade_residencial ~ cota_parte + verticalizacao + CA, data = _) |> 
+    summary()
+  
+  pval.log <- result |> 
+    filter(abs(espectro_irregularidade - .5) < corte) |> 
+    lm(log(densidade_residencial) ~ cota_parte + verticalizacao + CA, data = _) |> 
+    summary()
+  
+  pvals <- tibble(corte = corte, 
+                  nobs = pval.nivel$df[2] + 4,
+                  cota_parte = pval.nivel$coefficients[,4][["cota_parte"]],
+                  verticalizacao = pval.nivel$coefficients[,4][["verticalizacao"]],
+                  CA = pval.nivel$coefficients[,4][["CA"]],
+                  forma = "nivel") |> 
+    bind_rows(pvals)
+  
+  pvals <- tibble(corte = corte, 
+                  nobs = pval.log$df[2] + 4,
+                  cota_parte = pval.log$coefficients[,4][["cota_parte"]],
+                  verticalizacao = pval.log$coefficients[,4][["verticalizacao"]],
+                  CA = pval.log$coefficients[,4][["CA"]],
+                  forma = "log") |> 
+    bind_rows(pvals)
+}
+
+gg <- pvals |> 
+  pivot_longer(cota_parte:CA) |> 
+  ggplot(aes(x = corte, y = value, color = name)) +
+  geom_hline(yintercept = 0) +
+  geom_line(lwd = 1, alpha = .8) +
+  geom_hline(yintercept = .01, linetype = "dashed") +
+  facet_grid(rows = "forma") +
+  theme_classic() +
+  scale_y_sqrt(labels = scales::percent, breaks = c(.01, .05, .1, .5, 1), expand = c(0, 0)) +
+  scale_x_continuous(labels = scales::percent, expand = c(0, 0)) +
+  labs(x = "Corte do espectro de irregularidade",
+       y = "p.valor (escala em raiz quadrada)",
+       colour = "Variável")
+
+ggsave("tex/imagens/pvals.pdf", gg, width = 8, height = 6)
+gg
+```
+
+```{r analise_robustez_nobs, cache = TRUE}
+gg <- pvals |> 
+  filter(forma == "log") |> 
+  ggplot(aes(x = corte, y = nobs)) +
+  geom_line() +
+  geom_hline(yintercept = min(pvals$nobs), linetype = "dashed", alpha = .5) +
+  theme_classic() +
+  scale_y_continuous(limits = c(0,1250), breaks = c(pretty(pvals$nobs), min(pvals$nobs))) +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Corte do espectro de irregularidade", y = "Número de observações")
+
+ggsave("tex/imagens/nobs.pdf", gg, width = 6, height = 4)
+gg
+```
 
 
 ```{r analise_tree_raster, cache = TRUE}
 split <- rsample::initial_split(result %>% 
                                   drop_na() %>% 
                                   filter(abs(espectro_irregularidade - .5) <.1,
-                                         area > 63950) %>% 
-                                  select(-c(populacao, domicilios, espectro_irregularidade, area)), 
+                                         area > max(area) * .99) %>% 
+                                  select(-c(densidade_total, populacao, area, cota_parte_inversa)) |> 
+                                  mutate(placebo = rnorm(length(densidade_residencial))),
                                 prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
 
-rf_model <- ranger::ranger(densidade ~ ., 
-                     data = train, num.trees = 5000, importance = "permutation")
+rf_model <- ranger::ranger(densidade_residencial ~ ., 
+                     data = train, num.trees = 100000, importance = "permutation")
 rf_preds <- predict(rf_model, data = test)$predictions
 
-rf_model_restrito <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 5000, importance = "permutation")
+rf_model_restrito <- ranger::ranger(densidade_residencial ~ CA + cota_parte + verticalizacao, 
+                     data = train, num.trees = 50000)
 rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 
 gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
@@ -1076,23 +1142,23 @@ gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
     labs(x = "Importância", y = "Variável", title = "") +
     theme_classic()
 
-ggsave("tex/imagens/var_importance.pdf", gg, width = 6.5, heigh = 4)
+ggsave("tex/imagens/var_importance.pdf", gg, width = 7, heigh = 4)
 gg
 ```
 
 ```{r plot_tree, cache = TRUE}
-rtree <- rpart::rpart(densidade ~ CA + cota_parte + verticalizacao, data = train)
+rtree <- rpart::rpart(densidade_residencial ~ CA + cota_parte + verticalizacao, data = train)
 
 visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
 ```
 
 ```{r analise_comparacao_modelos}
-lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train)
+lm_model <- lm(densidade_residencial ~ CA + cota_parte + verticalizacao, data = train)
 lm_preds <- predict(lm_model, newdata = test)
 
-1 - sum((rf_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
-1 - sum((rf_preds_restrito - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
-1 - sum((lm_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
+1 - sum((rf_preds - test$densidade_residencial)^2)/sum((test$densidade_residencial - mean(test$densidade_residencial))^2)
+1 - sum((rf_preds_restrito - test$densidade_residencial)^2)/sum((test$densidade_residencial - mean(test$densidade_residencial))^2)
+1 - sum((lm_preds - test$densidade_residencial)^2)/sum((test$densidade_residencial - mean(test$densidade_residencial))^2)
 
 ```
 
@@ -1100,20 +1166,20 @@ lm_preds <- predict(lm_model, newdata = test)
 ```{r analise_tree_raster_densmod, cache = TRUE}
 split <- rsample::initial_split(result %>% 
                                   drop_na() %>% 
-                                  mutate(densidade = populacao / area_terreno) %>% 
                                   filter(abs(espectro_irregularidade - .5) <.1,
-                                         area > 63950) %>% 
-                                  select(-c(populacao, domicilios, espectro_irregularidade, area)), 
+                                         area > max(area) * .99) %>% 
+                                  mutate(placebo = rnorm(length(densidade_residencial))) %>%
+                                  select(-c(densidade_residencial, populacao, area, cota_parte_inversa)), 
                                 prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
 
-rf_model <- ranger::ranger(densidade ~ ., 
-                     data = train, num.trees = 5000, importance = "permutation")
+rf_model <- ranger::ranger(densidade_total ~ ., 
+                     data = train, num.trees = 50000, importance = "permutation")
 rf_preds <- predict(rf_model, data = test)$predictions
 
-rf_model_restrito <- ranger::ranger(densidade ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 5000, importance = "permutation")
+rf_model_restrito <- ranger::ranger(densidade_total ~ CA + cota_parte + verticalizacao, 
+                     data = train, num.trees = 50000, importance = "permutation")
 rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 
 gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
@@ -1123,17 +1189,19 @@ gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
     labs(x = "Importância", y = "Variável", title = "") +
     theme_classic()
 
-ggsave("tex/imagens/var_importance_densmod.pdf", gg, width = 6.5, heigh = 4)
+
+ggsave("tex/imagens/var_importance_densmod.pdf", gg, width = 7, heigh = 4)
+
 gg
 ```
 
-```{r analise_comparacao_modelos}
-lm_model <- lm(densidade ~ CA + cota_parte + verticalizacao, data = train)
+```{r analise_comparacao_modelos2}
+lm_model <- lm(densidade_total ~ CA + cota_parte + verticalizacao, data = train)
 lm_preds <- predict(lm_model, newdata = test)
 
-1 - sum((rf_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
-1 - sum((rf_preds_restrito - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
-1 - sum((lm_preds - test$densidade)^2)/sum((test$densidade - mean(test$densidade))^2)
+1 - sum((rf_preds - test$densidade_total)^2)/sum((test$densidade_total - mean(test$densidade_total))^2)
+1 - sum((rf_preds_restrito - test$densidade_total)^2)/sum((test$densidade_total - mean(test$densidade_total))^2)
+1 - sum((lm_preds - test$densidade_total)^2)/sum((test$densidade_total - mean(test$densidade_total))^2)
 
 ```
 

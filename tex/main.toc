@@ -11,12 +11,30 @@
 \contentsline {chapter}{\chapternumberline {2}\MakeTextUppercase []{Dados}}{12}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Dados do Censo}{12}{section.2.1}%
 \contentsline {section}{\numberline {2.2}Dados do IPTU}{12}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Cruzamento dos dados}{17}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Alguns resultados preliminares}{22}{section.2.4}%
+\contentsline {section}{\numberline {2.3}Cruzamento dos dados}{16}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Alguns resultados preliminares}{20}{section.2.4}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Análise}}{23}{chapter.3}%
+\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Análise}}{22}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Densidade pela ótica da área de terreno residencial}{22}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Densidade pela ótica da área total}{25}{section.3.2}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Conclusão}}{28}{chapter.4}%
+\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Conclusão}}{27}{chapter.4}%
 \vspace {\cftbeforechapterskip }
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
-\contentsline {chapter}{\MakeTextUppercase []{Refer\^encias}}{29}{section*.24}%
+\contentsline {chapter}{\MakeTextUppercase []{Refer\^encias}}{28}{section*.23}%
+\renewcommand *{\cftappendixname }{AP\^ENDICE \space }
+\setlength {\cftpartindent }{\cftlastnumwidth } \setlength {\cftpartnumwidth }{2em}
+\cftinsert {A}
+\contentsline {part}{\uppercase {Ap\^endices}}{29}{section*.24}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\cftinsert {A}
+\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{Discussões sobre a verticalização}}{30}{appendix.A}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\cftinsert {A}
+\contentsline {appendix}{\chapternumberline {B}\MakeTextUppercase []{Rasters de densidade residencial}}{32}{appendix.B}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\cftinsert {A}
+\contentsline {appendix}{\chapternumberline {C}\MakeTextUppercase []{Análise de robustez do corte do espectro de irregularidade}}{33}{appendix.C}%

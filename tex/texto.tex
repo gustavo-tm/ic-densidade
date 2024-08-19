@@ -112,18 +112,13 @@ Para compreender o perfil geográfico da distribuição populacional de São Pau
     \label{fig:populacao}
 \end{figure}
 
-A metodologia para a delimitação dos setores censitários leva em consideração diversos fatores, como elementos na paisagem que se constituam em barreiras naturais ou artificiais e dificultam o trabalho do agente, pontos de referência estáveis e de fácil identificação no terreno, limites das estruturas territoriais, entre outros \cite{IBGE2024}. De maneira geral, estes limites são construídos de forma que o agente de coleta consiga cobrir o setor inteiro, minimizando os erros de medição. Estes setores censitários também são georreferenciados através da malha preliminar divulgada pelo IBGE e apresentam um número de identificação que pode ser decomposto segundo o exemplo apresentado a seguir.
+A metodologia para a delimitação dos setores censitários leva em consideração diversos fatores, como elementos na paisagem que se constituam em barreiras naturais ou artificiais e dificultam o trabalho do agente, pontos de referência estáveis e de fácil identificação no terreno, limites das estruturas territoriais, entre outros \cite{IBGE2024}. De maneira geral, estes limites são construídos de forma que o agente de coleta consiga cobrir o setor inteiro, minimizando os erros de medição. Estes setores censitários também são georreferenciados através da malha preliminar divulgada pelo IBGE e apresentam um número de identificação que contém o município, distrito, subdistrito e setor da região.
 
-\begin{equation*}
-    \underbrace{21}_\text{UF} \underbrace{00873}_\text{Município} \underbrace{05}_\text{Distrito} \underbrace{00}_\text{Subdistrito} \underbrace{0026}_\text{Setor} \underbrace{P}_\text{Preliminar}
-    \label{eq:setor}
-\end{equation*}
-
-É interessante notar na Figura \ref{fig:populacao}, que o clássico modelo, no qual população se concentra principalmente no centro apresenta mérito, dado que perto da região da Sé, centro histórico de São Paulo, há uma enorme concentração habitacional. Entretanto, é surpreendente a densidade habitacional nas favelas de Paraisópolis e Heliópolis, que acabam por ser as áreas mais densas da cidade. Na Figura \ref{fig:dens-distcentro} é possível ver como ainda que haja uma relação entre a densidade habitacional e a distância, ela não é tão perfeita quanto no modelo microeconômico. Paraisópolis, por exemplo, está a 15km do centro e ainda é a região mais densa de São Paulo -- mais detalhes serão discutidos adiante.
+É interessante notar na Figura \ref{fig:populacao}, que o clássico modelo, no qual população se concentra principalmente no centro apresenta mérito, dado que perto da região da Sé, centro histórico de São Paulo, há uma enorme concentração populacional. Entretanto, é surpreendente a densidade populacional nas favelas de Paraisópolis e Heliópolis, que acabam por ser as áreas mais densas da cidade. Na Figura \ref{fig:dens-distcentro} é possível ver como ainda que haja uma relação entre a densidade populacional e a distância, ela não é tão perfeita quanto no modelo microeconômico. Paraisópolis, por exemplo, está a 15km do centro e ainda é a região mais densa de São Paulo -- mais detalhes serão discutidos adiante.
 
 \begin{figure}[h]
     \centering
-    \caption{Densidade habitacional na medida em que se distancia da Sé}
+    \caption{Densidade populacional na medida em que se distancia da Sé}
     \includegraphics[width = .75\linewidth]{imagens/densidade_distcentro.pdf}
     \label{fig:dens-distcentro}
 \end{figure}
@@ -133,7 +128,7 @@ A metodologia para a delimitação dos setores censitários leva em consideraç�
 Em relação aos dados sobre os empreendimentos imobiliários, a base de dados escolhida foi do IPTU. Para os fins deste artigo, ela é a mais completa, visto que não representa um fluxo de novos imóveis construídos todos os anos como a base da Embraesp, mas apresenta um estoque imobiliário de tudo que já foi construído legalmente na cidade. Dito isso, estão cadastrados os 3.096.719 números únicos de contribuintes, que, segundo a definição da documentação dos dados no GeoSampa, ``A cada imóvel urbano corresponderá um número de inscrição no Cadastro Imobiliário Fiscal, entendendo-se como imóvel: I - a área de terreno, construído ou não, definida em matrícula do competente Serviço de Registro de Imóveis ou em transcrições ainda vigente''. Os únicos dados que não constam nessa base são relativos a lotes irregulares ou não registrados, como em áreas de favelas. 
 % Estes casos podem ser visualizados na Figura \ref{fig:erros-join}, mas serão discutidos a seguir. Isso não é uma limitação, visto que os intrumentos de regulação urbana não se aplicam as estas áreas de qualquer forma.
 
-Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área ocupada e o número de pavimentos do empreendimento. O tipo de uso do imóvel também está disponível, mas como esta pesquisa foca em densidade habitacional, foram descartados os usos não residenciais. Na figura \ref{fig:area_construida}, é possível observar a área construída por tipo e padrão de uso em São Paulo. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte. A distribuição destes indicadores pode ser vista na Figura \ref{fig:histogramas}.
+Entre os dados disponíveis do IPTU, se destacam a área do terreno, a área construída, a área ocupada e o número de pavimentos do empreendimento. O tipo de uso do imóvel também está disponível, mas como esta pesquisa foca em densidade populacional, foram descartados os usos não residenciais. Na figura \ref{fig:area_construida}, é possível observar a área construída por tipo e padrão de uso em São Paulo. Logo, com estes dados é possível calcular os indicadores utilizados pela regulamentação do coeficiente de aproveitamento (CA), gabarito e cota parte. A distribuição destes indicadores pode ser vista na Figura \ref{fig:histogramas}.
 
 \begin{figure}[h]
     \centering
@@ -155,7 +150,7 @@ De fato, ao observar os indicadores na Figura \ref{fig:histogramas}, é possíve
 
 \begin{figure}[h]
     \centering
-    \caption{Variação no tempo dos indicadores residenciais em São Paulo}
+    \caption{Variação no tempo dos padrões construtivos residenciais observados em São Paulo}
     \includegraphics[width = \linewidth]{imagens/indicadores_tempo.pdf}
     \label{fig:indicadores-tempo}
 \end{figure}
@@ -168,22 +163,7 @@ Os dados do IPTU não são georreferenciados, então desacompanhados de outros d
 
 Agora, com os dados do censo georreferenciados e os dados do IPTU também georreferenciados, é necessário juntar estas bases. Entretanto, como o recorte dos setores censitários não respeita os recortes dos lotes, algum tipo de critério deve ser adotado para conectar essas geometrias. Duas abordagens foram feitas, a primeira com um join geográfico e a segunda, a partir da rasterização de ambos os dados. Na primeira, para cada um dos 27.592 setores censitários foram identificados todos os lotes que se interseccionam com os setores. A partir disso, foram cortados os lotes que não estão contidos apenas em um setor, de forma a atribuir seus dados a todos os setores que pertence, ponderado pelo percentual de sua área que intersecciona com cada setor. A segunda abordagem envolve dividir a cidade em um quadriculado (\textit{raster}) e converter tanto os dados do IPTU quanto do censo para esta escala. A metodologia é parecida, visto que formado o quadriculado, os lotes são dividos entre cada quadrado, ponderando-se pelo percentual de sua área que intersecciona com cada um.
 
-Dessa forma, para cada setor censitário ou para cada célula do \textit{raster}, há varios lotes, que devem ser agregados segundo algum critério. Para a área construída, área ocupada, área do terreno e unidades, os valores de cada lotes podem ser simplesmente somados. Entretanto, no caso da verticalização fica mais complicado e é necessário estabelecer de maneira muito clara a metodologia de cálculo, que é pouco documentada e unificada na literatura \cite{ccalicskan2022morphological}. Diversas métricas são possíveis para agregar o número de pavimentos de uma região, mas muitas delas podem gerar erros de medição ou acabar representando uma medida muito semelhante ao CA.
-
-Assumindo prédios como paralelepípedos, ou seja, todos os andares apresentam a mesma metragem, é possível traçar relações geométricas nas quais a área ocupada é a superfície que representa a base do paralelepípedo, o número de pavimentos sua altura e a área construída seu volume (Figura \ref{fig:desenho}). Nesse sentido, as relações apresentadas na Equação \ref{eq:pavimentos}, que apresenta diferentes formas de calcular a verticalização, ficam mais claras. Na equação, AC representa a área construída; AO, a área o cupada; AT, a área do terreno; CA o coeficiente de aproveitamento e tx\_ocupacao, o percentual da área do terreno que é ocupada. Usando o procedimento apresentado, em regiões que possuem o mesmo CA, quanto menor for a taxa de ocupação do terreno, maior será a verticalização. Analogamente, para dois lotes com a mesma ocupação de terreno, quanto maior for o CA, maior é a verticalização.
-
-\begin{figure}[h]
-    \centering
-    \caption{Representação do prédio como um paralelepípedo}
-    \includegraphics[width = \linewidth]{imagens/desenho.pdf}
-    \label{fig:desenho}
-\end{figure}
-
-\begin{equation}
-    \text{Pavimentos}=\frac{\text{AC}}{\text{AO}}=\frac{\text{AC}}{\text{AT}\cdot\underbrace{\frac{\text{AO}}{\text{AT}}}_\text{tx\_ocup}}=\frac{\text{AC}}{\text{AT}}\div\frac{\text{AO}}{\text{AT}}=\frac{\text{CA}}{\text{tx\_ocup}}
-    \label{eq:pavimentos}
-\end{equation}
-
+Dessa forma, para cada setor censitário ou para cada célula do \textit{raster}, há varios lotes, que devem ser agregados segundo algum critério. Para a área construída, área ocupada, área do terreno e unidades, os valores de cada lotes podem ser simplesmente somados. Entretanto, no caso da verticalização fica mais complicado e é necessário estabelecer de maneira muito clara a metodologia de cálculo, que é pouco documentada e unificada na literatura \cite{ccalicskan2022morphological}. Diversas métricas são possíveis para agregar o número de pavimentos de uma região, mas muitas delas podem gerar erros de medição ou acabar representando uma medida muito semelhante ao CA. Mais detalhes são discutidos no Apêndice \ref{appendix:verticalizacao}.
 
 Com as bases relacionadas, é importante fazer um balanço para analisar se as informações batem. A única informação em comum entre as bases é o número de unidades habitacionais, que nos dados do IPTU são classificadas como unidades, e na do Censo como domicílios. A definição deles não é exatamente a mesma, porém é a única informação possível de ser validada. Caso o número de domicílios no Censo seja maior do que o de unidades no IPTU, é um forte indicativo de que há moradias irregulares. Para medir essa diferença, foi criado um espectro de irregularidade, que é construído a partir do número de unidades dividido pelo número de unidades mais domicílios. Caso o valor calculado seja próximo de 50\%, as informações são consistentes, ou seja, o número de unidades do IPTU é igual ao número de domicílios no censo. Na medida em que o balanço se aproxima de 0\%, significa que há mais unidades no censo do que no IPTU, enquanto mais próximo de 100\% indica o contrário.
 
@@ -191,35 +171,37 @@ Com as bases relacionadas, é importante fazer um balanço para analisar se as i
     ``Domicílio é o local estruturalmente separado e independente que se destina a servir de habitação a uma ou mais pessoas, ou que esteja sendo utilizado como tal. A separação fica caracterizada quando o local de habitação for limitado por paredes, muros ou cercas e coberto por um teto, permitindo a uma ou mais pessoas, que nele habitam, isolar-se das demais, com a finalidade de dormir, preparar e/ ou consumir seus alimentos e proteger-se do meio ambiente, arcando, total ou parcialmente, com suas despesas de alimentação ou moradia. A independência fica caracterizada quando o local de habitação tem acesso direto, permitindo a seus moradores entrar e sair sem necessidade de passar por locais de moradia de outras pessoas'' \cite{IBGE2013}.
 \end{quote}
 
-Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas.  Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de irregularidade para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
-
-\begin{figure}[h]
-    \centering
-    \caption{Diferença entre unidades e domicílios por setor censitário}
-    \includegraphics[width = \linewidth]{imagens/disparidade_censoIPTU.pdf}
-    \label{fig:balanco}
-\end{figure}
-
 \begin{figure}[h]
     \caption{Inconsistências entre dados do IPTU e do censo}
+    \centering
+    \begin{subfigure}{.8\linewidth}
+        \centering
+        \caption{Diferença entre unidades e domicílios por setor censitário}
+        \includegraphics[width = \linewidth]{imagens/disparidade_censoIPTU.pdf}
+        \label{fig:balanco}
+    \end{subfigure}
     \begin{subfigure}[t]{0.45\linewidth}
+        \caption{Abordagem join}
         \centering
         \includegraphics[width = \linewidth]{imagens/mapa_pontos.pdf}
-        \caption{Abordagem join}
         \label{fig:pontos_erro}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\linewidth}
+        \caption{Abordagem \textit{Raster}}
         \includegraphics[width = \linewidth]{imagens/balanco_raster.pdf}
-        \caption{Abordagem Raster}
         \label{fig:balanco-raster}
     \end{subfigure}
     \label{fig:erros-join}
 \end{figure}
 
-Na Tabela \ref{tab:top5} estão descritas as 5 células do \textit{raster} que apresentam maior densidade populacional. É interessante observar que 4 das 5 regiões mais densas da cidade são de territórios de favelas e repleta quase completamente de domicílios que não estão registrados no IPTU. A densidade habitacional do município de São Paulo no geral é de 7.529 habitantes por quilômetro quadrado, o que significa que esta célula do \textit{raster} posicionada na região de Paraisópolis apresenta uma densidade quase quatro vezes maior do que o resto da cidade.
+Para analisar em termos práticos, no histograma da Figura \ref{fig:balanco} é possível identificar que há diversos setores censitários com domicílios registrados, mas nenhuma unidade habitacional no IPTU. Ademais, são incomuns os casos em que são semelhantes os números de domicílios e unidades. No mapa da Figura \ref{fig:pontos_erro}, para cada setor censitário foram simulados pontos aleatórios dentro da geometria do setor para representar sua população. Nos setores censitários em que não há nenhum lote presente, ou seja, há uma subnotificação de imóveis na base do IPTU, os pontos foram pintados de vermelho. Em azul, estão as geometrias de lotes irregulares e favelas, disponibilizados no GeoSampa. É possível identificar que a maioria dos setores censitários que não possuem loteamento estão nessas áreas de lotes irregulares e favelas.  Na Figura \ref{fig:balanco-raster}, um procedimento semelhante foi feito. Para cada célula do \textit{raster} foi calculado este indicador de irregularidade para analisar as inconsistências entre as bases. É notável que as células que se encontram em regiões centrais apresentam uma quantidade pequena de erros. Os casos mais críticos são células nas periferias.
 
-\input{tabelas/top5.tex}
+\begin{table}[h]
+    \input{tabelas/top5.tex}
+\end{table}
+
+Na Tabela \ref{tab:top5} estão descritas as 5 células do \textit{raster} que apresentam maior densidade populacional. É interessante observar que 4 das 5 regiões mais densas da cidade são de territórios de favelas e repletos quase completamente de domicílios que não estão registrados no IPTU. A densidade populacional do município de São Paulo no geral é de 7.529 habitantes por quilômetro quadrado, o que significa que esta célula do \textit{raster} posicionada na região de Paraisópolis apresenta uma densidade quase quatro vezes maior do que o resto da cidade. Outro fator interessante é o número maior de unidades no IPTU na região da Sé, se comparadas com domicílios do censo. Esta é uma das poucas regiões em que o espectro de irregularidade ultrapassa 50\%. Isso pode estar associada a alta taxa de abandono, que dificulta a medição por parte dos entrevistadores -- os dados do Censo indicam que 34,8\% dos domicílios estão desocupados.
 
 
 Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instrumentos regulatórios. Como é de se esperar, regiões com maior adensamento também apresentam maior CA, verticalização e menor cota parte. É importante destacar que quanto mais lotes irregulares há em uma região, menos confiáveis são os indicadores calculados de CA, cota parte e verticalização, visto que estes são inteiramente calculados com base nos dados do IPTU, que são disponíveis apenas para lotes regulares.
@@ -231,40 +213,39 @@ Na Figura \ref{fig:rasters} é possível analisar o perfil geográfico dos instr
     \label{fig:rasters}
 \end{figure}
 
-Por fim, foi construída uma matriz de correlação (Figura \ref{fig:corplot}) entre as variáveis mais importantes. É notável a baixa correlação linear que se observa entre a densidade e outras variáveis, mas na seção seguinte serão exploradas essas relações com maior profundidade. O importante de se observar é a forte correlação entre a verticalização e o CA, o que é natural, visto que o cálculo da verticalização utiliza o CA, como demonstrado na Figura \ref{fig:desenho}. Um raciocínio semelhante se aplica à taxa de ocupação, visto que para um gabarito pré estabelecido, quando maior a taxa de ocupação, maior o CA.
+Retomando a discussão sobre métricas de tipomorfologia, é importante definir com clareza o significado de densidade populacional \cite{ccalicskan2022morphological}. Em termos mais abrangentes, é a soma da população que se encontra em uma área. Todavia, a definição da área pode ser subjetiva. Por exemplo, se há um bairro que contém um lago, mas em toda a área de terra há um grande número de pessoas, a densidade será diluída se for considerada a área do lago. Nesse sentido, foram construídas duas métricas de densidade, uma densidade residencial que computa apenas a área de terreno de lotes residenciais, e a área total, que considera tudo, incluindo usos do solo não residenciais. Até este momento do artigo, a medida de densidade utilizada foi a total, mas na Seção \ref{sec:analise} essa diferenciação torna-se importante para avaliar os resultados. Os resultados para Figura \ref{fig:rasters} utilizando a densidade residencial podem ser observados no Apêndice \ref{appendix:rasters-corte}.
 
-\begin{figure}[h]
+\begin{figure}[!h]
     \centering
-    \caption{Matriz de correlação entre as variáveis de interesse}
-    \includegraphics[width = .6\textwidth]{imagens/corrplot.pdf}
+    \caption{Matriz de correlação entre as variáveis de interesse -- espectro irregularidade entre 40 e 60\%}
+    \includegraphics[width = .75\textwidth]{imagens/corrplot.pdf}
     \label{fig:corplot}
 \end{figure}
 
+Por fim, foi construída uma matriz de correlação (Figura \ref{fig:corplot}) entre as variáveis mais importantes. A correlação entre a densidade residencial e a total é de apenas 38\%, o que indica que de fato elas medem fenômenos diferentes. Os dois tipos de densidade apresentam a correlação na direção esperada com os indicadores apresentados, sendo que a residencial apresenta correlação mais forte. A alta correlação entre o CA e a verticalização é discutida no Apêndice \ref{appendix:verticalizacao}.
 
 \section{Alguns resultados preliminares}
 
-Apenas através da análise descritiva já é possível concluir que em boa parte da cidade os instrumentos regulatórios não funcionam, visto que as moradias não estão nem registradas nos sistemas públicos. Dessa forma, não importa qual regra for adotada pelo governo, estas áreas não serão impactadas por isso. Em termos numéricos, dos 4.996.529 domicílios registrados pelo Censo, há apenas 2.641.635 unidades habitacionais registradas no IPTU, o que representa um índice de moradia regular (em termos legais) de aproximadamente 52,87\%. Além disso, considerando uniforme o número de moradores por domicílio em cada setor censitário, estima-se que 5.944.595 de pessoas habitam em domicílios que não estão registrados no IPTU, o que representa 51,9\% da população de São Paulo.
+Apenas através da análise descritiva já é possível concluir que em boa parte da cidade os instrumentos regulatórios não funcionam, visto que as moradias não estão nem registradas nos sistemas públicos. Dessa forma, não importa qual regra for adotada pelo governo, estas áreas não serão impactadas por isso. Em termos numéricos, dos 4.996.529 domicílios registrados pelo Censo, há apenas 2.641.635 unidades habitacionais registradas no IPTU, o que representa um índice de moradia regular (em termos legais) de aproximadamente 52,87\%. Além disso, considerando uniforme o número de moradores por domicílio em cada setor censitário, estima-se que 5.944.595 de pessoas habitam em domicílios que não estão registrados no IPTU, o que representa 51,9\% da população de São Paulo. Outra descoberta relevante é de que grande parte das áreas mais densas da cidade estão em regiões de irregularidade. Isso é um indicativo de que há incentivos mais poderosos do que a regulação para definir a densidade de cada região.
 
-Outra descoberta relevante é de que grande parte das áreas mais densas da cidade estão em regiões de irregularidade. Isso é um indicativo de que há incentivos mais poderosos do que a regulação para definir a densidade de cada região.
-
-% entre as regiões mais densas da cidade, muitas estão nestes 48\% que não estão registradas no IPTU, portanto há outras forças além da regulação que levam a esse adensamento.
+Por fim, observa-se uma correlação positiva entre a densidade e o CA e verticalização, o que indica que geralmente regiões mais verticais e com maior densidade construtiva, maior a densidade. Sobre a cota parte, há uma correlação negativa com a densiade, visto que quanto mais unidades para uma dada área do terreno, menor a cota parte e maior a densidade. Entretanto, apenas a correlação não é suficiente para determinar se os instrumentos são capazes de definir a densidade ou não. Na Seção \ref{sec:analise} será feita a análise com maior profundidade.
 
 
 \chapter{Análise}
 \label{sec:analise}
 
-Para identificar como os indicadores estão relacionados à densidade habitacional, foi elaborada uma regressão linear, especificada na Equação \ref{eq:reg}. 
+\section{Densidade pela ótica da área de terreno residencial}
+
+Para identificar como os indicadores estão relacionados à densidade populacional, foi elaborada uma regressão linear, especificada na Equação \ref{eq:reg}. A densidade computada na regressão é a densidade residencial, que é calculada pela área do terreno ao invés da área total.
 
 \begin{equation}
-    \textit{densidade}_i = \beta_0 + \beta_1 \cdot \textit{CA}_i + \beta_2 \cdot\textit{cota parte}_i + \beta_3\cdot\textit{verticalização}_i + \varepsilon_i
+    \textit{densidade}_i^{(R)} = \beta_0 + \beta_1 \cdot \textit{CA}_i + \beta_2 \cdot\textit{cota parte}_i + \beta_3\cdot\textit{verticalização}_i + \varepsilon_i
     \label{eq:reg}
 \end{equation}
 
 Na análise conduzida, o nível da observação $i$ não pode ser o setor censitário, pois como discutido na Seção \ref{sec:dados}, o setor é construído de forma que um entrevistador sozinho consiga cobrí-lo por completo. Como consequência, áreas mais densas apresentarão setores censitários menores e, caso isso não seja controlado na regressão, haverá um grande problema de endogeneidade. Inclusive, na metodologia de separação dos setores censitários, há valores definidos de domicílios que cada setor censitário deve apresentar, de acordo com suas características \cite{IBGE2024}. Todavia, a área não pode ser um regressor, visto que haveria uma relação de simultaneidade: ao mesmo tempo que a área explica a densidade, a densidade também explica a área. Essa relação viola as suposições necessárias para interpretabilidade dos resultados.
 
-Para contornar este problema, o nível da observação foi definido como cada célula do \textit{raster}, metodologia apresentada na Seção \ref{sec:dados}. Dessa forma, todas células apresentam o mesmo tamanho e este problema deixa de existir. Note que foram desconsideradas as células em que há dados do Censo, mas não há dados do IPTU, já que não se sabe o valor dos indicadores de regulação urbana nessas regiões. Em áreas em que há uma diferença muito grande entre número de domicílios registrados pelo Censo e unidades do IPTU, há menos confiança de que os indicadores calculados representam de fato a realidade. Portanto, em áreas em que o espectro de irregularidade está muito distante de 50\%, haverá viés nas estimações. 
-
-Nesse sentido, foram feitas duas regressões, uma delas irrestrita, e a outra considera apenas valores do espectro entre 40 e 60\%. Além disso, em cada uma dessas regressões a densidade, que é a variável dependente, foi computada em nível e em log. Os resultados podem ser observados na Tabela \ref{tab:reg}. 
+Para contornar este problema, o nível da observação foi definido como cada célula do \textit{raster}, metodologia apresentada na Seção \ref{sec:dados}. Dessa forma, todas células apresentam o mesmo tamanho e este problema deixa de existir. Note que foram desconsideradas as células em que há dados do Censo, mas não há dados do IPTU, já que não se sabe o valor dos indicadores de regulação urbana nessas regiões. Em áreas em que há uma diferença muito grande entre número de domicílios registrados pelo Censo e unidades do IPTU, há menos confiança de que os indicadores calculados representam de fato a realidade. Portanto, em áreas em que o espectro de irregularidade está muito distante de 50\%, haverá viés nas estimações. Nesse sentido, foram feitas duas regressões, uma delas considera valores do espectro de irregularidade entre 35 e 65\% e a outra, entre 45 e 55\%. Além disso, em cada uma dessas regressões a densidade, que é a variável dependente, foi computada em nível e em log. Os resultados podem ser observados na Tabela \ref{tab:reg}. 
 
 \begin{table}[h]
     \caption{Regressão para densidade populacional em São Paulo, 2022}
@@ -273,18 +254,18 @@ Nesse sentido, foram feitas duas regressões, uma delas irrestrita, e a outra co
     \addtocounter{table}{-1}
 \end{table}
 
-O primeiro resultado interessante de ser analisado é como a verticalização não influencia a densidade. Do ponto de vista teórico isso faz sentido, visto que o número de andares é um fator principalmente estético, enquanto o CA computa quanto de área está sendo construída em relação ao tamanho do lote. Este resultado é consistente para as regressões (C) e (D), nas quais são considerados apenas os setores em que não há muita irregularidade e os estimadores são mais confiáveis. 
+O primeiro resultado interessante de ser analisado é como não são fortes as evidências de que a verticalização influencia a densidade. Do ponto de vista teórico isso faz sentido, visto que com o CA mantido constante, há um \textit{trade-off} direto entre verticalização e área construída, sendo que esta escolha é representa uma escolha principalmente estética, dado que a área construída se mantém igual. Todavia, um ponto importante de ser destacado é que o corte escolhido para o espectro de irregularidade nas regressões não segue um critério, portanto foi feita uma análise de sensibilidade dos resultados para variações desse critério arbitrário. Os resultados desse teste de robustez pode ser consultado no Apêndice \ref{appendix:robustez-corte}.
 
-Ao analisar a regressão (D), com a densidade em log, pode-se inferir que ao diminuir a cota parte em um metro quadrado, espera-se que com os outros componentes constantes, a densidade aumente em média 0,2\%. O aumento de 1 no CA, segundo os resultados da regressão (D), tem como consequência um aumento esperado médio na densidade de 14\%, caso os outros componentes se mantenham iguais. Infelizmente o intercepto não apresenta interpretação, visto que na prática é impossível que uma área tenha cota parte igual a zero, visto que é calculada pela área do terreno sobre o número de unidades, então apresenta o valor máximo igual a área do terreno e se aproxima de zero na medida em que o número de unidades é infinito. 
+Ao analisar a regressão (D), com a densidade em log, pode-se inferir que ao diminuir a cota parte em um metro quadrado, espera-se que com os outros componentes constantes, a densidade aumente em média 0,2\%. O aumento de 1 no CA, segundo os resultados da regressão (D), tem como consequência um aumento esperado médio na densidade de 27,4\%, caso os outros componentes se mantenham iguais. Infelizmente o intercepto não apresenta interpretação, visto que na prática é impossível que uma área tenha cota parte igual a zero, já que é calculada pela área do terreno sobre o número de unidades, então apresenta o valor máximo igual a área do terreno e se aproxima de zero na medida em que o número de unidades é infinito. 
 
 Todavia, há dois pontos que devem ser levantados. Primeiramente, partindo da hipótese de que os instrumentos de regulação apresentados não são eficientes para definir a densidade, os parâmetros da regressão estarão contaminados pelo viés advindo da omissão de regressores relevantes. Em segundo lugar, a forma funcional não foi especificada com base em alguma teoria econômica ou algum tipo de embasamento. Inclusive, ela pode ser reescrita como apresentado na Equação \ref{eq:reg2}, na qual se observa o que está por trás dos indicadores.
 
 \begin{equation}
-    \frac{\textit{População}_i}{\textit{A. Total}_i}=\beta_0+\beta_1\frac{\textit{A. Construída}_i}{\textit{A. do Terreno}_i}+\beta_2\frac{\textit{A. Terreno}_i}{\textit{N. unidades}_i}+\beta_3\frac{\textit{A. Construída}_i}{\textit{A. Ocupada}_i}+\varepsilon_i
+    \frac{\textit{População}_i}{\textit{A. Terreno}_i}=\beta_0+\beta_1\frac{\textit{A. Construída}_i}{\textit{A. Terreno}_i}+\beta_2\frac{\textit{A. Terreno}_i}{\textit{N. unidades}_i}+\beta_3\frac{\textit{A. Construída}_i}{\textit{A. Ocupada}_i}+\varepsilon_i
     \label{eq:reg2}
 \end{equation}
 
-Nesse sentido, foi tomada uma abordagem diferente, na qual foi construída uma \textit{random forest} \cite{wright2015ranger}. A vantagem dessa abordagem é que não é necessário especificar uma forma funcional, já que a própria metodologia seleciona as variáveis mais importantes. No exemplo de árvore de regressão apresentado na figura \ref{fig:tree}, cada círculo representa um nó de decisão, então no primeiro à esquerda, por exemplo, para cada observação da amostra gerada via \textit{bootstrap}, é testado se a sua cota parte é menor ou maior que 147 metros quadrados. A depender do resultado, a observação é direcionada para o próximo nó de decisão até que chegue na folha (quadrado na figura). É interessante notar que as folhas cuja predição apresenta a maior densidade são as com cota parte pequena e CA alto.
+Nesse sentido, foi tomada uma abordagem diferente, na qual foi construída uma \textit{random forest} \cite{wright2015ranger}. A vantagem dessa abordagem é que não é necessário especificar uma forma funcional, já que a própria metodologia seleciona as variáveis mais importantes e constrói uma regressão não linear. No exemplo de árvore de regressão apresentado na Figura \ref{fig:tree}, cada círculo representa um nó de decisão, então no primeiro à esquerda, por exemplo, é testado se a cota parte é menor ou maior que 147 metros quadrados. A depender do resultado, a observação é direcionada para o próximo nó de decisão até que chegue na folha (na figura, a folha está representada pelo quadrado à direita). É interessante notar que as folhas cuja predição apresenta a maior densidade são as com cota parte pequena e CA alto.
 
 \begin{figure}[h]
     \centering
@@ -293,40 +274,33 @@ Nesse sentido, foi tomada uma abordagem diferente, na qual foi construída uma \
     \label{fig:tree}
 \end{figure}
 
-Para construir o modelo de floresta de regressão, é necessário dividir a base de dados em treino e teste, de forma que não haja \textit{overfit}, ou seja, o modelo não ``decora'' os dados. Com o objetivo de tornar a comparação justa, foi refeita a equação de regressão linear, como especificado na Tabela \ref{tab:reg} (C), mas apenas com os dados de treino. Depois, tanto a floresta de regressão, quanto a regressão linear previram os dados de teste, para comparar os modelos. O $R^2$ na base de teste para o modelo de regressão linear foi de 23,9\%, enquanto da floresta de regressão foi de 28,8\%.
+Para construir o modelo de floresta de regressão, é necessário dividir a base de dados em treino e teste, de forma que não haja \textit{overfit}, ou seja, o modelo não ``decora'' os dados. As árvores foram construídas a partir das células que apresentam o espectro de irregularidade entre 40 e 60\%. Com o objetivo de tornar a comparação justa, foi refeita a equação de regressão linear, como especificado na Tabela \ref{tab:reg} (C), mas apenas com os dados de treino. Depois, tanto a floresta de regressão, quanto a regressão linear previram os dados de teste, para comparar os modelos. O $R^2$ na base de teste para o modelo de regressão linear foi de 48,4\%, enquanto da floresta de regressão foi de 72,2\%. Apesar da regressão apresentar um bom coeficiente de explicação, o maior sucesso da árvore de regressão é uma evidência de que a relação entre as variáveis apresentadas não é linear.
 
+Depois, foi fornecido à floresta de regressão mais informações que estão disponíveis na base de dados do IPTU, para avaliar se há algum outro componente importante para definir a densidade. Como resultado, o novo $R^2$ passou a ser de 81,1\%, o que representa um ganho aproximado de 10\%. Isso é um indicativo de que as outras variáveis não trazem muitas novas informações para prever a densidade populacioal da região. Entre as novas variáveis do modelo, estão o número total de unidades, a latitude e longitude do \textit{raster}, e as áreas do terreno, construída e ocupada.
 
-Depois, foi fornecido à floresta de regressão mais informações que estão disponíveis na base de dados do IPTU, para avaliar se há algum outro componente importante para definir a densidade. Como resultado, o novo $R^2$ passou a ser de 84,8\%, o que é cerca de três vezes maior. Isso é um forte indicativo de que há variáveis muito importantes para definir a densidade que não estavam sendo consideradas. Entre as novas variáveis do modelo, estão o número total de unidades, a latitude e longitude do \textit{raster}, e as áreas do terreno, construída e ocupada.
-
-Para analisar quais informações do modelo são mais importantes, é possível realizar um procedimento de permutação no qual é introduzido ruído nos regressores para testar como isso afeta o erro do modelo \cite{breiman2001random, Nembrini2018}. Esse processo de permutação permite quantificar a importância de cada regressor para explicar a variável dependente. Na Figura \ref{fig:importancia} é possível observar os resultados. 
+Para analisar quais informações do modelo são mais importantes, é possível realizar um procedimento de permutação no qual é introduzido ruído nos regressores para testar como isso afeta o erro do modelo \cite{breiman2001random, Nembrini2018}. Esse processo de permutação permite quantificar a importância de cada regressor para explicar a variável dependente. Na Figura \ref{fig:importancia} é possível observar os resultados. Foi também incluída uma coluna placebo, que contém valores aleatórios para fins de comparação. Como resultado, observa-se que o instrumento mais relevante para definir a densidade populacional foi a cota parte, seguida do CA e por fim a verticalização. É notável que a área do terreno apresenta uma importância significativa na definição da densidade residencial. Um motivo que pode contribuir para isso é, como apontado na Equação \ref{eq:reg2}, que a área do terreno é utilizada no cálculo da densidade.
 
 \begin{figure}[h]
     \centering
     \caption{Importância das variáveis do modelo para explicar a densidade}
-    \includegraphics[width = .8\linewidth]{imagens/var_importance.pdf}
+    \includegraphics[width = .95\linewidth]{imagens/var_importance.pdf}
     \label{fig:importancia}
 \end{figure}
 
-É interessante perceber que a ferramenta que se demonstra mais importante para definir a densidade é o número de unidades. Na regulação, um instrumento que apresenta uma função parecida é a cota parte, mas esta calcula a área do terreno sobre o número de unidades, então não exercem exatamente a mesma função. A vantagem de usar a cota parte ao invés do número de unidades se encontra na dificuldade de definir um número de unidades para cada localização, enquanto a cota parte faz este cálculo automaticamente, com base no tamanho do terreno (Equação \ref{eq:cotaparte}).
+\section{Densidade pela ótica da área total}
 
-De maneira semelhante, a área construída se apresenta mais relevante em relação ao CA, que é calculado pela área construída sobre a área do terreno. Entretanto, um fator que merece ser destacado é que enquanto estes indicadores utilizam como base a área do terreno, a densidade habitacional é calculada com base na área total da região, que inclui a área de terreno mais lotes não residenciais, áreas públicas como ruas e parques, rios, etc.
+Os resultados apresentados até então foram relativos à densidade residencial, que é diferente da densidade total, como desenvolvido na Seção \ref{sec:dados}. Caso o objetivo dos instrumentos seja regulamentar um novo lote residencial a ser construído, utilizar a ótica da área do terreno é o que mais faz sentido. Todavia, caso a intenção do governo seja de regulamentar uma região como um todo, não importando o uso de solo, faz mais sentido considerar a densidade como uma fração da área total. Isso implica considerar terrenos residenciais e não residenciais no cômputo da densidade, como áreas públicas, comerciais, de lazer, etc. Uma área com um grande parque, por exemplo, na ótica da área de terreno (densidade residencial), não é responsável por reduzir a densidade em uma região, e dessa forma os instrumentos não serão capazes de compensar a densidade perdida por outros usos do solo. 
 
-Nesse sentido, para criar uma comparação justa, foram realizados novamente os procedimentos, mas agora calculando a densidade populacional como a população sobre a área do terreno, ao invés da área total. Os novos resultados podem ser observados na Figura \ref{fig:importancia_densmod}. Agora, a relação se inverteu e a cota parte e o CA se tornam mais importante do que o número de unidades e área construída, respectivamente.
+A cota parte, que define o número mínimo de unidades que o lote deve apresentar, não considera quanto da área na região é alocada para outros tipos de uso de solo. Nesse sentido, considerando o exemplo do parque, um novo empreendimento não deve apresentar mais unidades por estar ao lado de uma área com amenidades e menor área de terreno residencial. Para validar se esta hipótese é verdadeira, foi realizado o mesmo procedimento utilizado para a densidade residencial, mas agora regredindo a densidade na ótica da área total. A importância de cada variável pode ser observada na Figura \ref{fig:importancia_densmod}.
 
 \begin{figure}[h]
     \centering
     \caption{Importância das variáveis, mas com a densidade calculada através da população sobre a área do terreno}
-    \includegraphics[width = .8\linewidth]{imagens/var_importance_densmod.pdf}
+    \includegraphics[width = .95\linewidth]{imagens/var_importance_densmod.pdf}
     \label{fig:importancia_densmod}
 \end{figure}
 
-Com a densidade calculada sobre a área do terreno, a performance dos modelos aumentaram bastante, sendo que a regressão linear passa a ter um $R^2$ na base de teste de 43,6\%, a \textit{random forest} de 72,7\% e quando incluídas todas as variáveis, o $R^2$ aumenta marginalmente para 79,6\%. Isso significa que as outras variáveis além dos três instrumentos não agregam muitas novas informações para explicar a densidade.
-
-Portanto, os três instrumentos de regulação são mais eficientes ao definir a densidade populacional ao se considerar a área de terreno ao invés da total. Em termos práticos, se a área da região for composta por lotes não residenciais, elementos naturais como rios, ou outros fatores, os instrumentos perdem a eficácia. Entretanto, se um novo lote residencial for construído, apenas com base nos três indicadores é possível ter uma boa ideia de qual densidade ele apresentará, sendo que outras informações como o número de unidades, não ajudariam muito. 
-
-Portanto, os três instrumentos de regulação são mais eficientes para definir a densidade populacional quando se considera a área do terreno, ao invés da área total. Em termos práticos, a eficácia desses instrumentos diminui se a região incluir lotes não residenciais, elementos naturais como rios, ou outros fatores. No entanto, para um novo lote residencial, é possível prever a densidade com base nesses três indicadores, sendo que outras informações, como o número de unidades, não agregariam muita precisão adicional.
-
-Todavia, há outras variáveis que não estão contempladas na base de dados do IPTU ou do censo, que podem ser muito importantes, como proximidade a ofertas de emprego ou meios de tranporte de alta capacidade, amenidades, etc. Em outras palavras, não é possível afirmar que os três indicadores utilizados sejam os mais eficientes, mas eles certamente são bons indicativos de densidade populacional.
+É interessante perceber que a ferramenta que se demonstra mais importante para definir a densidade total é o número de domicílios, especialmente os ocupados. Isso é um forte indicativo de que os instrumentos, apesar de serem capazes de definir a densidade de uma área de terreno, não apresentam a mesma eficácia para definir a densidade de uma região. O modelo de regressão linear, como especificado na Equação \ref{eq:reg}, apresenta um $R^2$ na base de teste de apenas 28,8\%, o que representa uma queda no poder de explicação. Com as mesmas variáveis explicativas, a árvore de regressão atinge um $R^2$ de 40\%. Agora, ao introduzir-se as outras variáveis disponíveis, as que estão demonstradas na Figura \ref{fig:importancia_densmod}, o $R^2$ na base de treino passa a ser de 95,6\%, mais que duas vezes maior do que o modelo restrito apenas com os três instrumentos. 
 
 \chapter{Conclusão}
 \label{sec:conclusao}
