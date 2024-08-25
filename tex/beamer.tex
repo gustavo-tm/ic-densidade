@@ -1,5 +1,5 @@
 \documentclass[%
-    9pt, 
+    8pt, 
     aspectratio=169,
     % draft
 ]{beamer}
@@ -25,6 +25,7 @@
 
 \usepackage{tikz}
 \usepackage{pgfplots} % Pacote para criação de gráficos
+\usepackage{amsmath}
 
 \pgfplotsset{compat=newest}
 \usepgfplotslibrary{statistics, fillbetween}
@@ -98,11 +99,35 @@
 
 \end{frame}
 
+\begin{frame}
+    \frametitle{Importância da regulação}
+
+    \begin{columns}
+        \column{.5\textwidth}
+        \begin{itemize}
+            \item O mercado \textit{laissez faire} adensa regiões centrais, próximas aos empregos
+            
+            \item Falhas de mercado geram espraiamento urbano. Exemplo: carro
+            \begin{itemize}
+                \item Carro gera trânsito, poluição, óbitos por acidentes, expansão da mancha urbana
+                \item Custos negligenciáveis do ponto de vista individual, mas externalidades importantes, quando agregadas
+            \end{itemize}
+            \item Regulação tem capacidade de combater externalidades
+            \begin{itemize}
+                \item Pedágio urbano, solução pigouviana
+                \item Regulação sobre potencial construtivo é mais factível, mas apresenta seus custos
+            \end{itemize}
+        \end{itemize}
+
+        \column{.5\textwidth}
+        \input{imagens/micro gabarito.tex}
+    \end{columns}
+\end{frame}
 
 \begin{frame}
     \frametitle{Regulação em São Paulo}
 
-    Os mecanismos de regulação são principalmente definidos pelo atual Plano Diretor Estratégico \cite[PDE]{PDE}
+    Os mecanismos de regulação são principalmente definidos pelo atual Plano Diretor Estratégico
 
     \begin{itemize}
         \item Entre os 17 objetivos estabelecidos, ao menos nove estão relacionados a estratégias de adensamento urbano \cite{lima2021alem}
@@ -118,71 +143,13 @@
 
     Estes instrumentos de regulação são capazes de determinar a densidade populacional?
 
+    \bigskip
+    
+    \includegraphics[width = .9\textwidth]{imagens/desenho_proposta.pdf}
+
 \end{frame}
-
-\section{Teoria}
-
-\begin{frame}
-    \frametitle{Construção do modelo econômico}
-    \framesubtitle{\cite{papageorgiou2012essay, fujita1989urban,brueckner2011lectures}}
-
-    \begin{columns}
-        \column{.5\textwidth}
-        \begin{itemize}
-            \item Pessoas querem moradias e consumir bens
-            \begin{itemize}
-                \item Quanto mais perto do trabalho moram, menos é gasto com transporte
-                \item Com mais demanda pelas regiões centrais, mais caro fica o $m^2$
-            \end{itemize}
-            \item Imobiliárias querem maximizar seus lucros
-            \begin{itemize}
-                \item Prefere construir onde há um $m^2$ mais caro
-                \item Vale a pena construir mais pavimentos onde o custo marginal de verticalizar é igual ao custo marginal da terra
-            \end{itemize}
-            \item Resultado: A densidade aumenta na medida em que a distância ao centro diminui
-        \end{itemize}
-
-        \column{.5\textwidth}
-        \input{imagens/micro.tex}
-    \end{columns}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Introdução de novos componentes}
-    \framesubtitle{\cite{papageorgiou2012essay, fujita1989urban,brueckner2011lectures}}
-
-    \begin{columns}
-        \column{.5\textwidth}
-        \input{imagens/micro.tex}
-
-        \column{.5\textwidth}
-        \input{imagens/micro-2.tex}
-    \end{columns}
-\end{frame}
-
-% \begin{frame}
-%     \frametitle{Implicações em policy}
-% \end{frame}
-
 
 \section{Dados}
-
-% \begin{frame}
-%     \frametitle{Sumário}
-%     \begin{columns}
-%         \column{.5\textwidth}
-%         \tableofcontents[currentsection]
-
-%         \column{.5\textwidth}
-%         \begin{enumerate}
-%             \item Dados do Censo
-%             \item Dados do IPTU
-%             \item Cruzamento dos dados
-%             \item Resultados preliminares
-%         \end{enumerate}
-%     \end{columns}
-    
-% \end{frame}
 
 \begin{frame}
     \frametitle{Dados do Censo}
@@ -206,75 +173,6 @@
     \end{columns}
 \end{frame}
 
-
-
-\begin{frame}
-    \frametitle{Cálculo dos indicadores}
-    \bigskip
-
-    \begin{columns}[T]
-        \column{.33\textwidth} 
-        \centering
-        \textbf{Coeficiente de Aproveitamento}
-        
-        \begin{equation*}
-            CA=\frac{\textit{Área Construída}}{\textit{Área do Terreno}}
-        \end{equation*}
-
-        \column{.33\textwidth} 
-        \centering
-        \textbf{Cota Parte}
-
-        \begin{equation*}
-            CP=\frac{\textit{Área do Terreno}}{\textit{Número de Unidades}}
-        \end{equation*}
-
-        \column{.33\textwidth}
-        \centering 
-        \textbf{Verticalização}
-
-        \begin{equation*}
-            \textit{Pavimentos (?)}
-        \end{equation*}
-    \end{columns}
-
-    \bigskip
-
-    \begin{figure}
-        \centering
-        \includegraphics[width = .85\textwidth]{imagens/indicadores.pdf}
-    \end{figure}
-\end{frame}
-
-
-\begin{frame}
-    \frametitle{Verticalização}
-    \begin{figure}
-        \centering
-        \includegraphics[height = .9\textheight]{imagens/desenho.pdf}
-    \end{figure}
-\end{frame}
-
-
-\begin{frame}
-    \frametitle{Verticalização}
-    \begin{equation*}
-        \text{Pavimentos}=\frac{\text{AC}}{\text{AO}}=\frac{\text{AC}}{\text{AT}\cdot\underbrace{\frac{\text{AO}}{\text{AT}}}_\text{tx\_ocup}}=\frac{\text{AC}}{\text{AT}}\div\frac{\text{AO}}{\text{AT}}=\frac{\text{CA}}{\text{tx\_ocup}}
-    \end{equation*}
-    \begin{figure}
-        \centering
-        \includegraphics[height = .6\textheight]{imagens/desenho.pdf}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Área construída em São Paulo}
-    \begin{figure}
-        \centering
-        \includegraphics[height = .95\textheight]{imagens/tree_area_construida.pdf}
-    \end{figure}
-\end{frame}
-
 \begin{frame}
     \frametitle{Dados do IPTU}
     \begin{columns}
@@ -295,7 +193,58 @@
             \includegraphics[width = .8\textwidth]{imagens/verticalizacao.pdf}
         \end{figure}
     \end{columns}
-    
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cômputo dos padrões construtivos}
+    \bigskip
+
+    \begin{columns}[T]
+        \column{.33\textwidth} 
+        \centering
+        \textbf{Densidade Construtiva}
+        
+        Coeficiente de Aproveitamento
+        
+        \begin{equation*}
+            \frac{\textit{Área Construída}}{\textit{Área do Terreno}}
+        \end{equation*}
+
+        \column{.33\textwidth} 
+        \centering
+        \textbf{Densidade Habitacional}
+
+        Cota Parte
+
+        \begin{equation*}
+            \frac{\textit{Área do Terreno}}{\textit{Número de Unidades}}
+        \end{equation*}
+
+        \column{.33\textwidth}
+        \centering 
+        \textbf{Verticalização} \hyperlink{appendix:verticalizacao}{\beamerbutton{Explicação}}
+
+        Número de Pavimentos
+
+        \begin{equation*}
+            \frac{\textit{Área Construída}}{\textit{Área Ocupada}}
+        \end{equation*}
+    \end{columns}
+
+    \bigskip
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = .85\textwidth]{imagens/indicadores.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Área construída em São Paulo}
+    \begin{figure}
+        \centering
+        \includegraphics[height = .95\textheight]{imagens/tree_area_construida.pdf}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
@@ -380,11 +329,25 @@
 
 \begin{frame}
     \frametitle{Construção do modelo empírico}
-    \fontsize{12pt}{7}
-    \begin{equation*}
-        \textit{densidade}_i = \beta_0 + \beta_1 \cdot \textit{CA}_i + \beta_2 \cdot\textit{cota parte}_i + \beta_3\cdot\textit{verticalização}_i + \varepsilon_i
+    \begin{align}
+        \textit{Densidade Populacional}_i =
+        &\beta_0 + \beta_1 \cdot \textit{Densidade Construtiva}_i + & \rightarrow & \text{ CA}\nonumber\\
+        &\beta_2 \cdot\textit{Densidade Habitacional}_i + & \rightarrow & \text{ Cota Parte} \\
+        &\beta_3\cdot\textit{Verticalização}_i + \varepsilon_i & \rightarrow & \text{ Gabarito}\nonumber
         \label{eq:reg}
-    \end{equation*}
+    \end{align}
+
+    \vspace{1cm}
+
+    \only<2>{\begin{equation}
+        \frac{\textit{População}_i}{\textit{A. Terreno}_i}=
+        \beta_0+
+        \beta_1\underbrace{\frac{\textit{A. Construída}_i}{\textit{A. Terreno}_i}}_\text{CA}+
+        \beta_2\underbrace{\frac{\textit{A. Terreno}_i}{\textit{N. unidades}_i}}_\text{Cota Parte}+
+        \beta_3\underbrace{\frac{\textit{A. Construída}_i}{\textit{A. Ocupada}_i}}_\text{Verticalização}+\varepsilon_i
+        \label{eq:reg2}
+    \end{equation}}
+
 \end{frame}
 
 \begin{frame}
@@ -413,6 +376,9 @@
         \caption{Regressão para densidade populacional}
         \include{tabelas/regressao_small}
     \end{table}
+
+    \hyperlink{appendix:robustez}{Testes de robustez}
+
 \end{frame}
 
 \begin{frame}
@@ -421,20 +387,13 @@
     \begin{enumerate}
         \item Forma funcional
 
-        \begin{align*}
-            &\textit{densidade}_i 
-            &=\beta_0 
-            &+\beta_1 (\textit{CA}_i) 
-            &+\beta_2 (\textit{cota parte}_i)
-            &+\beta_3 (\textit{verticalização}_i)
-            &+\varepsilon_i \\
-            &\frac{\textit{População}_i}{\textit{A. Total}_i}
-            &=\beta_0
-            &+\beta_1\left(\frac{\textit{A. Construída}_i}{\textit{A. do Terreno}_i}\right)
-            &+\beta_2\left(\frac{\textit{A. Terreno}_i}{\textit{N. unidades}_i}\right)
-            &+\beta_3\left(\frac{\textit{A. Construída}_i}{\textit{A. Ocupada}_i}\right)
-            &+\varepsilon_i
-        \end{align*}
+        \begin{equation*}
+            \frac{\textit{População}_i}{\textit{A. Terreno}_i}=
+            \beta_0+
+            \beta_1\underbrace{\frac{\textit{A. Construída}_i}{\textit{A. Terreno}_i}}_\text{CA}+
+            \beta_2\underbrace{\frac{\textit{A. Terreno}_i}{\textit{N. unidades}_i}}_\text{Cota Parte}+
+            \beta_3\underbrace{\frac{\textit{A. Construída}_i}{\textit{A. Ocupada}_i}}_\text{Verticalização}+\varepsilon_i
+        \end{equation*}
 
         \bigskip
         \item<2-> Omissão de regressores relevantes
@@ -448,7 +407,7 @@
 \begin{frame}
     \frametitle{Construção da \textit{random forest}}
     \begin{figure}
-        \includegraphics[width = .7\textwidth]{imagens/tree_example.png}
+        \includegraphics[width = .9\textwidth]{imagens/tree_example.png}
     \end{figure}
 \end{frame}
 
@@ -457,23 +416,22 @@
 
     \begin{table}
         \centering
-        \resizebox{.75\textwidth}{!}{%
+        \resizebox{.7\textwidth}{!}{%
         \begin{tabular}{rcl}
             Modelo & Variáveis & $R^2$ na base de teste \\
             \hline
-            Regressão Linear & (restrita) & 0,239\\
-            \textit{Random Forest} & (restrita) & 0,288\\
-            \textit{Random Forest} & (irrestrita) & 0,848
+            Regressão Linear & (restrita) & 0,506\\
+            \textit{Random Forest} & (restrita) & 0,819\\
+            \textit{Random Forest} & (irrestrita) & 0,847
         \end{tabular}%
     }
     \end{table}
     
-    \vspace{25pt}
+    \vspace{1cm}
 
     Modelo na versão irrestrita adiciona as variáveis: 
     \begin{itemize}
         \item Número total de unidades
-        \item Latitude e longitude do raster
         \item Áreas de terreno, construída e ocupada
 
     \end{itemize}
@@ -485,6 +443,15 @@
         \includegraphics[width = .8\textwidth]{imagens/var_importance.pdf}
     \end{figure}
 \end{frame}
+
+\begin{frame}
+    \frametitle{Previsões do modelo}
+    \begin{figure}
+        \caption{Previsões de população para cada padrão construtivo, considerando um terreno de 5.000$m^2$}
+        \includegraphics[width = .75\textwidth]{imagens/previsoes.pdf}
+    \end{figure}
+\end{frame}
+
 
 \begin{frame}
     \frametitle{Retomando\dots}
@@ -511,31 +478,30 @@
 
     \begin{table}
         \centering
-        \caption{Resultados utilizando área total para calcular a densidade}
+        \caption{Resultados utilizando área residencial para calcular a densidade}
         \resizebox{.6\textwidth}{!}{%
         \begin{tabular}{rcl}
             Modelo & Variáveis & $R^2$ na base de teste \\
             \hline
-            Regressão Linear & (restrita) & 0,239\\
-            \textit{Random Forest} & (restrita) & 0,288\\
-            \textit{Random Forest} & (irrestrita) & 0,848
+            Regressão Linear & (restrita) & 0,506\\
+            \textit{Random Forest} & (restrita) & 0,819\\
+            \textit{Random Forest} & (irrestrita) & 0,847
         \end{tabular}%
     }
     \end{table}
 
     \vspace{10pt}
 
-    % \textbf{Resultados utilizando área do terreno}
     \begin{table}
         \centering
-        \caption{Resultados utilizando área do terreno para calcular a densidade}
+        \caption{Resultados utilizando área total para calcular a densidade}
         \resizebox{.6\textwidth}{!}{%
         \begin{tabular}{rcl}
             Modelo & Variáveis & $R^2$ na base de teste \\
             \hline
-            Regressão Linear & (restrita) & 0,436\\
-            \textit{Random Forest} & (restrita) & 0,727\\
-            \textit{Random Forest} & (irrestrita) & 0,796
+            Regressão Linear & (restrita) & 0,286\\
+            \textit{Random Forest} & (restrita) & 0,442\\
+            \textit{Random Forest} & (irrestrita) & 0,961
         \end{tabular}%
     }
     \end{table}
@@ -545,7 +511,7 @@
 
 \begin{frame}
     \frametitle{Importância das variáveis do modelo}
-    \framesubtitle{Cálculo da densidade através da área de terreno}
+    \framesubtitle{Cálculo da densidade através da área total}
     \begin{figure}
         \includegraphics[width = .8\textwidth]{imagens/var_importance_densmod.pdf}
     \end{figure}
@@ -556,27 +522,63 @@
 
 \begin{frame}
     \frametitle{Conclusão}
-    \begin{itemize}
-        \item Eficiência dos instrumentos
-        \begin{itemize}
-            \item Cota parte $>$ CA $>$ pavimentos $=$ 0
-        \end{itemize}
-        \item Fatores adicionais
-        \begin{itemize}
-            \item Proximidade ao emprego é um fator importante não considerado
-            \item Necessidade de investigar outros fatores em futuras pesquisas
-        \end{itemize}
-        \item Moradia informal
-        \begin{itemize}
-            \item 53\% dos domicílios não inscritos no Cadastro Imobiliário Fiscal
-            \item Instrumentos impactam no máximo metade da cidade
-        \end{itemize}
-        \item Adensamento informal
-        \begin{itemize}
-            \item Regiões informais mostram maior adensamento
-            \item Exemplo: favela de Paraisópolis, região mais densa da cidade
-        \end{itemize}
-    \end{itemize}
+    \begin{columns}[T]
+        \column{.3\textwidth}
+        \textbf{Relevância dos padrões construtivos}
+        \bigskip
+
+        Cota parte $>$ CA $>$ pavimentos
+
+        \column{.3\textwidth}
+        \textbf{Para o bem ou para o mal}
+        \bigskip
+
+        Reflexão sobre os perigos de definir a densidade populacional
+
+        \column{.3\textwidth}
+        \textbf{Moradia Informal}
+        \bigskip
+
+        \textcolor{red}{53\%} dos domicílios não inscritos no Cadastro Imobiliário Fiscal, então instrumentos impactam diretamente no máximo metade da cidade
+
+    \end{columns}
+\end{frame}
+
+\section{Apêndice}
+
+\begin{frame}
+    \label{appendix:verticalizacao}
+    \frametitle{Verticalização}
+    \begin{equation*}
+        \text{Pavimentos}=\frac{\text{AC}}{\text{AO}}=\frac{\text{AC}}{\text{AT}\cdot\underbrace{\frac{\text{AO}}{\text{AT}}}_\text{tx\_ocup}}=\frac{\text{AC}}{\text{AT}}\div\frac{\text{AO}}{\text{AT}}=\frac{\text{CA}}{\text{tx\_ocup}}
+    \end{equation*}
+    \begin{figure}
+        \centering
+        \includegraphics[height = .6\textheight]{imagens/desenho.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \centering
+    \includegraphics[width = \textheight]{imagens/ca_vs_verticalizacao.pdf}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \includegraphics[width = \textheight]{imagens/corrplot.pdf}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \label{appendix:robustez}
+    \includegraphics[width = \textheight]{imagens/pvals.pdf}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \includegraphics[width = \textheight]{imagens/nobs.pdf}
 \end{frame}
 
 \end{document}
+
