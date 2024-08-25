@@ -244,9 +244,9 @@ IPTU %>%
 gg <- IPTU %>% 
   filter(residencial == 1) %>% 
   filter(cota_parte < 600, CA < 5, verticalizacao < 6) %>% 
-  select("Cota Parte" = cota_parte, 
-         "Coeficiente de Aproveitamento (CA)" = CA, 
-         "Verticalização" = verticalizacao) %>% 
+  select("Densidade habitacional" = cota_parte, 
+         "Densidade Construtiva" = CA, 
+         "Pavimentos" = verticalizacao) %>% 
   pivot_longer(everything()) %>% 
   ggplot() +
   geom_histogram(aes(x = value)) +
@@ -271,7 +271,7 @@ gg <- IPTU %>%
                       labels = scales::label_number(), breaks = 10^c(2, 3, 4, 5)) +
   coord_cartesian(xlim = c(0,15), ylim = c(0,15)) +
   labs(fill = "Número de ocorrências", colour = "", x = "Verticalização",
-       y = "Coeficiente de Aproveitamento (CA)") +
+       y = "Densidade Construtiva (CA observado)") +
   theme(aspect.ratio = 1)
 
 ggsave("tex/imagens/ca_vs_verticalizacao.pdf", gg, width = 7.5, height = 5)
@@ -297,9 +297,9 @@ gg <- IPTU %>%
   ggplot() +
   geom_ribbon(aes(x = ano_construcao, ymax = value, ymin = ymin, fill = factor(quantil)), color = "black") +
   facet_grid(rows = "name", scales = "free_y", 
-             labeller = as_labeller(c("CA" = "CA", 
-                                      "verticalizacao" = "Verticalização", 
-                                      "cota_parte" = "Cota parte"))) +
+             labeller = as_labeller(c("CA" = "Densidade Construtiva", 
+                                      "verticalizacao" = "Pavimentos", 
+                                      "cota_parte" = "Densidade Habitacional"))) +
   scale_x_date(limits = as.Date(c("1960", "2022"), format = "%Y")) +
   scale_fill_viridis_d(labels = c("20%", "40%", "60%", "80%")) +
   theme_bw() +
@@ -826,8 +826,8 @@ gg <- result %>%
   pivot_longer(c(CA, cota_parte, verticalizacao, densidade_total)) %>% 
   group_by(name) %>% 
   mutate(value = ntile(value, 10) %>% as.factor(),
-         name = case_when(name == "CA" ~ "Coeficiente de Aproveitamento (CA)",
-                          name == "cota_parte" ~ "Cota-parte",
+         name = case_when(name == "CA" ~ "Densidade Construtiva",
+                          name == "cota_parte" ~ "Densidade Habitacional",
                           name == "densidade_total" ~ "Densidade populacional",
                           name == "verticalizacao" ~ "Verticalização",
                           .default = NA)) %>% 
@@ -836,7 +836,7 @@ gg <- result %>%
   geom_tile(aes(x = x, y = y, fill = value), alpha = .75, color = NA, lwd = .01) +
   # facet_wrap(~name, ncol = 4) +
   theme_void() +
-  theme(strip.text = element_text(size = 12)) +
+  theme(strip.text = element_text(size = 20)) +
   labs(fill = "Decil") +
   scale_fill_viridis_d()
 
@@ -969,12 +969,17 @@ gg
 ```{r plot_corr, cache = TRUE}
 gg <- ggcorrplot::ggcorrplot(result |> 
                                filter(abs(espectro_irregularidade - .5) < .1) |> 
-                     mutate(tx_ocupacao = area_ocupada / area_terreno) |> 
-                     select(tx_ocupacao, verticalizacao, cota_parte, CA, densidade_total, densidade_residencial) |> 
-                     drop_na() |> 
-                     cor(),
-                     show.diag = FALSE, type = "upper", legend.title = "Correlação", 
-                     colors = c("red", "white", "blue"), lab = TRUE, outline.color = "white") + 
+                               mutate(tx_ocupacao = area_ocupada / area_terreno) |> 
+                               select("Taxa de ocupação" = tx_ocupacao, 
+                                      "Verticalização" = verticalizacao, 
+                                      "Densidade Habitacional" = cota_parte, 
+                                      "Densidade Construtiva" = CA, 
+                                      "Densidade Total" = densidade_total, 
+                                      "Densidade Residencial" = densidade_residencial) |> 
+                               drop_na() |> 
+                               cor(),
+                             show.diag = FALSE, type = "upper", legend.title = "Correlação", 
+                             colors = c("red", "white", "blue"), lab = TRUE, outline.color = "white") + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
@@ -1024,6 +1029,9 @@ tabela <- modelsummary(modelos,
              shape = term ~ model + statistic,
              output = "gt",
              align = "lrlrlrlrl",
+             coef_map = c("cota_parte" = "Densidade Habitacional",
+                          "CA" = "Densidade Construtiva",
+                          "verticalizacao" = "Verticalização"),
              add_rows = modelos %>% 
                sapply(get_gof) %>% 
                rbind %>% 
@@ -1044,8 +1052,8 @@ tabela <- modelsummary(modelos,
             locations = cells_body(rows = 5)) %>% 
   sub_values(values = "+", replacement = ".")
 
-gtsave(tabela %>% tab_options(table.font.size = 14), "tex/tabelas/regressao.tex")
-gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/regressao_small.tex")
+gtsave(tabela %>% tab_options(table.font.size = 12), "tex/tabelas/regressao.tex")
+gtsave(tabela %>% tab_options(table.font.size = 10), "tex/tabelas/regressao_small.tex")
 
 tabela
 ```
@@ -1083,7 +1091,11 @@ for (corte in seq(.005, .5, length.out = 1000)){
 }
 
 gg <- pvals |> 
-  pivot_longer(cota_parte:CA) |> 
+  select(corte, forma,
+         "Densidade Contrutiva" = CA, 
+         "Densidade Habitacional" = cota_parte, 
+         "Verticalização" = verticalizacao) |> 
+  pivot_longer(3:5) |> 
   ggplot(aes(x = corte, y = value, color = name)) +
   geom_hline(yintercept = 0) +
   geom_line(lwd = 1, alpha = .8) +
@@ -1121,36 +1133,106 @@ split <- rsample::initial_split(result %>%
                                   drop_na() %>% 
                                   filter(abs(espectro_irregularidade - .5) <.1,
                                          area > max(area) * .99) %>% 
-                                  select(-c(densidade_total, populacao, area, cota_parte_inversa)) |> 
-                                  mutate(placebo = rnorm(length(densidade_residencial))),
+                                  select(-c(densidade_total, populacao, area, 
+                                            cota_parte_inversa, x, y, espectro_irregularidade)),
                                 prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
 
 rf_model <- ranger::ranger(densidade_residencial ~ ., 
-                     data = train, num.trees = 100000, importance = "permutation")
+                           data = train, num.trees = 100000, importance = "permutation")
 rf_preds <- predict(rf_model, data = test)$predictions
 
 rf_model_restrito <- ranger::ranger(densidade_residencial ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 50000)
+                                    data = train, num.trees = 100000, importance = "permutation")
 rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 
-gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
-                 y = fct_reorder(names(rf_model$variable.importance),
-                                 rf_model$variable.importance))) +
-    geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Importância", y = "Variável", title = "") +
-    theme_classic()
+
+gg <- tibble(names = names(rf_model_restrito$variable.importance),
+             importance = rf_model_restrito$variable.importance) |> 
+  mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
+                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "verticalizacao" ~ "Verticalização",
+                           .default = names)) |> 
+  ggplot(aes(x = importance,
+             y = fct_reorder(names, importance))) +
+  geom_col(fill = "darkblue", alpha = 0.75) +
+  labs(x = "Importância", y = "Variável", title = "") +
+  theme_classic()
+
+ggsave("tex/imagens/var_importance_restrito.pdf", gg, width = 5.5, heigh = 2)
+gg
+
+gg <- tibble(names = names(rf_model$variable.importance),
+             importance = rf_model$variable.importance) |> 
+  mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
+                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "verticalizacao" ~ "Verticalização",
+                           names == "area_terreno" ~ "Área Terreno",
+                           names == "area_ocupada" ~ "Área Ocupada",
+                           names == "area_construida" ~ "Área Construída",
+                           names == "unidades" ~ "Unidades",
+                           names == "domicilios" ~ "Domicílios",
+                           names == "domicilios_ocupados" ~ "Domicílios Ocupados",
+                           .default = names)) |> 
+  ggplot(aes(x = importance,
+             y = fct_reorder(names, importance))) +
+  geom_col(fill = "darkblue", alpha = 0.75) +
+  labs(x = "Importância", y = "Variável", title = "") +
+  theme_classic()
 
 ggsave("tex/imagens/var_importance.pdf", gg, width = 7, heigh = 4)
 gg
 ```
 
+
+```{r analise_tree_predictions, cache = TRUE}
+df <- tibble()
+for (cota_parte in seq(5, 100, by = 5)){
+  for (CA in seq(0, 8, by = .5)){
+    for (verticalizacao in c(8, 20)){
+      df <- df |> 
+        bind_rows(tibble(cota_parte = cota_parte, CA = CA, verticalizacao = verticalizacao))
+    }
+  }
+}
+gg <- df |> 
+  mutate(preds = predict(rf_model_restrito,
+                           data = tibble(CA = CA,
+                                       cota_parte = cota_parte,
+                                       verticalizacao = verticalizacao)) |> 
+           ranger::predictions(),
+         preds = cut(preds * 5000, breaks = c(0:10) * 100, dig.lab = 6),
+         verticalizacao = paste(verticalizacao, "pavimentos") |> 
+           factor(levels = c("8 pavimentos", "20 pavimentos"))) |> 
+  ggplot(aes(x = CA, y = cota_parte, fill = preds)) +
+  geom_tile() +
+  facet_wrap(~verticalizacao, dir = "h") +
+  scale_fill_viridis_d() +
+  theme_classic() +
+  labs(fill = "População Prevista", x = "Coeficiente de Aproveitamento (CA)",
+       y = "Cota Parte")
+
+ggsave("tex/imagens/previsoes.pdf", width = 9, height = 4.25)
+
+gg
+```
+
+
 ```{r plot_tree, cache = TRUE}
-rtree <- rpart::rpart(densidade_residencial ~ CA + cota_parte + verticalizacao, data = train)
+split <- rsample::initial_split(result |> 
+                                  filter(abs(espectro_irregularidade - .5) < 1) |> 
+                                  select(densidade_total, 
+                                         dens_cons = CA, 
+                                         dens_hab = cota_parte,
+                                         vertic = verticalizacao), prop = 0.7)
+
+rtree <- rpart::rpart(densidade_total ~ dens_cons + dens_hab + vertic, 
+                      data = rsample::training(split))
 
 visNetwork::visTree(rtree, direction = "LR", collapse = TRUE, legend = FALSE)
 ```
+
 
 ```{r analise_comparacao_modelos}
 lm_model <- lm(densidade_residencial ~ CA + cota_parte + verticalizacao, data = train)
@@ -1160,6 +1242,8 @@ lm_preds <- predict(lm_model, newdata = test)
 1 - sum((rf_preds_restrito - test$densidade_residencial)^2)/sum((test$densidade_residencial - mean(test$densidade_residencial))^2)
 1 - sum((lm_preds - test$densidade_residencial)^2)/sum((test$densidade_residencial - mean(test$densidade_residencial))^2)
 
+mean((rf_preds_restrito - test$densidade_residencial)^2)
+
 ```
 
 
@@ -1168,27 +1252,37 @@ split <- rsample::initial_split(result %>%
                                   drop_na() %>% 
                                   filter(abs(espectro_irregularidade - .5) <.1,
                                          area > max(area) * .99) %>% 
-                                  mutate(placebo = rnorm(length(densidade_residencial))) %>%
-                                  select(-c(densidade_residencial, populacao, area, cota_parte_inversa)), 
+                                  select(-c(densidade_residencial, populacao, area, 
+                                            cota_parte_inversa, x, y, espectro_irregularidade)),
                                 prop = 0.7)
 train <- rsample::training(split)
 test <- rsample::testing(split)
 
 rf_model <- ranger::ranger(densidade_total ~ ., 
-                     data = train, num.trees = 50000, importance = "permutation")
+                     data = train, num.trees = 100000, importance = "permutation")
 rf_preds <- predict(rf_model, data = test)$predictions
 
 rf_model_restrito <- ranger::ranger(densidade_total ~ CA + cota_parte + verticalizacao, 
-                     data = train, num.trees = 50000, importance = "permutation")
+                     data = train, num.trees = 100000, importance = "permutation")
 rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 
-gg <- ggplot(NULL, aes(x = rf_model$variable.importance,
-                 y = fct_reorder(names(rf_model$variable.importance),
-                                 rf_model$variable.importance))) +
-    geom_col(fill = "darkblue", alpha = 0.75) +
-    labs(x = "Importância", y = "Variável", title = "") +
-    theme_classic()
-
+gg <- tibble(names = names(rf_model$variable.importance),
+             importance = rf_model$variable.importance) |> 
+  mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
+                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "verticalizacao" ~ "Verticalização",
+                           names == "area_terreno" ~ "Área Terreno",
+                           names == "area_ocupada" ~ "Área Ocupada",
+                           names == "area_construida" ~ "Área Construída",
+                           names == "unidades" ~ "Unidades",
+                           names == "domicilios" ~ "Domicílios",
+                           names == "domicilios_ocupados" ~ "Domicílios Ocupados",
+                           .default = names)) |> 
+  ggplot(aes(x = importance,
+             y = fct_reorder(names, importance))) +
+  geom_col(fill = "darkblue", alpha = 0.75) +
+  labs(x = "Importância", y = "Variável", title = "") +
+  theme_classic()
 
 ggsave("tex/imagens/var_importance_densmod.pdf", gg, width = 7, heigh = 4)
 
@@ -1204,7 +1298,4 @@ lm_preds <- predict(lm_model, newdata = test)
 1 - sum((lm_preds - test$densidade_total)^2)/sum((test$densidade_total - mean(test$densidade_total))^2)
 
 ```
-
-
-
 

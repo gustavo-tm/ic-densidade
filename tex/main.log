@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  19 AUG 2024 00:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  25 AUG 2024 11:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1148,11 +1148,7 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 203.
 
 
 Writing index file main.idx 
-(main.aux
-
-LaTeX Warning: Label `fig:CA' multiply defined.
-
-)
+(main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 246.
@@ -1306,47 +1302,44 @@ Missing character: There is no 1 in font nullfont!
 Missing character: There is no p in font nullfont!
 Missing character: There is no t in font nullfont!
 )
-Overfull \hbox (29.1017pt too wide) in paragraph at lines 29--38
+Overfull \hbox (29.1017pt too wide) in paragraph at lines 29--33
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--38
+Underfull \hbox (badness 10000) in paragraph at lines 29--33
 
  []
 
-[8]
-<imagens/CA_macroareas.png, id=132, 963.6pt x 297.11pt>
+[8] [9]
+<imagens/CA_macroareas.png, id=136, 963.6pt x 297.11pt>
 File: imagens/CA_macroareas.png Graphic file (type png)
 <use imagens/CA_macroareas.png>
-Package pdftex.def Info: imagens/CA_macroareas.png  used on input line 67.
+Package pdftex.def Info: imagens/CA_macroareas.png  used on input line 64.
 (pdftex.def)             Requested size: 409.49722pt x 126.25874pt.
-<imagens/CA_eixos.png, id=133, 963.6pt x 294.09875pt>
+<imagens/CA_eixos.png, id=137, 963.6pt x 294.09875pt>
 File: imagens/CA_eixos.png Graphic file (type png)
 <use imagens/CA_eixos.png>
-Package pdftex.def Info: imagens/CA_eixos.png  used on input line 72.
+Package pdftex.def Info: imagens/CA_eixos.png  used on input line 69.
 (pdftex.def)             Requested size: 409.49722pt x 124.97908pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--74
+Underfull \hbox (badness 10000) in paragraph at lines 71--71
 [][]|\T1/ptm/m/n/12 (+20) Fonte: [][]$<[]https : / / gestaourbana . prefeitura . sp . gov . br / marco-[]regulatorio / plano-[]diretor /
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9] [10 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>]
+[10 <./imagens/CA_macroareas.png (PNG copy)> <./imagens/CA_eixos.png (PNG copy)>]
 
 pdfTeX warning: pdflatex (file ./imagens/desenho_proposta.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<imagens/desenho_proposta.pdf, id=153, 794.97pt x 180.675pt>
+<imagens/desenho_proposta.pdf, id=152, 794.97pt x 180.675pt>
 File: imagens/desenho_proposta.pdf Graphic file (type pdf)
 <use imagens/desenho_proposta.pdf>
-Package pdftex.def Info: imagens/desenho_proposta.pdf  used on input line 92.
+Package pdftex.def Info: imagens/desenho_proposta.pdf  used on input line 85.
 (pdftex.def)             Requested size: 455.0pt x 103.41037pt.
 [11 <./imagens/desenho_proposta.pdf>]
 <imagens/mapa.pdf, id=180, 505.89pt x 867.24pt>
 File: imagens/mapa.pdf Graphic file (type pdf)
 <use imagens/mapa.pdf>
-Package pdftex.def Info: imagens/mapa.pdf  used on input line 111.
+Package pdftex.def Info: imagens/mapa.pdf  used on input line 104.
 (pdftex.def)             Requested size: 386.75278pt x 663.013pt.
 
 
@@ -1355,7 +1348,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <imagens/densidade_distcentro.pdf, id=185, 361.35pt x 216.81pt>
 File: imagens/densidade_distcentro.pdf Graphic file (type pdf)
 <use imagens/densidade_distcentro.pdf>
-Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 122.
+Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 115.
 (pdftex.def)             Requested size: 341.25pt x 204.75089pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1373,7 +1366,7 @@ Overfull \vbox (4.76299pt too high) has occurred while \output is active []
 <imagens/tree_area_construida.pdf, id=205, 487.8225pt x 361.35pt>
 File: imagens/tree_area_construida.pdf Graphic file (type pdf)
 <use imagens/tree_area_construida.pdf>
-Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 136.
+Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 128.
 (pdftex.def)             Requested size: 364.00139pt x 269.63339pt.
 
 
@@ -1382,7 +1375,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <imagens/indicadores.pdf, id=208, 650.43pt x 216.81pt>
 File: imagens/indicadores.pdf Graphic file (type pdf)
 <use imagens/indicadores.pdf>
-Package pdftex.def Info: imagens/indicadores.pdf  used on input line 145.
+Package pdftex.def Info: imagens/indicadores.pdf  used on input line 137.
 (pdftex.def)             Requested size: 455.0pt x 151.67001pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1391,7 +1384,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <imagens/indicadores_tempo.pdf, id=223, 578.16pt x 650.43pt>
 File: imagens/indicadores_tempo.pdf Graphic file (type pdf)
 <use imagens/indicadores_tempo.pdf>
-Package pdftex.def Info: imagens/indicadores_tempo.pdf  used on input line 154.
+Package pdftex.def Info: imagens/indicadores_tempo.pdf  used on input line 146.
 (pdftex.def)             Requested size: 455.0pt x 511.86897pt.
 
 
@@ -1401,117 +1394,141 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <imagens/disparidade_censoIPTU.pdf, id=268, 505.89pt x 216.81pt>
 File: imagens/disparidade_censoIPTU.pdf Graphic file (type pdf)
 <use imagens/disparidade_censoIPTU.pdf>
-Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 180.
+Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 172.
 (pdftex.def)             Requested size: 364.00139pt x 156.00383pt.
 <imagens/mapa_pontos.pdf, id=269, 1156.32pt x 1445.4pt>
 File: imagens/mapa_pontos.pdf Graphic file (type pdf)
 <use imagens/mapa_pontos.pdf>
-Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 186.
+Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 178.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
 <imagens/balanco_raster.pdf, id=270, 1156.32pt x 1445.4pt>
 File: imagens/balanco_raster.pdf Graphic file (type pdf)
 <use imagens/balanco_raster.pdf>
-Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 192.
+Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 184.
 (pdftex.def)             Requested size: 204.74861pt x 255.92621pt.
- [18 <./imagens/disparidade_censoIPTU.pdf> <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] (tabelas/top5.tex) [19]
-<imagens/rasters_wide.pdf, id=313, 1156.32pt x 433.62pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(tabelas/top5.tex)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[18]
+<imagens/rasters_wide.pdf, id=284, 1156.32pt x 433.62pt>
 File: imagens/rasters_wide.pdf Graphic file (type pdf)
 <use imagens/rasters_wide.pdf>
-Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 212.
+Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 204.
 (pdftex.def)             Requested size: 455.0pt x 170.61967pt.
-<imagens/corrplot.pdf, id=319, 505.89pt x 289.08pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[19 <./imagens/disparidade_censoIPTU.pdf> <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>]
+<imagens/corrplot.pdf, id=318, 505.89pt x 289.08pt>
 File: imagens/corrplot.pdf Graphic file (type pdf)
 <use imagens/corrplot.pdf>
-Package pdftex.def Info: imagens/corrplot.pdf  used on input line 221.
+Package pdftex.def Info: imagens/corrplot.pdf  used on input line 213.
 (pdftex.def)             Requested size: 341.25pt x 195.00148pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[20 <./imagens/rasters_wide.pdf>] [21 <./imagens/corrplot.pdf>] (tabelas/regressao.tex)
+[20 <./imagens/rasters_wide.pdf>] [21 <./imagens/corrplot.pdf>] [22
+
+] (tabelas/regressao.tex) [23]
+<imagens/tree_example.png, id=372, 2393.94376pt x 1256.44406pt>
+File: imagens/tree_example.png Graphic file (type png)
+<use imagens/tree_example.png>
+Package pdftex.def Info: imagens/tree_example.png  used on input line 272.
+(pdftex.def)             Requested size: 455.0pt x 238.78436pt.
+ [24 <./imagens/tree_example.png>]
+<imagens/var_importance_restrito.pdf, id=390, 397.485pt x 144.54pt>
+File: imagens/var_importance_restrito.pdf Graphic file (type pdf)
+<use imagens/var_importance_restrito.pdf>
+Package pdftex.def Info: imagens/var_importance_restrito.pdf  used on input line 283.
+(pdftex.def)             Requested size: 364.00139pt x 132.36746pt.
+<imagens/var_importance.pdf, id=393, 505.89pt x 289.08pt>
+File: imagens/var_importance.pdf Graphic file (type pdf)
+<use imagens/var_importance.pdf>
+Package pdftex.def Info: imagens/var_importance.pdf  used on input line 292.
+(pdftex.def)             Requested size: 432.24861pt x 247.00275pt.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[22
-
-] [23]
-<imagens/tree_example.png, id=370, 1284.8pt x 888.31876pt>
-File: imagens/tree_example.png Graphic file (type png)
-<use imagens/tree_example.png>
-Package pdftex.def Info: imagens/tree_example.png  used on input line 273.
-(pdftex.def)             Requested size: 364.00139pt x 251.66891pt.
- [24 <./imagens/tree_example.png>]
-<imagens/var_importance.pdf, id=386, 505.89pt x 289.08pt>
-File: imagens/var_importance.pdf Graphic file (type pdf)
-<use imagens/var_importance.pdf>
-Package pdftex.def Info: imagens/var_importance.pdf  used on input line 286.
-(pdftex.def)             Requested size: 432.24861pt x 247.00275pt.
- [25 <./imagens/var_importance.pdf>]
-<imagens/var_importance_densmod.pdf, id=404, 505.89pt x 289.08pt>
+[25 <./imagens/var_importance_restrito.pdf>]
+<imagens/var_importance_densmod.pdf, id=410, 505.89pt x 289.08pt>
 File: imagens/var_importance_densmod.pdf Graphic file (type pdf)
 <use imagens/var_importance_densmod.pdf>
-Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 299.
+Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 305.
 (pdftex.def)             Requested size: 432.24861pt x 247.00275pt.
- [26 <./imagens/var_importance_densmod.pdf>]) (main.bbl (main.brf)
+ [26 <./imagens/var_importance.pdf> <./imagens/var_importance_densmod.pdf>]
+<imagens/previsoes.pdf, id=436, 650.43pt x 307.1475pt>
+File: imagens/previsoes.pdf Graphic file (type pdf)
+<use imagens/previsoes.pdf>
+Package pdftex.def Info: imagens/previsoes.pdf  used on input line 319.
+(pdftex.def)             Requested size: 455.0pt x 214.86586pt.
+ [27 <./imagens/previsoes.pdf>]) (main.bbl (main.brf)
 \tf@brf=\write6
 \openout6 = `main.brf'.
 
- [27
+ [28
 
 ]
 bibitemlist
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 72.
 (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) (appendix.tex [28
+)) (appendix.tex [29
 
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\uppercase' on input line 5.
 
-[29
+[30
 
 
 ]
 
 pdfTeX warning: pdflatex (file ./imagens/desenho.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<imagens/desenho.pdf, id=440, 963.6pt x 542.025pt>
+<imagens/desenho.pdf, id=471, 963.6pt x 542.025pt>
 File: imagens/desenho.pdf Graphic file (type pdf)
 <use imagens/desenho.pdf>
 Package pdftex.def Info: imagens/desenho.pdf  used on input line 14.
 (pdftex.def)             Requested size: 455.0pt x 255.93448pt.
-[30
+[31
 
  <./imagens/desenho.pdf>]
-<imagens/ca_vs_verticalizacao.pdf, id=481, 542.025pt x 361.35pt>
+<imagens/ca_vs_verticalizacao.pdf, id=510, 542.025pt x 361.35pt>
 File: imagens/ca_vs_verticalizacao.pdf Graphic file (type pdf)
 <use imagens/ca_vs_verticalizacao.pdf>
 Package pdftex.def Info: imagens/ca_vs_verticalizacao.pdf  used on input line 28.
 (pdftex.def)             Requested size: 455.0pt x 303.34447pt.
- [31 <./imagens/ca_vs_verticalizacao.pdf>]
-<imagens/rasters_densidade.pdf, id=497, 722.7pt x 722.7pt>
+ [32 <./imagens/ca_vs_verticalizacao.pdf>]
+<imagens/rasters_densidade.pdf, id=526, 722.7pt x 722.7pt>
 File: imagens/rasters_densidade.pdf Graphic file (type pdf)
 <use imagens/rasters_densidade.pdf>
 Package pdftex.def Info: imagens/rasters_densidade.pdf  used on input line 40.
 (pdftex.def)             Requested size: 432.24861pt x 432.2449pt.
- [32
+ [33
 
  <./imagens/rasters_densidade.pdf>]
-<imagens/pvals.pdf, id=514, 578.16pt x 433.62pt>
+<imagens/pvals.pdf, id=543, 578.16pt x 433.62pt>
 File: imagens/pvals.pdf Graphic file (type pdf)
 <use imagens/pvals.pdf>
 Package pdftex.def Info: imagens/pvals.pdf  used on input line 55.
 (pdftex.def)             Requested size: 455.0pt x 341.24597pt.
- [33
+ [34
 
  <./imagens/pvals.pdf>]
-<imagens/nobs.pdf, id=529, 433.62pt x 289.08pt>
+<imagens/nobs.pdf, id=558, 433.62pt x 289.08pt>
 File: imagens/nobs.pdf Graphic file (type pdf)
 <use imagens/nobs.pdf>
 Package pdftex.def Info: imagens/nobs.pdf  used on input line 64.
 (pdftex.def)             Requested size: 341.25pt x 227.51054pt.
-) [34 <./imagens/nobs.pdf>]
+) [35 <./imagens/nobs.pdf>]
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
@@ -1522,25 +1539,21 @@ enddocument/afterlastpage: lastpage setting LastPage.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: 74A460320ADBE920C3C86F596A5C341C;1205.
+(rerunfilecheck)             Checksum: B49DA0D317ED5793B53427BC7ECE6D7E;1143.
  ) 
 Here is how much of TeX's memory you used:
- 49276 strings out of 474370
- 1127203 string characters out of 5740535
- 1947754 words of memory out of 5000000
- 70445 multiletter control sequences out of 15000+600000
- 633589 words of font info for 295 fonts, out of 8000000 for 9000
+ 49319 strings out of 474370
+ 1128095 string characters out of 5740535
+ 1946754 words of memory out of 5000000
+ 70467 multiletter control sequences out of 15000+600000
+ 635757 words of font info for 306 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1579b,2445s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (35 pages, 14313987 bytes).
+Output written on main.pdf (36 pages, 14352030 bytes).
 PDF statistics:
- 681 PDF objects out of 1000 (max. 8388607)
- 105 named destinations out of 1000 (max. 500000)
- 85806 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 715 PDF objects out of 1000 (max. 8388607)
+ 109 named destinations out of 1000 (max. 500000)
+ 87872 words of extra memory for PDF output out of 89155 (max. 10000000)
 

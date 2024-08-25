@@ -1,0 +1,15 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[0] Config.pm:311> INFO - Logfile is 'beamer.blg'
+[127] biber-MSWIN64:340> INFO - === 
+[166] Biber.pm:420> INFO - Reading 'beamer.bcf'
+[253] Biber.pm:994> INFO - Found 6 citekeys in bib section 0
+[264] Biber.pm:4463> INFO - Processing section 0
+[274] Biber.pm:4654> INFO - Looking for bibtex file 'bibliografia.bib' for section 0
+[335] bibtex.pm:1713> INFO - LaTeX decoding ...
+[355] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliografia.bib'
+[397] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[397] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[398] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[398] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
+[401] bbl.pm:676> INFO - Writing 'beamer.bbl' with encoding 'UTF-8'
+[403] bbl.pm:779> INFO - Output to beamer.bbl

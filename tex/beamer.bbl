@@ -77,33 +77,6 @@
       \field{title}{Lectures on urban economics}
       \field{year}{2011}
     \endentry
-    \entry{coase2013problem}{article}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=b72cff7fbaa71587c3cb83de0768adc7}{%
-           family={Coase},
-           familyi={C\bibinitperiod},
-           given={Ronald\bibnamedelima Harry},
-           giveni={R\bibinitperiod\bibinitdelim H\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{fullhash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{fullhashraw}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{bibnamehash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{authorbibnamehash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{authornamehash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{authorfullhash}{b72cff7fbaa71587c3cb83de0768adc7}
-      \strng{authorfullhashraw}{b72cff7fbaa71587c3cb83de0768adc7}
-      \field{sortinit}{C}
-      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{The journal of Law and Economics}
-      \field{title}{The problem of social cost}
-      \field{year}{1960}
-    \endentry
     \entry{fujita1989urban}{book}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7b0959582d547d10fda4471c0ba3842a}{%
@@ -133,35 +106,6 @@
       \field{journaltitle}{Cambridge Books}
       \field{title}{Urban economic theory}
       \field{year}{1989}
-    \endentry
-    \entry{glaeser2011triumph}{book}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=302583e77eb4f4e8a74b3b9d99c7342a}{%
-           family={Glaeser},
-           familyi={G\bibinitperiod},
-           given={Edward},
-           giveni={E\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Pan Macmillan}%
-      }
-      \strng{namehash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{fullhash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{fullhashraw}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{bibnamehash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{authorbibnamehash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{authornamehash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{authorfullhash}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \strng{authorfullhashraw}{302583e77eb4f4e8a74b3b9d99c7342a}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Triumph of the city: How urban spaces make us human}
-      \field{year}{2011}
     \endentry
     \entry{lima2021alem}{thesis}{}{}
       \name{author}{1}{}{%

@@ -2459,18 +2459,14 @@
     <bcf:citekey order="3" intorder="1">brueckner2011lectures</bcf:citekey>
     <bcf:citekey order="4" intorder="1">brueckner2011lectures</bcf:citekey>
     <bcf:citekey order="5" intorder="1">brueckner2011lectures</bcf:citekey>
-    <bcf:citekey order="6" intorder="1">bauman2003city</bcf:citekey>
-    <bcf:citekey order="7" intorder="1">coase2013problem</bcf:citekey>
-    <bcf:citekey order="8" intorder="1">glaeser2011triumph</bcf:citekey>
-    <bcf:citekey order="9" intorder="1">glaeser2011triumph</bcf:citekey>
-    <bcf:citekey order="10" intorder="1">PDE</bcf:citekey>
-    <bcf:citekey order="11" intorder="1">lima2021alem</bcf:citekey>
-    <bcf:citekey order="12" intorder="1">papageorgiou2012essay</bcf:citekey>
-    <bcf:citekey order="12" intorder="2">fujita1989urban</bcf:citekey>
-    <bcf:citekey order="12" intorder="3">brueckner2011lectures</bcf:citekey>
-    <bcf:citekey order="13" intorder="1">papageorgiou2012essay</bcf:citekey>
-    <bcf:citekey order="13" intorder="2">fujita1989urban</bcf:citekey>
-    <bcf:citekey order="13" intorder="3">brueckner2011lectures</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">PDE</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">lima2021alem</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">papageorgiou2012essay</bcf:citekey>
+    <bcf:citekey order="8" intorder="2">fujita1989urban</bcf:citekey>
+    <bcf:citekey order="8" intorder="3">brueckner2011lectures</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">papageorgiou2012essay</bcf:citekey>
+    <bcf:citekey order="9" intorder="2">fujita1989urban</bcf:citekey>
+    <bcf:citekey order="9" intorder="3">brueckner2011lectures</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

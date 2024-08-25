@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  31 JUL 2024 00:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.25)  23 AUG 2024 11:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1162,7 +1162,7 @@ Package biblatex Info: Reference segment=0 on input line 49.
 Package pgfplots notification 'compat/show suggested version=true': document has been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
 (beamer.nav)
-<imagens/mapa3d.png, id=118, 3854.4pt x 2168.1pt>
+<imagens/mapa3d.png, id=114, 3854.4pt x 2168.1pt>
 File: imagens/mapa3d.png Graphic file (type png)
 <use imagens/mapa3d.png>
 Package pdftex.def Info: imagens/mapa3d.png  used on input line 55.
@@ -1208,219 +1208,213 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 
 ] [10
 
-] [11
-
-] [12
-
-] [13
-
-] (beamer.toc) [14
+] (beamer.toc) [11
 
 ] (imagens/micro.tex
 LaTeX Font Info:    Trying to load font information for TS1+cmss on input line 23.
  (C:\Users\gusth\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmss.fd
 File: ts1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 ))
-Overfull \hbox (3.73221pt too wide) in paragraph at lines 180--180
+Overfull \hbox (3.73221pt too wide) in paragraph at lines 148--148
 [][] 
  []
 
-[15
+[12
 
 ] (imagens/micro.tex)
-Overfull \hbox (3.73221pt too wide) in paragraph at lines 193--193
+Overfull \hbox (3.73221pt too wide) in paragraph at lines 161--161
 [][] 
  []
 
 (imagens/micro-2.tex)
-Overfull \hbox (3.73221pt too wide) in paragraph at lines 193--193
+Overfull \hbox (3.73221pt too wide) in paragraph at lines 161--161
 [][] 
  []
 
-[16
+[13
 
-] (beamer.toc) [17
+] (beamer.toc) [14
 
 ]
-<imagens/mapa.pdf, id=1458, 505.89pt x 867.24pt>
+<imagens/mapa.pdf, id=1181, 505.89pt x 867.24pt>
 File: imagens/mapa.pdf Graphic file (type pdf)
 <use imagens/mapa.pdf>
-Package pdftex.def Info: imagens/mapa.pdf  used on input line 239.
+Package pdftex.def Info: imagens/mapa.pdf  used on input line 207.
 (pdftex.def)             Requested size: 131.30443pt x 225.10469pt.
-<imagens/densidade_distcentro.pdf, id=1459, 361.35pt x 216.81pt>
+<imagens/densidade_distcentro.pdf, id=1182, 361.35pt x 216.81pt>
 File: imagens/densidade_distcentro.pdf Graphic file (type pdf)
 <use imagens/densidade_distcentro.pdf>
-Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 239.
+Package pdftex.def Info: imagens/densidade_distcentro.pdf  used on input line 207.
 (pdftex.def)             Requested size: 167.30318pt x 100.38222pt.
 
-Overfull \vbox (15.16673pt too high) detected at line 239
+Overfull \vbox (15.16673pt too high) detected at line 207
  []
 
-[18
+[15
 
  <./imagens/mapa.pdf> <./imagens/densidade_distcentro.pdf>]
-<imagens/indicadores.pdf, id=1555, 578.16pt x 198.7425pt>
+<imagens/indicadores.pdf, id=1274, 650.43pt x 216.81pt>
 File: imagens/indicadores.pdf Graphic file (type pdf)
 <use imagens/indicadores.pdf>
-Package pdftex.def Info: imagens/indicadores.pdf  used on input line 279.
-(pdftex.def)             Requested size: 338.59023pt x 116.38974pt.
- [19
+Package pdftex.def Info: imagens/indicadores.pdf  used on input line 247.
+(pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
+ [16
 
  <./imagens/indicadores.pdf>]
 
 pdfTeX warning: pdflatex (file ./imagens/desenho.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<imagens/desenho.pdf, id=1647, 963.6pt x 542.025pt>
+<imagens/desenho.pdf, id=1361, 963.6pt x 542.025pt>
 File: imagens/desenho.pdf Graphic file (type pdf)
 <use imagens/desenho.pdf>
-Package pdftex.def Info: imagens/desenho.pdf  used on input line 288.
+Package pdftex.def Info: imagens/desenho.pdf  used on input line 256.
 (pdftex.def)             Requested size: 379.12544pt x 213.25632pt.
 
-Overfull \vbox (2.31836pt too high) detected at line 288
+Overfull \vbox (2.31836pt too high) detected at line 256
  []
 
-[20
+[17
 
  <./imagens/desenho.pdf>]
 File: imagens/desenho.pdf Graphic file (type pdf)
 <use imagens/desenho.pdf>
-Package pdftex.def Info: imagens/desenho.pdf  used on input line 300.
+Package pdftex.def Info: imagens/desenho.pdf  used on input line 268.
 (pdftex.def)             Requested size: 252.75029pt x 142.17328pt.
- [21
+ [18
 
 ]
-<imagens/tree_area_construida.pdf, id=1848, 487.8225pt x 361.35pt>
+<imagens/tree_area_construida.pdf, id=1554, 487.8225pt x 361.35pt>
 File: imagens/tree_area_construida.pdf Graphic file (type pdf)
 <use imagens/tree_area_construida.pdf>
-Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 308.
+Package pdftex.def Info: imagens/tree_area_construida.pdf  used on input line 276.
 (pdftex.def)             Requested size: 303.89087pt x 225.10469pt.
 
-Overfull \vbox (14.16673pt too high) detected at line 308
+Overfull \vbox (14.16673pt too high) detected at line 276
  []
 
-[22
+[19
 
  <./imagens/tree_area_construida.pdf>]
-<imagens/indicadores_tempo_small.pdf, id=1946, 397.485pt x 433.62pt>
+<imagens/indicadores_tempo_small.pdf, id=1649, 397.485pt x 433.62pt>
 File: imagens/indicadores_tempo_small.pdf Graphic file (type pdf)
 <use imagens/indicadores_tempo_small.pdf>
-Package pdftex.def Info: imagens/indicadores_tempo_small.pdf  used on input line 331.
+Package pdftex.def Info: imagens/indicadores_tempo_small.pdf  used on input line 299.
 (pdftex.def)             Requested size: 195.48503pt x 213.25632pt.
-<imagens/verticalizacao.pdf, id=1947, 433.62pt x 289.08pt>
+<imagens/verticalizacao.pdf, id=1650, 433.62pt x 289.08pt>
 File: imagens/verticalizacao.pdf Graphic file (type pdf)
 <use imagens/verticalizacao.pdf>
-Package pdftex.def Info: imagens/verticalizacao.pdf  used on input line 331.
+Package pdftex.def Info: imagens/verticalizacao.pdf  used on input line 299.
 (pdftex.def)             Requested size: 159.33604pt x 106.2257pt.
 
-Overfull \vbox (3.31836pt too high) detected at line 331
+Overfull \vbox (3.31836pt too high) detected at line 299
  []
 
-[23
+[20
 
  <./imagens/indicadores_tempo_small.pdf> <./imagens/verticalizacao.pdf>]
-<imagens/corte_lote.pdf, id=2042, 413.545pt x 345.29pt>
+<imagens/corte_lote.pdf, id=1741, 413.545pt x 345.29pt>
 File: imagens/corte_lote.pdf Graphic file (type pdf)
 <use imagens/corte_lote.pdf>
-Package pdftex.def Info: imagens/corte_lote.pdf  used on input line 341.
+Package pdftex.def Info: imagens/corte_lote.pdf  used on input line 309.
 (pdftex.def)             Requested size: 239.00558pt x 199.56232pt.
- [24
+ [21
 
  <./imagens/corte_lote.pdf>]
-<imagens/rasters_wide.pdf, id=2135, 1156.32pt x 433.62pt>
+<imagens/rasters_wide.pdf, id=1830, 1156.32pt x 433.62pt>
 File: imagens/rasters_wide.pdf Graphic file (type pdf)
 <use imagens/rasters_wide.pdf>
-Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 351.
+Package pdftex.def Info: imagens/rasters_wide.pdf  used on input line 319.
 (pdftex.def)             Requested size: 398.3386pt x 149.3741pt.
- [25
+ [22
 
  <./imagens/rasters_wide.pdf>]
-<imagens/disparidade_censoIPTU.pdf, id=2229, 505.89pt x 216.81pt>
+<imagens/disparidade_censoIPTU.pdf, id=1919, 505.89pt x 216.81pt>
 File: imagens/disparidade_censoIPTU.pdf Graphic file (type pdf)
 <use imagens/disparidade_censoIPTU.pdf>
-Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 378.
+Package pdftex.def Info: imagens/disparidade_censoIPTU.pdf  used on input line 346.
 (pdftex.def)             Requested size: 278.83578pt x 119.5039pt.
- [26
+ [23
 
  <./imagens/disparidade_censoIPTU.pdf>]
-<imagens/mapa_pontos.pdf, id=2319, 1156.32pt x 1445.4pt>
+<imagens/mapa_pontos.pdf, id=2005, 1156.32pt x 1445.4pt>
 File: imagens/mapa_pontos.pdf Graphic file (type pdf)
 <use imagens/mapa_pontos.pdf>
-Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 396.
+Package pdftex.def Info: imagens/mapa_pontos.pdf  used on input line 364.
 (pdftex.def)             Requested size: 199.1693pt x 248.95683pt.
-<imagens/balanco_raster.pdf, id=2320, 1156.32pt x 1445.4pt>
+<imagens/balanco_raster.pdf, id=2006, 1156.32pt x 1445.4pt>
 File: imagens/balanco_raster.pdf Graphic file (type pdf)
 <use imagens/balanco_raster.pdf>
-Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 396.
+Package pdftex.def Info: imagens/balanco_raster.pdf  used on input line 364.
 (pdftex.def)             Requested size: 199.1693pt x 248.95683pt.
 
-Overfull \vbox (43.96887pt too high) detected at line 396
+Overfull \vbox (43.96887pt too high) detected at line 364
  []
 
-[27
+[24
 
- <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] (tabelas/top5_small.tex) [28
+ <./imagens/mapa_pontos.pdf> <./imagens/balanco_raster.pdf>] (tabelas/top5_small.tex) [25
 
-] (beamer.toc) [29
+] (beamer.toc) [26
 
-] [30
+] [27
 
 ]
-<imagens/tabela_ibge.png, id=2687, 760.64175pt x 483.0045pt>
+<imagens/tabela_ibge.png, id=2358, 760.64175pt x 483.0045pt>
 File: imagens/tabela_ibge.png Graphic file (type png)
 <use imagens/tabela_ibge.png>
-Package pdftex.def Info: imagens/tabela_ibge.png  used on input line 440.
+Package pdftex.def Info: imagens/tabela_ibge.png  used on input line 408.
 (pdftex.def)             Requested size: 199.1693pt x 126.46997pt.
- [31
+ [28
 
  <./imagens/tabela_ibge.png>]
 \openout2 = `tabelas/regressao_small.aux'.
 
- (tabelas/regressao_small.tex) [32
+ (tabelas/regressao_small.tex) [29
 
 
 
 
-] [33
+] [30
 
-] [34
+] [31
 
 ]
-<imagens/tree_example.png, id=2988, 1284.8pt x 888.31876pt>
+<imagens/tree_example.png, id=2645, 1284.8pt x 888.31876pt>
 File: imagens/tree_example.png Graphic file (type png)
 <use imagens/tree_example.png>
-Package pdftex.def Info: imagens/tree_example.png  used on input line 485.
+Package pdftex.def Info: imagens/tree_example.png  used on input line 453.
 (pdftex.def)             Requested size: 278.83578pt x 192.78757pt.
- [35
+ [32
 
- <./imagens/tree_example.png>] [36
+ <./imagens/tree_example.png>] [33
 
 ]
-<imagens/var_importance.pdf, id=3159, 469.755pt x 289.08pt>
+<imagens/var_importance.pdf, id=2808, 505.89pt x 289.08pt>
 File: imagens/var_importance.pdf Graphic file (type pdf)
 <use imagens/var_importance.pdf>
-Package pdftex.def Info: imagens/var_importance.pdf  used on input line 519.
-(pdftex.def)             Requested size: 318.67209pt x 196.10422pt.
- [37
+Package pdftex.def Info: imagens/var_importance.pdf  used on input line 487.
+(pdftex.def)             Requested size: 318.67209pt x 182.0993pt.
+ [34
 
  <./imagens/var_importance.pdf>]
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
-(Font)              using `OT1/cmss/bx/n' instead on input line 538.
+(Font)              using `OT1/cmss/bx/n' instead on input line 506.
 
-[38
+[35
 
-] [39
+] [36
 
 ]
-<imagens/var_importance_densmod.pdf, id=3421, 469.755pt x 289.08pt>
+<imagens/var_importance_densmod.pdf, id=3057, 505.89pt x 289.08pt>
 File: imagens/var_importance_densmod.pdf Graphic file (type pdf)
 <use imagens/var_importance_densmod.pdf>
-Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 584.
-(pdftex.def)             Requested size: 318.67209pt x 196.10422pt.
- [40
+Package pdftex.def Info: imagens/var_importance_densmod.pdf  used on input line 552.
+(pdftex.def)             Requested size: 318.67209pt x 182.0993pt.
+ [37
 
- <./imagens/var_importance_densmod.pdf>] (beamer.toc) [41
+ <./imagens/var_importance_densmod.pdf>] (beamer.toc) [38
 
-] [42
+] [39
 
 ]
 \tf@nav=\write7
@@ -1448,10 +1442,10 @@ Package logreq Info: Writing requests to 'beamer.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 44586 strings out of 474370
- 1053787 string characters out of 5740535
- 1965754 words of memory out of 5000000
- 66077 multiletter control sequences out of 15000+600000
+ 44568 strings out of 474370
+ 1053488 string characters out of 5740535
+ 1963754 words of memory out of 5000000
+ 66067 multiletter control sequences out of 15000+600000
  572056 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,19n,123p,940b,4317s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1468,21 +1462,15 @@ pdfTeX warning (dest): name{cite.0@lima2021alem} has been referenced but does no
 pdfTeX warning (dest): name{cite.0@PDE} has been referenced but does not exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{cite.0@glaeser2011triumph} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@coase2013problem} has been referenced but does not exist, replaced by a fixed one
-
-
 pdfTeX warning (dest): name{cite.0@brueckner2011lectures} has been referenced but does not exist, replaced by a fixed one
 
 
 pdfTeX warning (dest): name{cite.0@bauman2003city} has been referenced but does not exist, replaced by a fixed one
 
  <C:\Users\gusth\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss0900.pk><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi12.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi9.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gusth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on beamer.pdf (42 pages, 11938649 bytes).
+Output written on beamer.pdf (39 pages, 11870531 bytes).
 PDF statistics:
- 3747 PDF objects out of 4296 (max. 8388607)
- 99 named destinations out of 1000 (max. 500000)
+ 3373 PDF objects out of 3580 (max. 8388607)
+ 91 named destinations out of 1000 (max. 500000)
  186 words of extra memory for PDF output out of 10000 (max. 10000000)
 
