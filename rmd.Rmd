@@ -244,7 +244,7 @@ IPTU %>%
 gg <- IPTU %>% 
   filter(residencial == 1) %>% 
   filter(cota_parte < 600, CA < 5, verticalizacao < 6) %>% 
-  select("Densidade habitacional" = cota_parte, 
+  select("Cota Parte Obs." = cota_parte, 
          "Densidade Construtiva" = CA, 
          "Pavimentos" = verticalizacao) %>% 
   pivot_longer(everything()) %>% 
@@ -299,7 +299,7 @@ gg <- IPTU %>%
   facet_grid(rows = "name", scales = "free_y", 
              labeller = as_labeller(c("CA" = "Densidade Construtiva", 
                                       "verticalizacao" = "Pavimentos", 
-                                      "cota_parte" = "Densidade Habitacional"))) +
+                                      "cota_parte" = "Cota Parte Obs."))) +
   scale_x_date(limits = as.Date(c("1960", "2022"), format = "%Y")) +
   scale_fill_viridis_d(labels = c("20%", "40%", "60%", "80%")) +
   theme_bw() +
@@ -827,7 +827,7 @@ gg <- result %>%
   group_by(name) %>% 
   mutate(value = ntile(value, 10) %>% as.factor(),
          name = case_when(name == "CA" ~ "Densidade Construtiva",
-                          name == "cota_parte" ~ "Densidade Habitacional",
+                          name == "cota_parte" ~ "Cota Parte Obs.",
                           name == "densidade_total" ~ "Densidade populacional",
                           name == "verticalizacao" ~ "Verticalização",
                           .default = NA)) %>% 
@@ -972,7 +972,7 @@ gg <- ggcorrplot::ggcorrplot(result |>
                                mutate(tx_ocupacao = area_ocupada / area_terreno) |> 
                                select("Taxa de ocupação" = tx_ocupacao, 
                                       "Verticalização" = verticalizacao, 
-                                      "Densidade Habitacional" = cota_parte, 
+                                      "Cota Parte Obs." = cota_parte, 
                                       "Densidade Construtiva" = CA, 
                                       "Densidade Total" = densidade_total, 
                                       "Densidade Residencial" = densidade_residencial) |> 
@@ -1029,7 +1029,8 @@ tabela <- modelsummary(modelos,
              shape = term ~ model + statistic,
              output = "gt",
              align = "lrlrlrlrl",
-             coef_map = c("cota_parte" = "Densidade Habitacional",
+             coef_map = c("(Intercept)" = "Intercepto",
+                          "cota_parte" = "Cota Parte Obs.",
                           "CA" = "Densidade Construtiva",
                           "verticalizacao" = "Verticalização"),
              add_rows = modelos %>% 
@@ -1093,7 +1094,7 @@ for (corte in seq(.005, .5, length.out = 1000)){
 gg <- pvals |> 
   select(corte, forma,
          "Densidade Contrutiva" = CA, 
-         "Densidade Habitacional" = cota_parte, 
+         "Cota Parte Obs." = cota_parte, 
          "Verticalização" = verticalizacao) |> 
   pivot_longer(3:5) |> 
   ggplot(aes(x = corte, y = value, color = name)) +
@@ -1151,7 +1152,7 @@ rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 gg <- tibble(names = names(rf_model_restrito$variable.importance),
              importance = rf_model_restrito$variable.importance) |> 
   mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
-                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "cota_parte" ~ "Cota Parte Obs.",
                            names == "verticalizacao" ~ "Verticalização",
                            .default = names)) |> 
   ggplot(aes(x = importance,
@@ -1166,7 +1167,7 @@ gg
 gg <- tibble(names = names(rf_model$variable.importance),
              importance = rf_model$variable.importance) |> 
   mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
-                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "cota_parte" ~ "Cota Parte Obs.",
                            names == "verticalizacao" ~ "Verticalização",
                            names == "area_terreno" ~ "Área Terreno",
                            names == "area_ocupada" ~ "Área Ocupada",
@@ -1188,7 +1189,7 @@ gg
 
 ```{r analise_tree_predictions, cache = TRUE}
 df <- tibble()
-for (cota_parte in seq(5, 100, by = 5)){
+for (cota_parte in (2:15) ^2){
   for (CA in seq(0, 8, by = .5)){
     for (verticalizacao in c(8, 20)){
       df <- df |> 
@@ -1209,6 +1210,7 @@ gg <- df |>
   geom_tile() +
   facet_wrap(~verticalizacao, dir = "h") +
   scale_fill_viridis_d() +
+  scale_y_sqrt(breaks = c(10, 20, 40, 80, 160, 320)) +
   theme_classic() +
   labs(fill = "População Prevista", x = "Coeficiente de Aproveitamento (CA)",
        y = "Cota Parte")
@@ -1269,7 +1271,7 @@ rf_preds_restrito <- predict(rf_model_restrito, data = test)$predictions
 gg <- tibble(names = names(rf_model$variable.importance),
              importance = rf_model$variable.importance) |> 
   mutate(names = case_when(names == "CA" ~ "Densidade Construtiva",
-                           names == "cota_parte" ~ "Densidade Habitacional",
+                           names == "cota_parte" ~ "Cota Parte Obs.",
                            names == "verticalizacao" ~ "Verticalização",
                            names == "area_terreno" ~ "Área Terreno",
                            names == "area_ocupada" ~ "Área Ocupada",
